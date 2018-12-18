@@ -1,3 +1,23 @@
+### Confirmed md5sums matched between trasnferred files
+```
+#!/bin/bash -e
+
+#SBATCH --account=uoo00106
+#SBATCH --job-name=md5
+#SBATCH -n 1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=2:00:00
+#SBATCH --mem-per-cpu=1G
+#SBATCH --hint=nomultithread
+#SBATCH --partition=large
+#SBATCH -D /nesi/nobackup/uoo00106
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=alana.alexander@otago.ac.nz
+#SBATCH -N 1
+
+md5sum * >> md5sum.log
+```
+
 ### Indexed reference and made 'trimmed' directory
 In the working directory, made a trimmed directory for the raw reads to be moved into once trimmed, and indexed the reference genome (northern fur seal)
 ```
