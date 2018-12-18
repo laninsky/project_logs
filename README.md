@@ -1,2 +1,2 @@
 # project_logs
-Log of analyses conducted for various projects
+This repository contains a record of analyses run for various projects
