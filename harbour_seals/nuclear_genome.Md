@@ -1,11 +1,24 @@
 ### Indexed reference and made 'trimmed' directory
 In the working directory, made a trimmed directory for the raw reads to be moved into once trimmed, and indexed the reference genome (northern fur seal)
 ```
-module load bowtie2/2.3.4.2
-module load fastqc/0.11.5
-module load samtools/1.7
+#!/bin/bash -e
 
-bowtie2-build GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_seal
+#SBATCH --account=uoo00106
+#SBATCH --job-name=sample1
+#SBATCH -n 1
+#SBATCH --cpus-per-task=16
+#SBATCH --time=2:00:00
+#SBATCH --mem-per-cpu=1G
+#SBATCH --hint=nomultithread
+#SBATCH --partition=large
+#SBATCH -D /nesi/nobackup/uoo00106/uploaded
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=alana.alexander@otago.ac.nz
+#SBATCH -N 1
+
+module load Bowtie2/2.3.2-gimkl-2017a
+
+bowtie2-build --threads 16 GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_seal
 
 mkdir trimmed
 ```
