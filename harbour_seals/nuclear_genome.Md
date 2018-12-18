@@ -1,4 +1,4 @@
-### Confirmed md5sums matched between trasnferred files
+### Confirmed md5sums matched between transferred files/folders
 ```
 #!/bin/bash -e
 
