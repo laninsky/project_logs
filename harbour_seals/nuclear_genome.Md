@@ -97,7 +97,64 @@ for i in *.zip;
   sbatch $basename.sh;
 done  
 ```
+### Pulled out cutadapt stats to record them (in R)
+First had to load the R module
+```
+module load R/3.5.1-gimkl-2017a
+```
+And then...
+```
+library(stringr)
+files <- list.files(pattern=".cutadapt.log")
+
+for (i in files) {
+  tempfile <- readLines(i)
+  samplename <- gsub(".cutadapt.log","",i)
+    
+  grep("Command line parameters",tempfile)
+  grep("Read 1 with adapter",tempfile)                                                                                                     grep("Read 2 with adapter",tempfile)                                                                                                     grep("Pairs that were too short",tempfile)                                                                                               grep("Pairs written (passing filters)",tempfile)
+  grep("Total basepairs processed",tempfile)                                                                                               grep("Total basepairs processed",tempfile) + 1                                                                                           grep("Total basepairs processed",tempfile) + 2                                                                                           grep("Quality-trimmed",tempfile)                                                                                                         grep("Quality-trimmed",tempfile) + 1                                                                                                     grep("Quality-trimmed",tempfile) + 2                                                                                                                                                                                                                                                                                                                              
+  [21] "Total written (filtered):  14,280,044,252 bp (99.4%)"                                                                                                                                                                                                            
+  [22] "  Read 1: 7,153,291,982 bp"                                                                                                                                                                                                                                      
+  [23] "  Read 2: 7,126,752,270 bp"                                                                           
+  
+    [25] "=== First read: Adapter 1 ==="                                                                                                                                                                                                                                   
+  [26] ""                                                                                                                                                                                                                                                                
+  [27] "Sequence: AGATCGGAAGAGC; Type: regular 3'; Length: 13; Trimmed: 1481346 times."                                                                                                                                                                                  
+  [28] ""                                                                                                                                                                                                                                                                
+  [29] "No. of allowed errors:"                                                                                                                                                                                                                                          
+  [30] "0-9 bp: 0; 10-13 bp: 1"                                                                                                                                                                                                                                          
+  [31] ""                                                                                                                                                                                                                                                                
+  [32] "Bases preceding removed adapters:"                                                                                                                                                                                                                               
+  [33] "  A: 32.4%"                                                                                                                                                                                                                                                      
+  [34] "  C: 25.5%"                                                                                                                                                                                                                                                      
+  [35] "  G: 23.7%"                                                                                                                                                                                                                                                      
+  [36] "  T: 18.3%"                                                                                                                                                                                                                                                      
+  [37] "  none/other: 0.1%"     
+  
+  
+  
+  tempfile <- tempfile[(grep(" reads; of these:",tempfile)):(grep("overall alignment rate",tempfile))]
+
+  tempfile <- str_trim(tempfile, side = "left")
+  tempfile <- strsplit(tempfile," ")
+  tempfile <- unlist(lapply(1:length(tempfile),function(x) { tempfile[[x]][1] }))
+  tempfile <- tempfile[c(-6,-7,-9)]
+  output[(i+1),] <- c(samplename,tempfile)
+}
+  
+write.table(output,"bowtie_ref.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
+
+
+```
+
 ### Pulled out reference mapping stats to record them (in R)
+First had to load the R module
+```
+module load R/3.5.1-gimkl-2017a
+```
+And then...
+```
 module load R/3.5.1-gimkl-2017a
 ```
 library(stringr)
