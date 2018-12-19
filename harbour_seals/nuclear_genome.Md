@@ -155,8 +155,6 @@ module load R/3.5.1-gimkl-2017a
 ```
 And then...
 ```
-module load R/3.5.1-gimkl-2017a
-```
 library(stringr)
 files <- list.files(pattern=".ref_log.txt")
                 
