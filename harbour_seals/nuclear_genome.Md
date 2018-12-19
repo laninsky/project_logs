@@ -107,33 +107,58 @@ And then...
 library(stringr)
 files <- list.files(pattern=".cutadapt.log")
 
+output <- NULL
+
 for (i in files) {
   tempfile <- readLines(i)
   samplename <- gsub(".cutadapt.log","",i)
-    
-  grep("Command line parameters",tempfile)
-  grep("Read 1 with adapter",tempfile)                                                                                                     grep("Read 2 with adapter",tempfile)                                                                                                     grep("Pairs that were too short",tempfile)                                                                                               grep("Pairs written (passing filters)",tempfile)
-  grep("Total basepairs processed",tempfile)                                                                                               grep("Total basepairs processed",tempfile) + 1                                                                                           grep("Total basepairs processed",tempfile) + 2                                                                                           grep("Quality-trimmed",tempfile)                                                                                                         grep("Quality-trimmed",tempfile) + 1                                                                                                     grep("Quality-trimmed",tempfile) + 2                                                                                                                                                                                                                                                                                                                              
-  [21] "Total written (filtered):  14,280,044,252 bp (99.4%)"                                                                                                                                                                                                            
-  [22] "  Read 1: 7,153,291,982 bp"                                                                                                                                                                                                                                      
-  [23] "  Read 2: 7,126,752,270 bp"                                                                           
+  tempoutput <- matrix(tempfile[grep("Command line parameters",tempfile)],nrow=1)
+  if (length(unique(t(tempoutput)))<dim(tempoutput)[2]) {
+    print(paste(samplename," has duplicate cutadapt runs so will need to be processed manually",sep=""))
+    next
+  }    
+  tempoutput <- rbind(tempoutput,tempfile[grep("Read 1 with adapter",tempfile)])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Read 2 with adapter",tempfile)])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Pairs that were too short",tempfile)])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Pairs written \\(passing filters\\)",tempfile)])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Total basepairs processed",tempfile)])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Total basepairs processed",tempfile) + 1])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Total basepairs processed",tempfile) + 2])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Quality-trimmed",tempfile)])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Quality-trimmed",tempfile) + 1])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Quality-trimmed",tempfile) + 2]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("Total written \\(filtered\\)",tempfile)])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Total written \\(filtered\\)",tempfile) + 1])
+  tempoutput <- rbind(tempoutput,tempfile[grep("Total written \\(filtered\\)",tempfile) + 2]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 2]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 8]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 9]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 10]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 11]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 12])
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 2]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 8]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 9]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 10]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 11]) 
+  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 12])
   
-    [25] "=== First read: Adapter 1 ==="                                                                                                                                                                                                                                   
-  [26] ""                                                                                                                                                                                                                                                                
-  [27] "Sequence: AGATCGGAAGAGC; Type: regular 3'; Length: 13; Trimmed: 1481346 times."                                                                                                                                                                                  
-  [28] ""                                                                                                                                                                                                                                                                
-  [29] "No. of allowed errors:"                                                                                                                                                                                                                                          
-  [30] "0-9 bp: 0; 10-13 bp: 1"                                                                                                                                                                                                                                          
-  [31] ""                                                                                                                                                                                                                                                                
-  [32] "Bases preceding removed adapters:"                                                                                                                                                                                                                               
-  [33] "  A: 32.4%"                                                                                                                                                                                                                                                      
-  [34] "  C: 25.5%"                                                                                                                                                                                                                                                      
-  [35] "  G: 23.7%"                                                                                                                                                                                                                                                      
-  [36] "  T: 18.3%"                                                                                                                                                                                                                                                      
-  [37] "  none/other: 0.1%"     
+  header <- rep(samplename,dim(tempoutput)[2])
   
+  tempoutput <- rbind(header,tempoutput)
   
+  output <- cbind(output,tempoutput)
+}  
   
+finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter","Read_2_with_adapter","Pairs_that_were_too_short","Pairs_written_passing_filters"
+
+output[2,] <- gsub(" ",",",gsub(".*trimmed.fastq.gz ","",gsub(" -q .*","",output[2,])))
+output[3,] <- gsub("  Read 1 with adapter: *","",output[3,])
+output[4,] <- gsub("  Read 2 with adapter: *","",output[4,]) 
+output[5,] <- gsub("Pairs that were too short: *","",output[5,])
+output[6,] <- gsub("Pairs written \\(passing filters\\): *","",output[6,])
+
+
   tempfile <- tempfile[(grep(" reads; of these:",tempfile)):(grep("overall alignment rate",tempfile))]
 
   tempfile <- str_trim(tempfile, side = "left")
