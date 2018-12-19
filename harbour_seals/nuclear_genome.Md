@@ -51,9 +51,9 @@ Ran cutadapt on raw reads, used bowtie2 to assemble them to northern fur seal re
 #SBATCH --account=uoo02423
 #SBATCH --job-name=Sample_19-D135
 #SBATCH -n 1
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=18
 #SBATCH --time=24:00:00
-#SBATCH --mem-per-cpu=1G
+#SBATCH --mem=52G
 #SBATCH --hint=nomultithread
 #SBATCH --partition=large
 #SBATCH -D /nesi/nobackup/uoo02423/uploaded 
