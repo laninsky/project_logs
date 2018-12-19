@@ -43,13 +43,13 @@ bowtie2-build --threads 16 GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_
 mkdir trimmed
 ```
 
-### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_12-D099)
-Sed'd the name to substitute in other samples' names. Ran cutadapt on raw reads, used bowtie2 to assemble them to northern fur seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam.
+### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_19-D135)
+Ran cutadapt on raw reads, used bowtie2 to assemble them to northern fur seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam.
 ```
 #!/bin/bash -e
 
 #SBATCH --account=uoo02423
-#SBATCH --job-name=Sample_12-D099
+#SBATCH --job-name=Sample_19-D135
 #SBATCH -n 1
 #SBATCH --cpus-per-task=16
 #SBATCH --time=24:00:00
@@ -66,7 +66,7 @@ module load cutadapt/1.16-gimkl-2017a-Python-3.6.3
 module load Bowtie2/2.3.2-gimkl-2017a
 module load FastQC/0.11.7
 
-i=Sample_12-D099.zip;
+i=Sample_19-D135.zip;
 basename=`echo $i | sed 's/.zip//g'`;
 echo $basename >> $i.ref_log.txt
 echo $basename >> $i.bam_log.txt
@@ -88,6 +88,14 @@ samtools view --threads 16 -bS -o $basename.bam $basename.sam &>> $i.bam_log.txt
 rm -rf $basename.sam; 
 rm -rf $basename;
 ```
+To create a sample-specific \*.sh file:
+```
+for i in *.zip; 
+  do basename=`echo $i | sed 's/.zip//g'`;
+  cp Sample_19-D135.sh $basename.sh;
+  sed -i "s/Sample_19-D135/$basename/g" $basename.sh;
+  sbatch $basename.sh;
+done  
 
 ### Pulled out reference mapping stats to record them (in R)
 module load R/3.5.1-gimkl-2017a
