@@ -88,7 +88,7 @@ samtools view --threads 16 -bS -o $basename.bam $basename.sam &>> $i.bam_log.txt
 rm -rf $basename.sam; 
 rm -rf $basename;
 ```
-To create a sample-specific \*.sh file:
+To create a sample-specific \*.sh file for each \*zip based on Sample_19-D135.sh and then start these jobs off:
 ```
 for i in *.zip; 
   do basename=`echo $i | sed 's/.zip//g'`;
@@ -96,7 +96,7 @@ for i in *.zip;
   sed -i "s/Sample_19-D135/$basename/g" $basename.sh;
   sbatch $basename.sh;
 done  
-
+```
 ### Pulled out reference mapping stats to record them (in R)
 module load R/3.5.1-gimkl-2017a
 ```
