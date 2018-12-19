@@ -88,3 +88,27 @@ samtools view --threads 16 -bS -o $basename.bam $basename.sam &>> $i.bam_log.txt
 rm -rf $basename.sam; 
 rm -rf $basename;
 ```
+
+### Pulled out reference mapping stats to record them (in R)
+module load R/3.5.1-gimkl-2017a
+```
+library(stringr)
+files <- list.files(pattern=".ref_log.txt")
+                
+output <- matrix("",nrow=(length(files)+1),ncol=13)
+
+output[1,] <- c("File_name","Reads","Number_paired","aligned_concordantly_0_times","aligned_concordantly_exactly_1_time","aligned_concordantly_>1_times","aligned_discordantly_1_time","aligned_0_times_concordantly_or_discordantly","aligned_0_times_concordantly_or_discordantly_single_read_count","single_read_aligned_0_times", "aligned_exactly_1_time", "aligned_>1_times", "overall_alignment_rate")
+
+for (i in 1:length(files)) {
+  tempfile <- readLines(files[i])
+  tempfile <- tempfile[(grep(" reads; of these:",tempfile)):(grep("overall alignment rate",tempfile))]
+  samplename <- gsub(".ref_log.txt","",files[i])
+  tempfile <- str_trim(tempfile, side = "left")
+  tempfile <- strsplit(tempfile," ")
+  tempfile <- unlist(lapply(1:length(tempfile),function(x) { tempfile[[x]][1] }))
+  tempfile <- tempfile[c(-6,-7,-9)]
+  output[(i+1),] <- c(samplename,tempfile)
+}
+  
+write.table(output,"bowtie_ref.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
+```
