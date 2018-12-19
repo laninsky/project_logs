@@ -150,14 +150,19 @@ for (i in files) {
   output <- cbind(output,tempoutput)
 }  
   
-finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter","Read_2_with_adapter","Pairs_that_were_too_short","Pairs_written_passing_filters"
+finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter","Read_2_with_adapter","Pairs_that_were_too_short","Pairs_written_passing_filters","Total_basepairs_processed","Read_1_processed","Read_2_processed","Quality_trimmed"
 
 output[2,] <- gsub(" ",",",gsub(".*trimmed.fastq.gz ","",gsub(" -q .*","",output[2,])))
 output[3,] <- gsub("  Read 1 with adapter: *","",output[3,])
 output[4,] <- gsub("  Read 2 with adapter: *","",output[4,]) 
 output[5,] <- gsub("Pairs that were too short: *","",output[5,])
 output[6,] <- gsub("Pairs written \\(passing filters\\): *","",output[6,])
+output[7,] <- gsub("Total basepairs processed: *","",output[7,])
+output[8,] <- gsub("  Read 1: *","",output[8,])
+output[9,] <- gsub("  Read 2: *","",output[9,])
 
+output[10,]
+gsub("Quality-trimmed:  *","",output[10,])
 
   tempfile <- tempfile[(grep(" reads; of these:",tempfile)):(grep("overall alignment rate",tempfile))]
 
