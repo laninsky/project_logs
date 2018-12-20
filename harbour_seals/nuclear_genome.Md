@@ -10,7 +10,7 @@
 #SBATCH --mem-per-cpu=1G
 #SBATCH --hint=nomultithread
 #SBATCH --partition=large
-#SBATCH -D /nesi/nobackup/uoo00106
+#SBATCH -D /nesi/nobackup/uoo02423/uploaded 
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=alana.alexander@otago.ac.nz
 #SBATCH -N 1
@@ -31,7 +31,7 @@ In the working directory, made a trimmed directory for the raw reads to be moved
 #SBATCH --mem-per-cpu=1G
 #SBATCH --hint=nomultithread
 #SBATCH --partition=large
-#SBATCH -D /nesi/nobackup/uoo00106/uploaded
+#SBATCH -D /nesi/nobackup/uoo02423/uploaded 
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=alana.alexander@otago.ac.nz
 #SBATCH -N 1
@@ -150,19 +150,63 @@ for (i in files) {
   output <- cbind(output,tempoutput)
 }  
   
-finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter","Read_2_with_adapter","Pairs_that_were_too_short","Pairs_written_passing_filters","Total_basepairs_processed","Read_1_processed","Read_2_processed","Quality_trimmed"
+finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter_#","Read_1_with_adapter_%","Read_2_with_adapter_#","Read_2_with_adapter_%","Pairs_that_were_too_short_#","Pairs_that_were_too_short_%","Pairs_written_passing_filters_#","Pairs_written_passing_filters_%","Total_basepairs_processed_bp","Read_1_processed_bp","Read_2_processed_bp","Quality_trimmed_bp","Quality_trimmed_%","Read_1_quality_trimmed","Read_2_quality_trimmed","Total_bp_written","Total_%_written","Read_1_bp_written","Read_2_bp_written",
+
+"No_times_adapter_1_trimmed",
+
+"%_times_A_precedes_adapter1_seq","%_times_C_precedes_adapter1_seq","%_times_G_precedes_adapter1_seq","%_times_T_precedes_adapter1_seq","%_times_none_other_precedes_adapter1_seq","No_times_adapter_2_trimmed","%_times_A_precedes_adapter2_seq","%_times_C_precedes_adapter2_seq","%_times_G_precedes_adapter2_seq","%_times_T_precedes_adapter2_seq","%_times_none_other_precedes_adapter2_seq"
 
 output[2,] <- gsub(" ",",",gsub(".*trimmed.fastq.gz ","",gsub(" -q .*","",output[2,])))
-output[3,] <- gsub("  Read 1 with adapter: *","",output[3,])
-output[4,] <- gsub("  Read 2 with adapter: *","",output[4,]) 
-output[5,] <- gsub("Pairs that were too short: *","",output[5,])
-output[6,] <- gsub("Pairs written \\(passing filters\\): *","",output[6,])
-output[7,] <- gsub("Total basepairs processed: *","",output[7,])
-output[8,] <- gsub("  Read 1: *","",output[8,])
-output[9,] <- gsub("  Read 2: *","",output[9,])
+temp3 <- gsub("  Read 1 with adapter: *","",output[3,])
+output[3,] <- gsub(" .*","",temp3)
+temp3 <- gsub("%\\)","",gsub(".*\\(","",temp3))
+output <- rbind(output[1:3,],temp3,output[4:27,])
+temp5 <- gsub("  Read 2 with adapter: *","",output[5,])
+output[5,] <- gsub(" .*","",temp5)
+temp5 <- gsub("%\\)","",gsub(".*\\(","",temp5))
+output <- rbind(output[1:5,],temp5,output[6:28,])
+temp7 <- gsub("Pairs that were too short: *","",output[7,])
+output[7,] <- gsub(" .*","",temp7)
+temp7 <- gsub("%\\)","",gsub(".*\\(","",temp7))
+output <- rbind(output[1:7,],temp7,output[8:29,])
+temp9 <- gsub("Pairs written \\(passing filters\\): *","",output[9,])
+output[9,] <- gsub(" .*","",temp9)
+temp9 <- gsub("%\\)","",gsub(".*\\(","",temp9))
+output <- rbind(output[1:9,],temp9,output[10:30,])
+output[11,] <- gsub(" bp","",gsub("Total basepairs processed: *","",output[11,]))
+output[12,] <- gsub(" bp","",gsub("  Read 1: *","",output[12,]))
+output[13,] <- gsub(" bp","",gsub("  Read 2: *","",output[13,]))
+temp14 <- gsub("Quality-trimmed:  *","",output[14,])
+output[14,] <- gsub(" .*","",temp14)
+temp14 <- gsub("%\\)","",gsub(".*\\(","",temp14))
+output <- rbind(output[1:14,],temp14,output[15:31,])
+output[16,] <- gsub(" bp","",gsub("  Read 1: *","",output[16,]))
+output[17,] <- gsub(" bp","",gsub("  Read 2: *","",output[17,]))
+temp18 <- gsub("Total written \\(filtered\\): *","",output[18,])
+output[18,] <- gsub(" .*","",temp18)
+temp18 <- gsub("%\\)","",gsub(".*\\(","",temp18))
+output <- rbind(output[1:18,],temp18,output[19:32,])
+output[20,] <- gsub(" bp","",gsub("  Read 1: *","",output[20,]))
+output[21,] <- gsub(" bp","",gsub("  Read 2: *","",output[21,]))
 
-output[10,]
-gsub("Quality-trimmed:  *","",output[10,])
+
+output[16,] <- gsub(" times.","",gsub(".*Trimmed: *","",output[16,]))
+output[17,] <- gsub("  A: *","",output[17,])
+output[18,] <- gsub("  C: *","",output[18,])
+output[19,] <- gsub("  G: *","",output[19,])
+output[20,] <- gsub("  T: *","",output[20,])
+output[21,] <- gsub("  none/other: *","",output[21,])
+output[22,] <- gsub(" times.","",gsub(".*Trimmed: *","",output[22,]))
+output[23,] <- gsub("  A: *","",output[23,])
+output[24,] <- gsub("  C: *","",output[24,])
+output[25,] <- gsub("  G: *","",output[25,])
+output[26,] <- gsub("  T: *","",output[26,])
+output[27,] <- gsub("  none/other: *","",output[27,])
+
+
+
+
+
 
   tempfile <- tempfile[(grep(" reads; of these:",tempfile)):(grep("overall alignment rate",tempfile))]
 
