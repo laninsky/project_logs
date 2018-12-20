@@ -197,22 +197,7 @@ output[31,] <- gsub("%","",gsub("  G: *","",output[31,]))
 output[32,] <- gsub("%","",gsub("  T: *","",output[32,]))
 output[33,] <- gsub("%","",gsub("  none/other: *","",output[33,]))
 
-
-
-
-
-
-  tempfile <- tempfile[(grep(" reads; of these:",tempfile)):(grep("overall alignment rate",tempfile))]
-
-  tempfile <- str_trim(tempfile, side = "left")
-  tempfile <- strsplit(tempfile," ")
-  tempfile <- unlist(lapply(1:length(tempfile),function(x) { tempfile[[x]][1] }))
-  tempfile <- tempfile[c(-6,-7,-9)]
-  output[(i+1),] <- c(samplename,tempfile)
-}
-  
-write.table(output,"bowtie_ref.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
-
+write.table(cbind(finalheader,output),"cutadapt_log_summary.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
 
 ```
 
