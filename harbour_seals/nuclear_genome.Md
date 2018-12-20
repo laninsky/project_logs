@@ -197,9 +197,15 @@ output[31,] <- gsub("%","",gsub("  G: *","",output[31,]))
 output[32,] <- gsub("%","",gsub("  T: *","",output[32,]))
 output[33,] <- gsub("%","",gsub("  none/other: *","",output[33,]))
 
-write.table(cbind(finalheader,output),"cutadapt_log_summary.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
+write.table(t(cbind(finalheader,output)),"cutadapt_log_summary.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
 
 ```
+I downloaded and opened cutadapt_log_summary.txt to my own computer so I could pull it through Rstudio and eyeball plots as I went to make sure there weren't any squiffy correlations
+```
+
+
+```
+
 
 ### Pulled out reference mapping stats to record them (in R)
 First had to load the R module
