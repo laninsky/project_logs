@@ -150,11 +150,7 @@ for (i in files) {
   output <- cbind(output,tempoutput)
 }  
   
-finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter_#","Read_1_with_adapter_%","Read_2_with_adapter_#","Read_2_with_adapter_%","Pairs_that_were_too_short_#","Pairs_that_were_too_short_%","Pairs_written_passing_filters_#","Pairs_written_passing_filters_%","Total_basepairs_processed_bp","Read_1_processed_bp","Read_2_processed_bp","Quality_trimmed_bp","Quality_trimmed_%","Read_1_quality_trimmed","Read_2_quality_trimmed","Total_bp_written","Total_%_written","Read_1_bp_written","Read_2_bp_written",
-
-"No_times_adapter_1_trimmed",
-
-"%_times_A_precedes_adapter1_seq","%_times_C_precedes_adapter1_seq","%_times_G_precedes_adapter1_seq","%_times_T_precedes_adapter1_seq","%_times_none_other_precedes_adapter1_seq","No_times_adapter_2_trimmed","%_times_A_precedes_adapter2_seq","%_times_C_precedes_adapter2_seq","%_times_G_precedes_adapter2_seq","%_times_T_precedes_adapter2_seq","%_times_none_other_precedes_adapter2_seq"
+finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter_#","Read_1_with_adapter_%","Read_2_with_adapter_#","Read_2_with_adapter_%","Pairs_that_were_too_short_#","Pairs_that_were_too_short_%","Pairs_written_passing_filters_#","Pairs_written_passing_filters_%","Total_basepairs_processed_bp","Read_1_processed_bp","Read_2_processed_bp","Quality_trimmed_bp","Quality_trimmed_%","Read_1_quality_trimmed","Read_2_quality_trimmed","Total_bp_written","Total_%_written","Read_1_bp_written","Read_2_bp_written","No_times_adapter_1_trimmed","%_times_A_precedes_adapter1_seq","%_times_C_precedes_adapter1_seq","%_times_G_precedes_adapter1_seq","%_times_T_precedes_adapter1_seq","%_times_none_other_precedes_adapter1_seq","No_times_adapter_2_trimmed","%_times_A_precedes_adapter2_seq","%_times_C_precedes_adapter2_seq","%_times_G_precedes_adapter2_seq","%_times_T_precedes_adapter2_seq","%_times_none_other_precedes_adapter2_seq")
 
 output[2,] <- gsub(" ",",",gsub(".*trimmed.fastq.gz ","",gsub(" -q .*","",output[2,])))
 temp3 <- gsub("  Read 1 with adapter: *","",output[3,])
@@ -188,20 +184,18 @@ temp18 <- gsub("%\\)","",gsub(".*\\(","",temp18))
 output <- rbind(output[1:18,],temp18,output[19:32,])
 output[20,] <- gsub(" bp","",gsub("  Read 1: *","",output[20,]))
 output[21,] <- gsub(" bp","",gsub("  Read 2: *","",output[21,]))
-
-
-output[16,] <- gsub(" times.","",gsub(".*Trimmed: *","",output[16,]))
-output[17,] <- gsub("  A: *","",output[17,])
-output[18,] <- gsub("  C: *","",output[18,])
-output[19,] <- gsub("  G: *","",output[19,])
-output[20,] <- gsub("  T: *","",output[20,])
-output[21,] <- gsub("  none/other: *","",output[21,])
 output[22,] <- gsub(" times.","",gsub(".*Trimmed: *","",output[22,]))
-output[23,] <- gsub("  A: *","",output[23,])
-output[24,] <- gsub("  C: *","",output[24,])
-output[25,] <- gsub("  G: *","",output[25,])
-output[26,] <- gsub("  T: *","",output[26,])
-output[27,] <- gsub("  none/other: *","",output[27,])
+output[23,] <- gsub("%","",gsub("  A: *","",output[23,]))
+output[24,] <- gsub("%","",gsub("  C: *","",output[24,]))
+output[25,] <- gsub("%","",gsub("  G: *","",output[25,]))
+output[26,] <- gsub("%","",gsub("  T: *","",output[26,]))
+output[27,] <- gsub("%","",gsub("  none/other: *","",output[27,]))
+output[28,] <- gsub("%","",gsub(" times.","",gsub(".*Trimmed: *","",output[28,])))
+output[29,] <- gsub("%","",gsub("  A: *","",output[29,]))
+output[30,] <- gsub("%","",gsub("  C: *","",output[30,]))
+output[31,] <- gsub("%","",gsub("  G: *","",output[31,]))
+output[32,] <- gsub("%","",gsub("  T: *","",output[32,]))
+output[33,] <- gsub("%","",gsub("  none/other: *","",output[33,]))
 
 
 
