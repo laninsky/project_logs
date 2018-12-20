@@ -200,8 +200,27 @@ output[33,] <- gsub("%","",gsub("  none/other: *","",output[33,]))
 write.table(t(cbind(finalheader,output)),"cutadapt_log_summary.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
 
 ```
-I downloaded and opened cutadapt_log_summary.txt to my own computer so I could pull it through Rstudio and eyeball plots as I went to make sure there weren't any squiffy correlations
+I downloaded and opened cutadapt_log_summary.txt to my own computer so I could pull it through Rstudio and eyeball plots as I went to make sure there weren't any squiffy correlations and to do some sample summaries
 ```
+library(readr)
+library(tidyr)
+library(dplyr)
+library(GGally)
+
+temp <- read_table2("cutadapt_log_summary.txt")
+
+# Too many variables to plot all at once, so doing these in batches
+
+corgraph <- ggpairs(temp, mapping=(aes(fill = sample_name,color=sample_name)),
+        columns=c(names(temp)[c(1,3:dim(temp)[2])]),
+        upper=list(continuous="blank",combo="blank"),
+        lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
+        diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = 5) +
+        theme(axis.ticks=element_blank())
+
+# change this one
+corgraph[4,1] <- corgraph[4,1] + theme(axis.text.x = element_blank(),
+                           axis.ticks = element_blank()) 
 
 
 ```
