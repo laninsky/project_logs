@@ -209,18 +209,23 @@ library(GGally)
 
 temp <- read_table2("cutadapt_log_summary.txt")
 
-# Too many variables to plot all at once, so doing these in batches
+# A lot of variables to plot all at once, so can do these in batches by modifying startpos and endpos
+# samplename is in column 1, read file name is in column 2, so including 1 in every plot, and excluding 2
+# (2 shows up as the separate points plotted for each sample)
+
+startpos <- 3
+endpos <- dim(temp)[2]
 
 corgraph <- ggpairs(temp, mapping=(aes(fill = sample_name,color=sample_name)),
-        columns=c(names(temp)[c(1,3:dim(temp)[2])]),
+        columns=c(names(temp)[c(1,startpos:endpos)]),
         upper=list(continuous="blank",combo="blank"),
         lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
-        diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = 5) +
-        theme(axis.ticks=element_blank())
+        diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = (endpos-startpos+3))
 
-# change this one
-corgraph[4,1] <- corgraph[4,1] + theme(axis.text.x = element_blank(),
-                           axis.ticks = element_blank()) 
+corgraph[(endpos-startpos+2),1] <- corgraph[(endpos-startpos+2),1] + theme(axis.text.x = element_blank(),
+                           axis.ticks = element_blank())  
+
+corgraph
 
 
 ```
