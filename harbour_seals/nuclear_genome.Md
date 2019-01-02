@@ -209,6 +209,34 @@ library(GGally)
 
 temp <- read_table2("cutadapt_log_summary.txt")
 
+temp
+## A tibble: 56 x 33
+#   sample_name seq_file_name `Read_1_with_ad… `Read_1_with_ad… `Read_2_with_ad… `Read_2_with_ad…
+#   <chr>       <chr>                    <dbl>            <dbl>            <dbl>            <dbl>
+# 1 Sample_12-… 12-D099_S7_L…          1139203              3.2          1117572              3.1
+# 2 Sample_12-… 12-D099_S7_L…          1173278              3.2          1159492              3.2
+# 3 Sample_12-… 12-D099_S7_L…          1050600              3.2          1028700              3.2
+# 4 Sample_12-… 12-D099_S7_L…          1070980              3.2          1047569              3.2
+# 5 Sample_14-… 14-D084_S11_…           897505              3.1           882116              3.1
+# 6 Sample_14-… 14-D084_S11_…           925149              3.1           916051              3.1
+# 7 Sample_14-… 14-D084_S11_…           826148              3.2           812282              3.1
+# 8 Sample_14-… 14-D084_S11_…           847822              3.2           826900              3.1
+# 9 Sample_15-… 15-591_S13_L…          1011762              3            1000638              2.9
+#10 Sample_15-… 15-591_S13_L…          1039595              3            1038096              3  
+## ... with 46 more rows, and 27 more variables: `Pairs_that_were_too_short_#` <dbl>,
+##   `Pairs_that_were_too_short_%` <dbl>, `Pairs_written_passing_filters_#` <dbl>,
+##   `Pairs_written_passing_filters_%` <dbl>, Total_basepairs_processed_bp <dbl>,
+##   Read_1_processed_bp <dbl>, Read_2_processed_bp <dbl>, Quality_trimmed_bp <dbl>,
+##   `Quality_trimmed_%` <dbl>, Read_1_quality_trimmed <dbl>, Read_2_quality_trimmed <dbl>,
+##   Total_bp_written <dbl>, `Total_%_written` <dbl>, Read_1_bp_written <dbl>,
+##   Read_2_bp_written <dbl>, No_times_adapter_1_trimmed <int>,
+##   `%_times_A_precedes_adapter1_seq` <dbl>, `%_times_C_precedes_adapter1_seq` <dbl>,
+##   `%_times_G_precedes_adapter1_seq` <dbl>, `%_times_T_precedes_adapter1_seq` <dbl>,
+##   `%_times_none_other_precedes_adapter1_seq` <dbl>, No_times_adapter_2_trimmed <int>,
+##   `%_times_A_precedes_adapter2_seq` <dbl>, `%_times_C_precedes_adapter2_seq` <dbl>,
+##   `%_times_G_precedes_adapter2_seq` <dbl>, `%_times_T_precedes_adapter2_seq` <dbl>,
+##   `%_times_none_other_precedes_adapter2_seq` <dbl>
+
 # A lot of variables to plot all at once, so can do these in batches by modifying startpos and endpos
 # samplename is in column 1, read file name is in column 2, so including 1 in every plot, and excluding 2
 # (2 shows up as the separate points plotted for each sample)
@@ -225,8 +253,7 @@ corgraph <- ggpairs(temp, mapping=(aes(fill = sample_name,color=sample_name)),
 corgraph[(endpos-startpos+2),1] <- corgraph[(endpos-startpos+2),1] + theme(axis.text.x = element_blank(),
                            axis.ticks = element_blank())  
 
-corgraph
-
+ggsave(filename="cutadapt_correlations.pdf",corgraph,width=(endpos-startpos)*2,height=(endpos-startpos)*2,units="cm")
 
 ```
 
