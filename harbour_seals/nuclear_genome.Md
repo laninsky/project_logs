@@ -253,6 +253,7 @@ corgraph <- ggpairs(temp, mapping=(aes(fill = sample_name,color=sample_name)),
 corgraph[(endpos-startpos+2),1] <- corgraph[(endpos-startpos+2),1] + theme(axis.text.x = element_blank(),
                            axis.ticks = element_blank())  
 
+# This adjusts the width of the plot for how many samples we are plotting
 plotwidthmultiplier <- round(length(unique(temp$sample_name)),-1)
 
 ggsave(filename="cutadapt_correlations.pdf",corgraph,width=(endpos-startpos)*plotwidthmultiplier,height=(endpos-startpos)*plotwidthmultiplier,units="cm",limitsize=FALSE)
