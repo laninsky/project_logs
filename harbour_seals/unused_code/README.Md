@@ -1,6 +1,6 @@
 Originally, I used the following cutadapt commands in this [script:]( https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-northern-fur-seal-reference-example-for-sample_19-d135)
 
-However, there appeared to be adapter/adaptor dimer/concatamer, potentially involving the truseq process controls, so I switched the loop to remove any sequences with the contaminating sequence present in the 5' part of the read (the code currently [here:]( https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-northern-fur-seal-reference-example-for-sample_19-d135))
+However, there appeared to be adapter/adaptor dimer/concatamer, potentially involving the truseq process controls, so I switched the loop to remove any sequences with the contaminating sequence present in the 5' part of the read (the code currently [here]( https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-northern-fur-seal-reference-example-for-sample_19-d135)). The sequence was very similar to the adapters, but missing the first two basepair (potentially as past of the ligation reaction).
 
 ```
 for j in *R1*.fastq.gz;
