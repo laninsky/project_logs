@@ -135,18 +135,28 @@ for (i in files) {
   tempoutput <- rbind(tempoutput,tempfile[grep("Total written \\(filtered\\)",tempfile)])
   tempoutput <- rbind(tempoutput,tempfile[grep("Total written \\(filtered\\)",tempfile) + 1])
   tempoutput <- rbind(tempoutput,tempfile[grep("Total written \\(filtered\\)",tempfile) + 2]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 2]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 8]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 9]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 10]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 11]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== First read: Adapter 1 ===",tempfile) + 12])
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 2]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 8]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 9]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 10]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 11]) 
-  tempoutput <- rbind(tempoutput,tempfile[grep("=== Second read: Adapter 2 ===",tempfile) + 12])
+  
+  # Need to create a for loop given this is now going to be more than one adaptor
+  # probably something like this WORK IN PROGRESS
+  read1names <- unique(tempfile[grep("=== First read: Adapter [0-9]+ ===",tempfile)])
+  for (j in $read1names) { 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 2]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 8]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 9]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 10]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 11]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 12])
+  }
+  
+  read2names <- unique(tempfile[grep("=== Second read: Adapter [0-9]+ ===",tempfile)])
+  for (j in $read2names) { 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 2]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 8]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 9]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 10]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 11]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 12])
+  }  
   
   header <- rep(samplename,dim(tempoutput)[2])
   
@@ -154,7 +164,9 @@ for (i in files) {
   
   output <- cbind(output,tempoutput)
 }  
-  
+
+# WORK IN PROGRESS - need to do a finalheader for this one too.
+
 finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter_#","Read_1_with_adapter_%","Read_2_with_adapter_#","Read_2_with_adapter_%","Pairs_that_were_too_short_#","Pairs_that_were_too_short_%","Pairs_written_passing_filters_#","Pairs_written_passing_filters_%","Total_basepairs_processed_bp","Read_1_processed_bp","Read_2_processed_bp","Quality_trimmed_bp","Quality_trimmed_%","Read_1_quality_trimmed","Read_2_quality_trimmed","Total_bp_written","Total_%_written","Read_1_bp_written","Read_2_bp_written","No_times_adapter_1_trimmed","%_times_A_precedes_adapter1_seq","%_times_C_precedes_adapter1_seq","%_times_G_precedes_adapter1_seq","%_times_T_precedes_adapter1_seq","%_times_none_other_precedes_adapter1_seq","No_times_adapter_2_trimmed","%_times_A_precedes_adapter2_seq","%_times_C_precedes_adapter2_seq","%_times_G_precedes_adapter2_seq","%_times_T_precedes_adapter2_seq","%_times_none_other_precedes_adapter2_seq")
 
 output[2,] <- gsub(" ",",",gsub(".*trimmed.fastq.gz ","",gsub(" -q .*","",output[2,])))
