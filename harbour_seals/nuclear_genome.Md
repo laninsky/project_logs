@@ -76,7 +76,12 @@ for j in *R1*.fastq.gz;
 do trimname1=`echo $j | sed 's/.fastq/.trimmed.fastq/g'`;
 trimname2=`echo $trimname1 | sed 's/R1/R2/g'`;
 reverse=`echo $j | sed 's/R1/R2/g'`;
-cutadapt -j 16 -a AGATCGGAAGAGC -A AGATCGGAAGAGC -o $trimname1 -p $trimname2 $j $reverse -q 5,15 -m 25 >> ../$i.cutadapt.log;
+
+bbduk.sh in=in.fq.gz out=trimmed.fq.gz ktrim=r k=23 mink=11 hdist=1 tbo tpe minlen=70 ref=adapters ftm=5
+bbduk.sh in=trimmed.fq.gz out=filtered.fq.gz k=31 ref=artifacts,phix ordered cardinality
+
+
+
 done;
 R1=`echo *R1*trimmed.fastq.gz | sed 's/ /,/g'`;
 R2=`echo *R2*trimmed.fastq.gz | sed 's/ /,/g'`;
