@@ -38,9 +38,11 @@ In the working directory, made a trimmed directory for the raw reads to be moved
 
 module load Bowtie2/2.3.2-gimkl-2017a
 
-bowtie2-build --threads 16 GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_seal
+working_dir=/nesi/nobackup/uoo02423/uploaded/done/redo
+mkdir $working_dir
+mkdir $working_dir/trimmed
 
-mkdir trimmed
+bowtie2-build --threads 16 GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_seal
 ```
 
 ### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)
@@ -66,26 +68,29 @@ module load cutadapt/1.16-gimkl-2017a-Python-3.6.3
 module load Bowtie2/2.3.2-gimkl-2017a
 module load FastQC/0.11.7
 
+working_dir=/nesi/nobackup/uoo02423/uploaded/done/redo
+zipped_folder_location=/nesi/nobackup/uoo02423/uploaded/done
+
 i=Sample_1-D079.zip;
 basename=`echo $i | sed 's/.zip//g'`;
-echo $basename >> $i.ref_log.txt
-echo $basename >> $i.bam_log.txt
-#unzip $i;
+echo $basename >> $working_dir/$i.ref_log.txt
+echo $basename >> $working_dir/$i.bam_log.txt
+unzip $i;
 cd $basename;
 for j in *R1*.fastq.gz;
   do trimname1=`echo $j | sed 's/.fastq/.trimmed.fastq/g'`;
   trimname2=`echo $trimname1 | sed 's/R1/R2/g'`;
   reverse=`echo $j | sed 's/R1/R2/g'`;
-  cutadapt -j 16 -a AGATCGGAAGAGC -a ^ATCGGAAGAGCACACGTCTGAACTCCAGTCACCCGCGGTTATCTCGTATGCCGTCTTCTGCTTGAAAAAA -A AGATCGGAAGAGC -A ^ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTCTAGCGCTGTGTAGATCTCGGTGGTCGCCGTATCATTAAAAAA -o $trimname1 -p $trimname2 $j $reverse -q 5,15 -m 25 >> ../$i.cutadapt.log;
+  cutadapt -j 18 -a AGATCGGAAGAGC -a ^ATCGGAAGAGCACACGTCTGAACTCCAGTCACCCGCGGTTATCTCGTATGCCGTCTTCTGCTTGAAAAAA -A AGATCGGAAGAGC -A ^ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTCTAGCGCTGTGTAGATCTCGGTGGTCGCCGTATCATTAAAAAA -o $trimname1 -p $trimname2 $j $reverse -q 5,15 -m 25 >> $working_dir/$i.cutadapt.log;
 done;
 R1=`echo *R1*trimmed.fastq.gz | sed 's/ /,/g'`;
 R2=`echo *R2*trimmed.fastq.gz | sed 's/ /,/g'`;
-bowtie2 --fr -p 16 -x /nesi/nobackup/uoo02423/uploaded/northern_fur_seal -1 $R1 -2 $R2 -S /nesi/nobackup/uoo02423/uploaded/$basename.sam &>> /nesi/nobackup/uoo02423/uploaded/$i.ref_log.txt
-cd /nesi/nobackup/uoo02423/uploaded;
-fastqc -k $basename/*fastq.gz -o trimmed -t 16;
-mv $basename/*trimmed* trimmed;
-samtools view --threads 16 -bS -o $basename.bam $basename.sam &>> $i.bam_log.txt;
-rm -rf $basename.sam;
+bowtie2 --fr -p 18 -x /nesi/nobackup/uoo02423/uploaded/northern_fur_seal -1 $R1 -2 $R2 -S $working_dir/$basename.sam &>> $working_dir/$i.ref_log.txt
+cd $zipped_folder_location
+fastqc -k $basename/*fastq.gz -o $working_dir/trimmed -t 18;
+mv $basename/*trimmed* $working_dir/trimmed;
+samtools view --threads 18 -bS -o $working_dir/$basename.bam $working_dir/$basename.sam &>> $working_dir/$i.bam_log.txt;
+rm -rf $working_dir/$basename.sam;
 rm -rf $basename;
 ```
 To create a sample-specific \*.sh file for each \*zip based on Sample_19-D135.sh and then start these jobs off:
