@@ -87,7 +87,7 @@ R1=`echo *R1*trimmed.fastq.gz | sed 's/ /,/g'`;
 R2=`echo *R2*trimmed.fastq.gz | sed 's/ /,/g'`;
 bowtie2 --fr -p 18 -x /nesi/nobackup/uoo02423/uploaded/northern_fur_seal -1 $R1 -2 $R2 -S $working_dir/$basename.sam &>> $working_dir/$i.ref_log.txt
 cd $zipped_folder_location
-fastqc -k 7 $basename/*fastq.gz -o $working_dir/trimmed -t 18;
+fastqc $basename/*fastq.gz -o $working_dir/trimmed -t 18;
 mv $basename/*trimmed* $working_dir/trimmed;
 samtools view --threads 18 -bS -o $working_dir/$basename.bam $working_dir/$basename.sam &>> $working_dir/$i.bam_log.txt;
 rm -rf $working_dir/$basename.sam;
