@@ -43,20 +43,20 @@ bowtie2-build --threads 16 GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_
 mkdir trimmed
 ```
 
-### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_19-D135)
+### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)
 Ran cutadapt on raw reads, used bowtie2 to assemble them to northern fur seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam.
 ```
 #!/bin/bash -e
 
 #SBATCH --account=uoo02423
-#SBATCH --job-name=Sample_19-D135
+#SBATCH --job-name=Sample_1-D079
 #SBATCH -n 1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=24:00:00
 #SBATCH --mem=52G
 #SBATCH --hint=nomultithread
 #SBATCH --partition=large
-#SBATCH -D /nesi/nobackup/uoo02423/uploaded 
+#SBATCH -D /nesi/nobackup/uoo02423/uploaded/done 
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=alana.alexander@otago.ac.nz
 #SBATCH -N 1
@@ -66,11 +66,11 @@ module load cutadapt/1.16-gimkl-2017a-Python-3.6.3
 module load Bowtie2/2.3.2-gimkl-2017a
 module load FastQC/0.11.7
 
-i=Sample_19-D135.zip;
+i=Sample_1-D079.zip;
 basename=`echo $i | sed 's/.zip//g'`;
 echo $basename >> $i.ref_log.txt
 echo $basename >> $i.bam_log.txt
-unzip $i;
+#unzip $i;
 cd $basename;
 for j in *R1*.fastq.gz;
   do trimname1=`echo $j | sed 's/.fastq/.trimmed.fastq/g'`;
@@ -82,18 +82,18 @@ R1=`echo *R1*trimmed.fastq.gz | sed 's/ /,/g'`;
 R2=`echo *R2*trimmed.fastq.gz | sed 's/ /,/g'`;
 bowtie2 --fr -p 16 -x /nesi/nobackup/uoo02423/uploaded/northern_fur_seal -1 $R1 -2 $R2 -S /nesi/nobackup/uoo02423/uploaded/$basename.sam &>> /nesi/nobackup/uoo02423/uploaded/$i.ref_log.txt
 cd /nesi/nobackup/uoo02423/uploaded;
-fastqc $basename/*fastq.gz -o trimmed -t 16;
+fastqc -k $basename/*fastq.gz -o trimmed -t 16;
 mv $basename/*trimmed* trimmed;
 samtools view --threads 16 -bS -o $basename.bam $basename.sam &>> $i.bam_log.txt;
-rm -rf $basename.sam; 
+rm -rf $basename.sam;
 rm -rf $basename;
 ```
 To create a sample-specific \*.sh file for each \*zip based on Sample_19-D135.sh and then start these jobs off:
 ```
 for i in *.zip; 
   do basename=`echo $i | sed 's/.zip//g'`;
-  cp Sample_19-D135.sh $basename.sh;
-  sed -i "s/Sample_19-D135/$basename/g" $basename.sh;
+  cp Sample_1-D079.sh $basename.sh;
+  sed -i "s/Sample_1-D079/$basename/g" $basename.sh;
   sbatch $basename.sh;
 done  
 ```
