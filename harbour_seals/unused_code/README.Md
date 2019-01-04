@@ -54,15 +54,10 @@ The i5 and i7 adaptors have a region of complementarity (Y-shaped adaptor). Coup
 # What these y-shaped adapters look like (yes, the library (5'-xxxx-A) is back-to-front, but didn't realise I had these in a non-
 # intuitive direction until too late, and couldn't be bothered remaking them! To get it in the usual 5' to 3' orientation
 # flip it from left to right, and then top to bottom in your brain
-
-[reverse i7]       GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA
-                                                                   CGAGAAGGTCAG      A-xxxx-5'
-                                                                   GCTCTTCCGATCT    5'-xxxx-A
-[original i5] AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGAC
-
-
-                                           CAGCACATCCCTTTCTCACA[5i]CACATCTAGAGCCACCAGCGGCATAGCAA 
- A-xxxx-5'      [Reverse i5]  TCTAGCCTTCTCG
-5'-xxxx-A      [i7 adaptor]    GATCGGAAGAGC
-                                           ACACGTCTGAACTCCAGTCA[i7]ATCTCGTATGCCGTCTTCTGCTTG
+                                                                                     DNA frag of interest
+[reverse i7]       GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA                  3'                   5'                     CAGCACATCCCTTTCTCACA[5i]CACATCTAGAGCCACCAGCGGCATAGCAA [Reverse i5]
+                                                                   CGAGAAGGTCAG      A-xxxxxxxxxxxxxxxxxx           TCTAGCCTTCTCG
+                                                                   GCTCTTCCGATCT       xxxxxxxxxxxxxxxxxx-A          GATCGGAAGAGC
+[original i5] AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGAC                  5'                   3'                     ACACGTCTGAACTCCAGTCA[i7]ATCTCGTATGCCGTCTTCTGCTTG
+                                          
 ```
