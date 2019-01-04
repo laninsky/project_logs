@@ -46,7 +46,7 @@ bowtie2-build --threads 16 GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_
 ```
 
 ### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)
-Ran cutadapt on raw reads, used bowtie2 to assemble them to northern fur seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam.
+Ran cutadapt on raw reads, used bowtie2 to assemble them to northern fur seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam. This script is modified from original cutadapt [loop](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md) because of the presence of adaptor dimer. The bioinformatics troubleshooting for this is explained [here](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md)
 ```
 #!/bin/bash -e
 
