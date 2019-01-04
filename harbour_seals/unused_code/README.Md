@@ -47,7 +47,7 @@ But back to my original question - why were these bases missing? The following p
 
 Glenn, T. C., R. Nilsen, T. J. Kieran, J. W. Finger Jr., T. W. Pierson, K. E. Bentley, S. L. Hoffberg, S. Louha, F. J. Garcia-De Leon, M. A. D. R. Portilla, K. D. Reed, J. L. Anderson, J. K. Meece, S. E. Aggrey, R. Rekaya, M. Alabady, M. Belanger, K. Winker, and B. C. Faircloth. Adapterama I: Universal stubs and primers for thousands of dual-indexed Illumina libraries (iTru & iNext). Preprint at http://biorxiv.org/content/early/2016/06/15/049114
 
-The i5 and i7 adaptors have a region of complementarity (Y-shaped adaptor). Coupled with the 3' A-tailing during (library prep)[https://www.illumina.com/content/dam/illumina-marketing/documents/products/datasheets/datasheet_truseq_dna_pcr_free_sample_prep.pdf], this ensures the formation of library fragments with i5 on one side, and i7 on the other (i.e. exactly what we want for sequencing!).
+The i5 and i7 adaptors have a region of complementarity (Y-shaped adaptor). Coupled with the 3' A-tailing during [library prep](https://www.illumina.com/content/dam/illumina-marketing/documents/products/datasheets/datasheet_truseq_dna_pcr_free_sample_prep.pdf), this ensures the formation of library fragments with i5 on one side, and i7 on the other (i.e. exactly what we want for sequencing!).
 ```
 # What these y-shaped adapters look like (yes, the library (5'-xxxx-A) is back-to-front, but didn't realise I had these in a non-
 # intuitive direction until too late, and couldn't be bothered remaking them! To get it in the usual 5' to 3' orientation
