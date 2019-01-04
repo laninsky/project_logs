@@ -31,7 +31,8 @@ ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGGTTATAGTGTAGATCTCGGTGGTCGCCGTATCATTAAAAAAAAAGTG
 ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGGTTATAGTGTAGATCTCGGTGGTCGCCGTATCATTAAAAAAATTGATGTTTTGGGGGGTTTTTTTTGTTGTAGTAGTTGGGTAGTTTGTGTTTTGTTGTGTGTGGTGATTGTTTTTTT
 ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGGTTATAGTGTAGATCTCGGTGGTCGCCGTATCATTAAAAAAACAAGTGATGTGGTTGGGATGTTGTAGAATCAAGTGTGAGATGAGGTGATATGTTGTGTGGAGAGGATTTGTGAGGG
 ```
-These sequences matched up really nicely with the i5 and i7 sequences described [here](https://support.illumina.com/content/dam/illumina-support/documents/documentation/chemistry_documentation/experiment-design/illumina-adapter-sequences-1000000002694-09.pdf)
+
+These sequences matched up really nicely with the i5 and i7 sequences described [here](https://support.illumina.com/content/dam/illumina-support/documents/documentation/chemistry_documentation/experiment-design/illumina-adapter-sequences-1000000002694-09.pdf) e.g.
 ```
 # First read
 [over-represented sequence]          ATCGGAAGAGCACACGTCTGAACTCCAGTCACCCGCGGTTATCTCGTATGCCGTCTTCTGCTTGAAAAA
@@ -41,6 +42,7 @@ These sequences matched up really nicely with the i5 and i7 sequences described 
 [over-represented sequence]           ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTCTAGCGCTGTGTAGATCTCGGTGGTCGCCGTATCATTAAAAA
 [Reverse Complement of i5 adaptor]  AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT[i5indx]GTGTAGATCTCGGTGGTCGCCGTATCATT
 ```
+
 What was getting me stuck, however, is why the over-represented sequences didn't cover the first few bases of the adaptor sequence. This was probably the reason why the original cutadapt loop couldn't cull these reads out, because running cutadapt in default mode allows for only up to 10% errors when matching your adaptor sequence against your sequencing reads. In the 13 bp abbreviated adaptor sequence I fed cutadapt above (AGATCGGAAGAGC), this means up to 1.3 (probably rounded to 1) errors would be allowed. By missing the first 2 bp off this expected adaptor sequence, the over-represented sequences above had too many differences to the expected adaptor sequence to be culled.
 
 But back to my original question - why were these bases missing? The following preprint was bloody useful in figuring this out!
