@@ -51,10 +51,11 @@ Glenn, T. C., R. Nilsen, T. J. Kieran, J. W. Finger Jr., T. W. Pierson, K. E. Be
 
 The i5 and i7 adaptors have a region of complementarity (Y-shaped adaptor). Coupled with the 3' A-tailing during [library prep](https://www.illumina.com/content/dam/illumina-marketing/documents/products/datasheets/datasheet_truseq_dna_pcr_free_sample_prep.pdf), this ensures the formation of library fragments with i5 on one side, and i7 on the other (i.e. exactly what we want for sequencing!).
 ```
-# What these y-shaped adapters look like (yes, the library (5'-xxxx-A) is back-to-front, but didn't realise I had these in a non-
-# intuitive direction until too late, and couldn't be bothered remaking them! To get it in the usual 5' to 3' orientation
-# flip it from left to right, and then top to bottom in your brain
-                                                                                     DNA frag of interest
+# What these y-shaped adapters look like (yes, sorry, the DNA frag of interest is back-to-front, in comparison with the usual
+# orientation for a diagram like this, but I didn't realise I had these in a non-intuitive direction until too late, and 
+# couldn't be bothered remaking them! To get it in the usual 5' to 3' orientation flip it from left to right, and then top to 
+# bottom in your brain
+                                                                                      DNA frag of interest
 [reverse i7]       GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA                  3'                   5'                     CAGCACATCCCTTTCTCACA[5i]CACATCTAGAGCCACCAGCGGCATAGCAA [Reverse i5]
                                                                    CGAGAAGGTCAG      A-xxxxxxxxxxxxxxxxxx           TCTAGCCTTCTCG
                                                                    GCTCTTCCGATCT       xxxxxxxxxxxxxxxxxx-A          GATCGGAAGAGC
