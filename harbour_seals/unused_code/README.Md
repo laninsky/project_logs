@@ -13,7 +13,7 @@ done;
 ```
 
 ### How did I come to the conclusion this was adaptor dimer?
-After initial trimming of reads for quality/3’-adaptor contamination using the code above, FastQC found truseq/illumina sequencing primers were still overrepresented. The presence of the Illumina adaptor/primers in the "overrepresented sequences" module of FastQC but not in the actual "adaptor sequences" module suggested this adaptor might not be at the 3' end of the reads. A quick grep for the overrepresented sequences suggested this was very much the case e.g.
+After initial trimming of reads for quality/3’-adaptor contamination using the code above, FastQC found truseq/illumina sequencing primers were still over-represented. The presence of the Illumina adaptor/primers in the "over-represented sequences" module of FastQC but not in the actual "adaptor sequences" module suggested this adaptor might not be at the 3' end of the reads. A quick grep for the over-represented sequences suggested this was very much the case e.g.
 ```
 zgrep ^ATCGGAAGAGCACACGTCTGAACTCCAGTCA 12-D099_S7_L001_R1_001.fastq.gz
 ATCGGAAGAGCACACGTCTGAACTCCAGTCACCTCTCGTCATCTCGTCTGCCGTCTTCTGCTTGAACAAACGATTCCAGAAGTACTGTCCTCACCTGCGTGCTTCTTGCTGCGGCGCCATTCTGCCCAGTGGGATCACGCACCACCGTAAC
@@ -79,19 +79,16 @@ Then coupled with where the sequencing primer sits down, we get the following ex
 But what about Read 2's over-represented sequence? It has TWO base pairs shaved off the beginning. We start off with the "same" fragment, but flipped in the opposite direction because Read 2 is primed off the i7 sequencing primer.
 ```
 # Sorry, going to make you do mental arithmetic again - I've reversed but not reverse-comped the following.
-# Instead, I'll reverse-comp Read 2's overrepresented sequence once I get to this demo below.
+# Instead, I'll reverse-comp Read 2's over-represented sequence once I get to this demo below.
                                                                                                                                                              
                                                                             TCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[xedn5i]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
  [reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACACGAGAAGGTCAG                                                          
 ```
 Adding in the sequencing primer...
 ```
-# Sorry, going to make you do mental arithmetic again - I've reversed but not reverse-comped the following.
-# Instead, I'll reverse-comp Read 2's overrepresented sequence once I get to this demo below.
-
-                           [Read 2 overrepresented sequence reverse comped]   TAGCCTTCTCGCAGCACATCCCTTTCTCACAGATCGCGACACATCTAGAGCCACCAGCGGCATAGTAATTTTT
+                          [Read 2 over-represented sequence reverse comped]   TAGCCTTCTCGCAGCACATCCCTTTCTCACAGATCGCGACACATCTAGAGCCACCAGCGGCATAGTAATTTTT
                                 R2 seq primer reverse comped ->   CGAGAAGGTCAG|                                                                                                                                 
                                                                             TCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[xedn5i]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
  [reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACACGAGAAGGTCAG                                                          
 ```
-
+We can see that because of how the Read 2 sequencing primer sits down, that it shaves 2 bp off the i5 adaptor sequence, leading to Read 2's over-represented sequence.
