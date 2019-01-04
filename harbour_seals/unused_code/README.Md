@@ -59,6 +59,22 @@ The i5 and i7 adaptors have a region of complementarity (Y-shaped adaptor). Coup
 [reverse i7]       GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA                  3'                   5'                     CAGCACATCCCTTTCTCACA[5i]CACATCTAGAGCCACCAGCGGCATAGCAA [Reverse i5]
                                                                    CGAGAAGGTCAG      A-xxxxxxxxxxxxxxxxxx           TCTAGCCTTCTCG
                                                                    GCTCTTCCGATCT       xxxxxxxxxxxxxxxxxx-A          GATCGGAAGAGC
-[original i5] AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGAC                  5'                   3'                     ACACGTCTGAACTCCAGTCA[i7]ATCTCGTATGCCGTCTTCTGCTTG
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGAC                  5'                   3'                     ACACGTCTGAACTCCAGTCA[i7]ATCTCGTATGCCGTCTTCTGCTTG  [i7 adaptor]
                                           
 ```
+
+But... the dark side of this is adaptor-adaptor dimer, where the adaptors stick together instead of to our DNA fragments of interest. There are two base pairs at the very end of the adaptors that happen to be complementary to each other, and I think these are the bases sticking together e.g.
+```
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCT                                                
+                                                                              GATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor] 
+```
+Then coupled with where the sequencing primer sits down, we get the following expected sequence from this fragment:                                                                                             
+
+```
+
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCT                                                
+                                                                              GATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor] 
+                                                R1 seq primer ->   GCTCTTCCGATC|
+                                         [Read 1 over-represented sequence]    ATCGGAAGAGCACACGTCTGAACTCCAGTCACCCGCGGTTATCTCGTATGCCGTCTTCTGCTTGAAAAA
+```
+                                                                                             
