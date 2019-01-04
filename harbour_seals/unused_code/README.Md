@@ -65,30 +65,50 @@ The i5 and i7 adaptors have a region of complementarity (Y-shaped adaptor). Coup
 
 But... the dark side of this is adaptor-adaptor dimer, where the adaptors stick together instead of to our DNA fragments of interest. There are two base pairs at the very end of the adaptors that happen to be complementary to each other, and I think these are the bases sticking together e.g.
 ```
-[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCT                                                
+[reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA\                  
+                                                                  \CGAGAAGGTCAG
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCT
+                                                                              ||
                                                                               GATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor] 
+                                                                             TCTAGCCTTCTCG\
+                                                                                           \CAGCACATCCCTTTCTCACA[5i]CACATCTAGAGCCACCAGCGGCATAGCAA [Reverse i5]
+```
+I'm not sure how this exactly would proceed in the ligation reaction, but let's say some exonuclease chomping going on on the overhanging ends to allow these fragments to mush together e.g.
+```
+# Putative adaptor-Adaptor dimer molecule
+[reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA\                  
+                                                                  \CGAGAAGGTCAGATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor] 
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCTAGCCTTCTCG\
+                                                                                           \CAGCACATCCCTTTCTCACA[5i]CACATCTAGAGCCACCAGCGGCATAGCAA [Reverse i5]
 ```
 Then coupled with where the sequencing primer sits down, we get the following expected sequence from this fragment that exactly matches our over-represented sequence (e.g. identical to i7 with a base shaved off the beginning):                                                                                             
 ```
-
-[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCT                                                
-                                                                              GATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor] 
+[reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA\                  
+                                                                  \CGAGAAGGTCAGATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor] 
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCTAGCCTTCTCG\
+                                                                                           \CAGCACATCCCTTTCTCACA[5i]CACATCTAGAGCCACCAGCGGCATAGCAA [Reverse i5]
                                                 R1 seq primer ->   GCTCTTCCGATC|
                                          [Read 1 over-represented sequence]    ATCGGAAGAGCACACGTCTGAACTCCAGTCACCCGCGGTTATCTCGTATGCCGTCTTCTGCTTGAAAAA
+                       [in comparison to i7 adaptor (also see top strand)]    GATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG  
+
 ```
-But what about Read 2's over-represented sequence? It has TWO base pairs shaved off the beginning. We start off with the "same" fragment, but flipped in the opposite direction because Read 2 is primed off the i7 sequencing primer.
+But what about Read 2's over-represented sequence? It has TWO base pairs shaved off the beginning. We start off with the "same" fragment, but flipped in the vertical direction because Read 2 is primed off the i7 sequencing primer.
 ```
 # Sorry, going to make you do mental arithmetic again - I've reversed but not reverse-comped the following.
 # Instead, I'll reverse-comp Read 2's over-represented sequence once I get to this demo below.
                                                                                                                                                              
-                                                                            TCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[xedn5i]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
- [reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACACGAGAAGGTCAG                                                          
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[xedn5i]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
+                                                                  /CGAGAAGGTCAGATCGGAAGAGC\
+[reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA/                         \ACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor]                                                    
 ```
 Adding in the sequencing primer...
 ```
-                          [Read 2 over-represented sequence reverse comped]   TAGCCTTCTCGCAGCACATCCCTTTCTCACAGATCGCGACACATCTAGAGCCACCAGCGGCATAGTAATTTTT
-                                R2 seq primer reverse comped ->   CGAGAAGGTCAG|                                                                                                                                 
-                                                                            TCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[xedn5i]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
- [reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACACGAGAAGGTCAG                                                          
+[i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[xedn5i]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
+                                                                  /CGAGAAGGTCAGATCGGAAGAGC\
+[reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACA/                         \ACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor]                                                    
+                                 R2 seq primer reverse comped ->   CGAGAAGGTCAG|  
+                           [Read 2 over-represented sequence reverse comped]   TAGCCTTCTCGCAGCACATCCCTTTCTCACAGATCGCGACACATCTAGAGCCACCAGCGGCATAGTAATTTTT                                                                                                                              
+           [in comparison to reversed i5 adaptor (also see top strand)] ]    TCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[xedn5i]CACATCTAGAGCCACCAGCGGCATAGCAA 
+                                                        
 ```
 We can see that because of how the Read 2 sequencing primer sits down, that it shaves 2 bp off the i5 adaptor sequence, leading to Read 2's over-represented sequence.
