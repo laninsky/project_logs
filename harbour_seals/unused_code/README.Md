@@ -80,11 +80,7 @@ But what about Read 2's over-represented sequence? It has TWO base pairs shaved 
 ```
 # Sorry, going to make you do mental arithmetic again - I've reversed but not reverse-comped the following.
 # Instead, I'll reverse-comp Read 2's overrepresented sequence once I get to this demo below.
-
                                                                                                                                                              
                                                                             TCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[  5i  ]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
- [reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACACGAGAAGGTCAG
-                                                                  
-
-
+ [reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACACGAGAAGGTCAG                                                          
 ```
