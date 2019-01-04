@@ -68,8 +68,7 @@ But... the dark side of this is adaptor-adaptor dimer, where the adaptors stick 
 [i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCT                                                
                                                                               GATCGGAAGAGCACACGTCTGAACTCCAGTCA[i7index]ATCTCGTATGCCGTCTTCTGCTTG   [i7 adaptor] 
 ```
-Then coupled with where the sequencing primer sits down, we get the following expected sequence from this fragment:                                                                                             
-
+Then coupled with where the sequencing primer sits down, we get the following expected sequence from this fragment that exactly matches our over-represented sequence (e.g. identical to i7 with a base shaved off the beginning):                                                                                             
 ```
 
 [i5 adaptor]  AATGATACGGCGACCACCGAGATCTACAC[i5]ACACTCTTTCCCTACACGACGCTCTTCCGATCT                                                
@@ -77,4 +76,15 @@ Then coupled with where the sequencing primer sits down, we get the following ex
                                                 R1 seq primer ->   GCTCTTCCGATC|
                                          [Read 1 over-represented sequence]    ATCGGAAGAGCACACGTCTGAACTCCAGTCACCCGCGGTTATCTCGTATGCCGTCTTCTGCTTGAAAAA
 ```
-                                                                                             
+But what about Read 2's over-represented sequence? It has TWO base pairs shaved off the beginning. We start off with the "same" fragment, but flipped in the opposite direction because Read 2 is primed off the i7 sequencing primer.
+```
+# Sorry, going to make you do mental arithmetic again - I've reversed but not reverse-comped the following.
+# Instead, I'll reverse-comp Read 2's overrepresented sequence once I get to this demo below.
+
+                                                                                                                                                             
+                                                                            TCTAGCCTTCTCGCAGCACATCCCTTTCTCACA[  5i  ]CACATCTAGAGCCACCAGCGGCATAGCAA   [Reverse i5] 
+ [reverse i7]     GTTCGTCTTCTGCCGTATGCTCTA[7i]ACTGACCTCAAGTCTGCACACGAGAAGGTCAG
+                                                                  
+
+
+```
