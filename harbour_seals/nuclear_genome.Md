@@ -102,6 +102,15 @@ for i in *.zip;
   sbatch $basename.sh;
 done  
 ```
+Stored results in mutiple folders: scripts (the \*.sh and slurm output scripts), zips (the original zip files), med (the trimmed fastq.gz reads), logs (logs of various programs), and bams. For the slurm-output, I prepended them with sample name using the code below.
+
+```
+mkdir scripts
+ls *.zip > zip.txt
+ls *.out > slurm.txt
+for i in `seq $ziplines`; do samplename=` tail -n $i zip.txt | head -n 1 | sed 's/.zip//g'`; oldslurm=`tail -n $i slurm.txt | head -n 1`; newslurm=`echo $samplename.$oldslurm`; mv $oldslurm scripts/$newslurm; done
+```
+
 ### Pulled out cutadapt stats to record them (in R)
 First had to load the R module
 ```
