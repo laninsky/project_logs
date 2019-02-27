@@ -272,7 +272,7 @@ endpos <- dim(temp)[2]
 for (i in 3:(endpos-1)) {
   j <- i + 1
   while (j < endpos) {
-    k <- j + 3
+    k <- j + 1
     if (k > endpos) {
       k <- endpos
     }
@@ -282,7 +282,9 @@ for (i in 3:(endpos-1)) {
                     columns=c(names(temp2)[-1]),
                     upper=list(continuous="blank",combo="blank"),
                     lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
-                    diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = (k-j+3))
+                    diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = (k-j+3)) +
+      theme_grey(base_size=48) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
     corgraph[(k-j+2),1] <- corgraph[(k-j+2),1] + theme(axis.text.x = element_blank(),
                                                                            axis.ticks = element_blank())  
@@ -295,7 +297,6 @@ for (i in 3:(endpos-1)) {
     j <- k + 1
   }
 }  
-
 ```
 
 
