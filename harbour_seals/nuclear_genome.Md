@@ -267,22 +267,34 @@ temp
 # samplename is in column 1, read file name is in column 2, so including 1 in every plot, and excluding 2
 # (2 shows up as the separate points plotted for each sample)
 
-startpos <- 3
 endpos <- dim(temp)[2]
 
-corgraph <- ggpairs(temp, mapping=(aes(fill = sample_name,color=sample_name)),
-        columns=c(names(temp)[c(1,startpos:endpos)]),
-        upper=list(continuous="blank",combo="blank"),
-        lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
-        diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = (endpos-startpos+3))
+for (i in 3:(endpos-1)) {
+  j <- i + 1
+  while (j < endpos) {
+    k <- j + 3
+    if (k > endpos) {
+      k <- endpos
+    }
+    temp2 <- temp %>% select(c(1,i,j:k))
 
-corgraph[(endpos-startpos+2),1] <- corgraph[(endpos-startpos+2),1] + theme(axis.text.x = element_blank(),
-                           axis.ticks = element_blank())  
+    corgraph <- ggpairs(temp2, cardinality_threshold=length(unique(temp$sample_name)),mapping=(aes(fill = sample_name,color=sample_name)),
+                    columns=c(names(temp2)[-1]),
+                    upper=list(continuous="blank",combo="blank"),
+                    lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
+                    diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = (k-j+3))
 
-# This adjusts the width of the plot for how many samples we are plotting
-plotwidthmultiplier <- round(length(unique(temp$sample_name)),-1)
+    corgraph[(k-j+2),1] <- corgraph[(k-j+2),1] + theme(axis.text.x = element_blank(),
+                                                                           axis.ticks = element_blank())  
 
-ggsave(filename="cutadapt_correlations.pdf",corgraph,width=(endpos-startpos)*plotwidthmultiplier,height=(endpos-startpos)*plotwidthmultiplier,units="cm",limitsize=FALSE)
+    # This adjusts the width of the plot for how many samples we are plotting
+    plotwidthmultiplier <- round(length(unique(temp2$sample_name)),-1)
+
+    ggsave(filename=(paste(paste(c(1,i,j:k),collapse="_"),"correlations.pdf",sep="_")),corgraph,width=(k-j+1)*plotwidthmultiplier,height=(k-j+1)*plotwidthmultiplier,units="cm",limitsize=FALSE)
+
+    j <- k + 1
+  }
+}  
 
 ```
 
