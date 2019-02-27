@@ -282,12 +282,9 @@ for (i in 3:(endpos-1)) {
                     columns=c(names(temp2)[-1]),
                     upper=list(continuous="blank",combo="blank"),
                     lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
-                    diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend = (k-j+3)) +
-      theme_grey(base_size=48) +
-      theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
-    corgraph[(k-j+2),1] <- corgraph[(k-j+2),1] + theme(axis.text.x = element_blank(),
-                                                                           axis.ticks = element_blank())  
+                    diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend=c(3,1)) +
+      theme_grey(base_size=40) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1))  + theme(legend.text=element_text(size=8))
 
     # This adjusts the width of the plot for how many samples we are plotting
     plotwidthmultiplier <- round(length(unique(temp2$sample_name)),-1)
@@ -297,6 +294,7 @@ for (i in 3:(endpos-1)) {
     j <- k + 1
   }
 }  
+  
 ```
 
 
