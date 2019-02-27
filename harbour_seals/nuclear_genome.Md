@@ -148,23 +148,23 @@ for (i in files) {
   # Need to create a for loop given this is now going to be more than one adaptor
   # probably something like this WORK IN PROGRESS
   read1names <- unique(tempfile[grep("=== First read: Adapter [0-9]+ ===",tempfile)])
-  for (j in $read1names) { 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 2]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 8]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 9]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 10]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 11]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 12])
+  for (j in read1names) { 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 2]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 8]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 9]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 10]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 11]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 12])
   }
   
   read2names <- unique(tempfile[grep("=== Second read: Adapter [0-9]+ ===",tempfile)])
-  for (j in $read2names) { 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 2]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 8]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 9]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 10]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 11]) 
-    tempoutput <- rbind(tempoutput,tempfile[grep($j,tempfile) + 12])
+  for (j in read2names) { 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 2]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 8]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 9]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 10]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 11]) 
+    tempoutput <- rbind(tempoutput,tempfile[grep(j,tempfile) + 12])
   }  
   
   header <- rep(samplename,dim(tempoutput)[2])
