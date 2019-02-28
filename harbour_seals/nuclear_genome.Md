@@ -279,13 +279,11 @@ corgraph <- ggpairs(temp, cardinality_threshold=length(unique(temp$sample_name))
                     diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))  + theme(legend.text=element_text(size=8))
 
-
-
 for (i in 1:(corgraph$ncol-1)) {
   plotlist <- list()
   plotlist[[1]] <- corgraph[i,i]
   for (j in (i+1):corgraph$ncol) {
-    plotlist[[j]] <- corgraph[j,i] + theme(legend.position = "none")
+    plotlist[[j-i+1]] <- corgraph[j,i] + theme(legend.position = "none")
   }
 
   lay <- matrix(c(2:length(plotlist)),ncol=2,byrow=TRUE)
@@ -293,6 +291,7 @@ for (i in 1:(corgraph$ncol-1)) {
   tempgraphs <- grid.arrange(grobs=plotlist,layout_matrix=lay)
   ggsave(filename=gsub("#","no",gsub("%","perc",paste(names(temp)[i+2],"correlations.pdf",sep="_"),fixed=TRUE),fixed=TRUE),tempgraphs,width=8,height=4*(dim(lay)[1]),units="in",limitsize=FALSE)
 }
+
 ```
 
 
