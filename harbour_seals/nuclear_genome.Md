@@ -322,9 +322,13 @@ module load R/3.5.1-gimkl-2017a
 And then...
 ```
 library(stringr)
-library(GGally)
+library(tidyverse)
+library(gridExtra)
+library(grid)
+library(ggplot2)
+library(lattice)
 files <- list.files(pattern=".ref_log.txt")
-                
+
 output <- matrix("",nrow=(length(files)+1),ncol=13)
 
 output[1,] <- c("File_name","Reads","Number_paired","aligned_concordantly_0_times","aligned_concordantly_exactly_1_time","aligned_concordantly_>1_times","aligned_discordantly_1_time","aligned_0_times_concordantly_or_discordantly","aligned_0_times_concordantly_or_discordantly_single_read_count","single_read_aligned_0_times", "aligned_exactly_1_time", "aligned_>1_times", "overall_alignment_rate")
@@ -339,6 +343,55 @@ for (i in 1:length(files)) {
   tempfile <- tempfile[c(-6,-7,-9)]
   output[(i+1),] <- c(samplename,tempfile)
 }
-  
+
 write.table(output,"bowtie_ref.txt",quote=FALSE,row.name=FALSE,col.name=FALSE)  
+
+
+output[,13] <- gsub("%","",output[,13],fixed=TRUE)
+outputtibble <- tibble(output[2:(dim(output)[1]),1])
+
+for (i in 2:dim(output)[2]) {
+  outputtibble <- cbind(outputtibble,tibble(as.numeric(output[2:(dim(output)[1]),i])))  
+}
+
+names(outputtibble) <- output[1,]
+outputtibble <- as_tibble(outputtibble)
+
+corgraph <- ggpairs(outputtibble, cardinality_threshold=length(unique(outputtibble$File_name)),mapping=(aes(fill = File_name,color=File_name)),
+                    columns=(names(outputtibble)[-1]),
+                    upper=list(continuous="blank",combo="blank"),
+                    lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
+                    diag=list(discrete="blankDiag",continuous=wrap("blankDiag",alpha=0.5)))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  + theme(legend.text=element_text(size=8))
+
+# Then for every column (except the last one) in the ggpairs correlation graph
+# Then for every column (except the last one) in the ggpairs correlation graph
+for (i in 1:(corgraph$ncol-1)) {
+  # Make a list, and populate the first item in the list with the column's variable self comparison
+  # It's going to be in its own row (including a legend)
+  plotlist <- list()
+  plotlist[[1]] <- corgraph[(i+1),i]
+  # For the remaining comparisons of that variable to others, if there isn't an odd number
+  if ((corgraph$ncol-i-1) %% 2 == 0) {
+    # Adding them in to the plot list
+    for (j in (i+2):corgraph$ncol) {
+      plotlist[[j-i]] <- corgraph[j,i] + theme(legend.position = "none")
+    }
+  } else {
+    # Or else, add a blank element in first
+    plotlist[[2]] <- grid.rect(gp = gpar(col = "white"))
+    for (j in (i+2):corgraph$ncol) {
+      plotlist[[j-i+1]] <- corgraph[j,i] + theme(legend.position = "none")
+    }
+  }
+  # Creating the layout (first self-self plot with the legend in first row
+  # Every other plot half the width i pairs
+  lay <- matrix(c(2:length(plotlist)),ncol=2,byrow=TRUE)
+  lay <- rbind(c(1,1),lay)
+  tempgraphs <- grid.arrange(grobs=plotlist,layout_matrix=lay)
+  # Saving the set of correlations as the variable name
+  ggsave(filename=gsub("<","",(gsub(">","",(gsub("#","no",(gsub("%","perc",paste(names(outputtibble)[i+1],"correlations.pdf",sep="_"),fixed=TRUE)),fixed=TRUE)),fixed=TRUE)),fixed=TRUE),tempgraphs,width=8,height=4*(dim(lay)[1]),units="in",limitsize=FALSE)
+}
+
+
 ```
