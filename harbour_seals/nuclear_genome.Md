@@ -393,5 +393,26 @@ for (i in 1:(corgraph$ncol-1)) {
   ggsave(filename=gsub("<","",(gsub(">","",(gsub("#","no",(gsub("%","perc",paste(names(outputtibble)[i+1],"correlations.pdf",sep="_"),fixed=TRUE)),fixed=TRUE)),fixed=TRUE)),fixed=TRUE),tempgraphs,width=8,height=4*(dim(lay)[1]),units="in",limitsize=FALSE)
 }
 
-
 ```
+Most interested in the correlations between overall alignment rate and read number to see "how good" the samples are:
+```
+# Using the output object created above
+output[,1] <- gsub(".zip","",output[,1],fixed=TRUE)
+output[,13] <- gsub("%","",output[,13],fixed=TRUE)
+outputtibble <- tibble(output[2:(dim(output)[1]),1])
+
+for (i in 2:dim(output)[2]) {
+  outputtibble <- cbind(outputtibble,tibble(as.numeric(output[2:(dim(output)[1]),i])))  
+}
+
+names(outputtibble) <- output[1,]
+outputtibble <- as_tibble(outputtibble)
+
+ggplot(outputtibble,mapping=aes(x=Reads,y=overall_alignment_rate,color=File_name,fill=File_name)) + 
+  geom_point(size=8,pch=21,alpha=0.5)+ theme_bw() + ylab("Overall alignment rate (%)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1,size=16,colour="black")) + 
+  theme(axis.text.y = element_text(size=16,colour="black")) +
+  scale_x_continuous(labels = scales::comma) +
+  theme(axis.title.x = element_text(face="bold",size=20)) +
+  theme(axis.title.y = element_text(face="bold",size=20))
+  ```
