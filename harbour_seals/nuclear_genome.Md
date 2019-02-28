@@ -232,8 +232,13 @@ library(readr)
 library(tidyr)
 library(dplyr)
 library(GGally)
+library(gridExtra)
+library(grid)
+library(ggplot2)
+library(lattice)
+library(fs)
 
-temp <- read_table2("cutadapt_log_summary.txt")
+temp <- read_table2("C://Users//Alana//Dropbox//seal//Emma//genome//logs//cutadapt//cutadapt_log_summary.txt")
 
 temp
 ## A tibble: 56 x 33
@@ -267,34 +272,28 @@ temp
 # samplename is in column 1, read file name is in column 2, so including 1 in every plot, and excluding 2
 # (2 shows up as the separate points plotted for each sample)
 
-endpos <- dim(temp)[2]
 
-for (i in 3:(endpos-1)) {
-  j <- i + 1
-  while (j < endpos) {
-    k <- j + 1
-    if (k > endpos) {
-      k <- endpos
-    }
-    temp2 <- temp %>% select(c(1,i,j:k))
-
-    corgraph <- ggpairs(temp2, cardinality_threshold=length(unique(temp$sample_name)),mapping=(aes(fill = sample_name,color=sample_name)),
-                    columns=c(names(temp2)[-1]),
+corgraph <- ggpairs(temp, cardinality_threshold=length(unique(temp$sample_name)),mapping=(aes(fill = sample_name,color=sample_name)),
+                    columns=(names(temp)[-1:-2]),
                     upper=list(continuous="blank",combo="blank"),
                     lower=list(continuous=wrap("points",size=5,pch=21,alpha=0.5,color="black"),combo=wrap("facetdensity")),
-                    diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)),legend=c(3,1)) +
-      theme_grey(base_size=40) +
-      theme(axis.text.x = element_text(angle = 90, hjust = 1))  + theme(legend.text=element_text(size=8))
+                    diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)))+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  + theme(legend.text=element_text(size=8))
 
-    # This adjusts the width of the plot for how many samples we are plotting
-    plotwidthmultiplier <- round(length(unique(temp2$sample_name)),-1)
 
-    ggsave(filename=(paste(paste(c(1,i,j:k),collapse="_"),"correlations.pdf",sep="_")),corgraph,width=(k-j+1)*plotwidthmultiplier,height=(k-j+1)*plotwidthmultiplier,units="cm",limitsize=FALSE)
 
-    j <- k + 1
+for (i in 1:(corgraph$ncol-1)) {
+  plotlist <- list()
+  plotlist[[1]] <- corgraph[i,i]
+  for (j in (i+1):corgraph$ncol) {
+    plotlist[[j]] <- corgraph[j,i] + theme(legend.position = "none")
   }
-}  
-  
+
+  lay <- matrix(c(2:length(plotlist)),ncol=2,byrow=TRUE)
+  lay <- rbind(c(1,1),lay)
+  tempgraphs <- grid.arrange(grobs=plotlist,layout_matrix=lay)
+  ggsave(filename=path_sanitize(paste(names(temp)[i+2],"correlations.pdf",sep="_"),replacement=""),tempgraphs,width=8,height=4*(dim(lay)[1]),units="in",limitsize=FALSE)
+}
 ```
 
 
