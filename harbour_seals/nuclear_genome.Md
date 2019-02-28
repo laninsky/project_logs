@@ -236,7 +236,6 @@ library(gridExtra)
 library(grid)
 library(ggplot2)
 library(lattice)
-library(fs)
 
 temp <- read_table2("C://Users//Alana//Dropbox//seal//Emma//genome//logs//cutadapt//cutadapt_log_summary.txt")
 
@@ -292,7 +291,7 @@ for (i in 1:(corgraph$ncol-1)) {
   lay <- matrix(c(2:length(plotlist)),ncol=2,byrow=TRUE)
   lay <- rbind(c(1,1),lay)
   tempgraphs <- grid.arrange(grobs=plotlist,layout_matrix=lay)
-  ggsave(filename=path_sanitize(paste(names(temp)[i+2],"correlations.pdf",sep="_"),replacement=""),tempgraphs,width=8,height=4*(dim(lay)[1]),units="in",limitsize=FALSE)
+  ggsave(filename=gsub("#","no",gsub("%","perc",paste(names(temp)[i+2],"correlations.pdf",sep="_"),fixed=TRUE),fixed=TRUE),tempgraphs,width=8,height=4*(dim(lay)[1]),units="in",limitsize=FALSE)
 }
 ```
 
