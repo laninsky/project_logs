@@ -174,7 +174,7 @@ for (i in files) {
   output <- cbind(output,tempoutput)
 }  
 
-# WORK IN PROGRESS - need to do a finalheader for this one too.
+# Need to look into how to adapt this for an arbritrary number of adaptors
 
 finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter_#","Read_1_with_adapter_%","Read_2_with_adapter_#","Read_2_with_adapter_%","Pairs_that_were_too_short_#","Pairs_that_were_too_short_%","Pairs_written_passing_filters_#","Pairs_written_passing_filters_%","Total_basepairs_processed_bp","Read_1_processed_bp","Read_2_processed_bp","Quality_trimmed_bp","Quality_trimmed_%","Read_1_quality_trimmed","Read_2_quality_trimmed","Total_bp_written","Total_%_written","Read_1_bp_written","Read_2_bp_written","No_times_adapter_1_trimmed","%_times_A_precedes_adapter1_seq","%_times_C_precedes_adapter1_seq","%_times_G_precedes_adapter1_seq","%_times_T_precedes_adapter1_seq","%_times_none_other_precedes_adapter1_seq","No_times_adapter_2_trimmed","%_times_A_precedes_adapter2_seq","%_times_C_precedes_adapter2_seq","%_times_G_precedes_adapter2_seq","%_times_T_precedes_adapter2_seq","%_times_none_other_precedes_adapter2_seq")
 
