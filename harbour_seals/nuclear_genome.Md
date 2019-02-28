@@ -322,6 +322,7 @@ module load R/3.5.1-gimkl-2017a
 And then...
 ```
 library(stringr)
+library(GGally)
 files <- list.files(pattern=".ref_log.txt")
                 
 output <- matrix("",nrow=(length(files)+1),ncol=13)
