@@ -174,7 +174,9 @@ for (i in files) {
   output <- cbind(output,tempoutput)
 }  
 
+# Need to check to make sure previous has pulled out all of the Adaptors (think it will have based on the grep
 # Need to look into how to adapt this for an arbritrary number of adaptors
+# Also comment this whole bit of code better
 
 finalheader <- c("sample_name","seq_file_name","Read_1_with_adapter_#","Read_1_with_adapter_%","Read_2_with_adapter_#","Read_2_with_adapter_%","Pairs_that_were_too_short_#","Pairs_that_were_too_short_%","Pairs_written_passing_filters_#","Pairs_written_passing_filters_%","Total_basepairs_processed_bp","Read_1_processed_bp","Read_2_processed_bp","Quality_trimmed_bp","Quality_trimmed_%","Read_1_quality_trimmed","Read_2_quality_trimmed","Total_bp_written","Total_%_written","Read_1_bp_written","Read_2_bp_written","No_times_adapter_1_trimmed","%_times_A_precedes_adapter1_seq","%_times_C_precedes_adapter1_seq","%_times_G_precedes_adapter1_seq","%_times_T_precedes_adapter1_seq","%_times_none_other_precedes_adapter1_seq","No_times_adapter_2_trimmed","%_times_A_precedes_adapter2_seq","%_times_C_precedes_adapter2_seq","%_times_G_precedes_adapter2_seq","%_times_T_precedes_adapter2_seq","%_times_none_other_precedes_adapter2_seq")
 
@@ -228,6 +230,7 @@ write.table(t(cbind(finalheader,output)),"cutadapt_log_summary.txt",quote=FALSE,
 ```
 I downloaded and opened cutadapt_log_summary.txt to my own computer so I could pull it through Rstudio and eyeball plots as I went to make sure there weren't any squiffy correlations and to do some sample summaries
 ```
+# Loading in the libraries
 library(readr)
 library(tidyr)
 library(dplyr)
@@ -237,8 +240,10 @@ library(grid)
 library(ggplot2)
 library(lattice)
 
+# the path to the file generated above
 temp <- read_table2("C://Users//Alana//Dropbox//seal//Emma//genome//logs//cutadapt//cutadapt_log_summary.txt")
 
+# What this tibble looks like
 temp
 ## A tibble: 56 x 33
 #   sample_name seq_file_name `Read_1_with_ad… `Read_1_with_ad… `Read_2_with_ad… `Read_2_with_ad…
@@ -267,11 +272,7 @@ temp
 ##   `%_times_G_precedes_adapter2_seq` <dbl>, `%_times_T_precedes_adapter2_seq` <dbl>,
 ##   `%_times_none_other_precedes_adapter2_seq` <dbl>
 
-# A lot of variables to plot all at once, so can do these in batches by modifying startpos and endpos
-# samplename is in column 1, read file name is in column 2, so including 1 in every plot, and excluding 2
-# (2 shows up as the separate points plotted for each sample)
-
-
+# Doing a ggpairs plot on everything bar the first two columns, coloring by sample_name
 corgraph <- ggpairs(temp, cardinality_threshold=length(unique(temp$sample_name)),mapping=(aes(fill = sample_name,color=sample_name)),
                     columns=(names(temp)[-1:-2]),
                     upper=list(continuous="blank",combo="blank"),
@@ -279,23 +280,34 @@ corgraph <- ggpairs(temp, cardinality_threshold=length(unique(temp$sample_name))
                     diag=list(discrete="blankDiag",continuous=wrap("densityDiag",alpha=0.5)))+
   theme(axis.text.x = element_text(angle = 90, hjust = 1))  + theme(legend.text=element_text(size=8))
 
+# The following is going to generate a pdf for each quantitative cutadapt variable
+# with graphs of that variable against all other quantitative variable
 
+# Then for every column (except the last one) in the ggpairs correlation graph
 for (i in 1:(corgraph$ncol-1)) {
+  # Make a list, and populate the first item in the list with the column's variable self comparison
+  # It's going to be in its own row (including a legend)
   plotlist <- list()
   plotlist[[1]] <- corgraph[i,i]
+  # For the remaining comparisons of that variable to others, if there isn't an odd number
   if ((corgraph$ncol-i) %% 2 == 0) {
+  # Adding them in to the plot list
     for (j in (i+1):corgraph$ncol) {
       plotlist[[j-i+1]] <- corgraph[j,i] + theme(legend.position = "none")
     }
   } else {
+    # Or else, add a blank element in first
     plotlist[[2]] <- grid.rect(gp = gpar(col = "white"))
     for (j in (i+1):corgraph$ncol) {
       plotlist[[j-i+2]] <- corgraph[j,i] + theme(legend.position = "none")
     }
   }
+  # Creating the layout (first self-self plot with the legend in first row
+  # Every other plot half the width i pairs
   lay <- matrix(c(2:length(plotlist)),ncol=2,byrow=TRUE)
   lay <- rbind(c(1,1),lay)
   tempgraphs <- grid.arrange(grobs=plotlist,layout_matrix=lay)
+  # Saving the set of correlations as the variable name
   ggsave(filename=gsub("#","no",gsub("%","perc",paste(names(temp)[i+2],"correlations.pdf",sep="_"),fixed=TRUE),fixed=TRUE),tempgraphs,width=8,height=4*(dim(lay)[1]),units="in",limitsize=FALSE)
 }
 
