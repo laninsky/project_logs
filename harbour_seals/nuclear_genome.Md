@@ -4,6 +4,7 @@
 [Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-northern-fur-seal-reference-example-for-sample_1-d079)  
 [Pulled out cutadapt stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-cutadapt-stats-to-record-them-in-r)  
 [Pulled out reference mapping stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-reference-mapping-stats-to-record-them-in-r)  
+[Estimated individual heterozygosity using genomescope and jellyfish]
 
 
 
@@ -425,3 +426,24 @@ ggplot(outputtibble,mapping=aes(x=Reads,y=overall_alignment_rate,color=File_name
   theme(axis.title.x = element_text(face="bold",size=20)) +
   theme(axis.title.y = element_text(face="bold",size=20))
   ```
+
+### Estimated individual heterozygosity using genomescope and jellyfish
+```
+#!/bin/bash -e 
+#SBATCH -A uoo00105
+#SBATCH -J jellyfish
+#SBATCH -n 1
+#SBATCH -c 24
+#SBATCH -t 24:00:00
+#SBATCH --mem-per-cpu=10G
+#SBATCH -D /projects/uoo00105
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=alana.alexander@otago.ac.nz
+#SBATCH -N 1
+
+module load Jellyfish/2.2.6-gimkl-2017a
+zcat trim_data/*.gz >> merged_data.fastq
+jellyfish count -m 17 -o fastq.counts.jf -C merged_data.fastq -s 10000000000 -U 500 -t 24
+rm merged_data.fastq
+jellyfish histo -o fastq.counts.histo fastq.counts.jf
+```
