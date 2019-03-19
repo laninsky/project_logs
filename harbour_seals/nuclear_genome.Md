@@ -427,23 +427,24 @@ ggplot(outputtibble,mapping=aes(x=Reads,y=overall_alignment_rate,color=File_name
   theme(axis.title.y = element_text(face="bold",size=20))
   ```
 
-### Estimated individual heterozygosity using genomescope and jellyfish
+### Estimated individual heterozygosity using genomescope and jellyfish (example for Sample_1-D079)
 ```
 #!/bin/bash -e 
-#SBATCH -A uoo00105
+#SBATCH -A uoo02423
 #SBATCH -J jellyfish
 #SBATCH -n 1
-#SBATCH -c 24
+#SBATCH -c 36
 #SBATCH -t 24:00:00
-#SBATCH --mem-per-cpu=10G
-#SBATCH -D /projects/uoo00105
+#SBATCH --mem=105G
+#SBATCH -D /nesi/nobackup/uoo02423/data
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=alana.alexander@otago.ac.nz
+#SBATCH --mail-user=laninsky@gmail.com
 #SBATCH -N 1
+#SBATCH --hint=nomultithread option
 
 module load Jellyfish/2.2.6-gimkl-2017a
-zcat trim_data/*.gz >> merged_data.fastq
-jellyfish count -m 17 -o fastq.counts.jf -C merged_data.fastq -s 10000000000 -U 500 -t 24
+zcat trimmed/Sample_1-D079*.gz >> merged_data.fastq
+jellyfish count -m 17 -o fastq.counts.jf -C merged_data.fastq -s 10000000000 -U 500 -t 36
 rm merged_data.fastq
 jellyfish histo -o fastq.counts.histo fastq.counts.jf
 ```
