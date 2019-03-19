@@ -4,7 +4,7 @@
 [Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-northern-fur-seal-reference-example-for-sample_1-d079)  
 [Pulled out cutadapt stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-cutadapt-stats-to-record-them-in-r)  
 [Pulled out reference mapping stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-reference-mapping-stats-to-record-them-in-r)  
-[Estimated individual heterozygosity using genomescope and jellyfish]
+[Estimated individual heterozygosity using genomescope and jellyfish](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#estimated-individual-heterozygosity-using-genomescope-and-jellyfish)
 
 
 
