@@ -435,7 +435,7 @@ A kmer of 17 did not appear to be long enough (underestimated genome length and 
 #SBATCH -J 1-D029_jellyfish
 #SBATCH -n 1
 #SBATCH -c 36
-#SBATCH -t 4:00:00
+#SBATCH -t 1:00:00
 #SBATCH --mem=105G
 #SBATCH -D /nesi/nobackup/uoo02423/data
 #SBATCH --mail-type=ALL
@@ -449,4 +449,13 @@ jellyfish count -m 21 -o 1-D079_fastq.counts.jf -C 1-D079_merged_data.fastq -s 1
 rm 1-D079_merged_data.fastq
 jellyfish histo -o 1-D079_fastq.counts.histo 1-D079_fastq.counts.jf
 rm 1-D079_fastq.counts.jf
+```
+To run on each of the samples by modifying the script for Sample_1-D079...
+```
+for i in trimmed/*001_R1_001*;
+do newname=`echo $i | sed "s'trimmed/''g" | sed 's/_S.*//g'`;
+cp Sample_1-D079_jellyfish.sh Sample_${newname}_jellyfish.sh;
+sed -i "s/1-D079/$newname/g" Sample_${newname}_jellyfish.sh
+sbatch Sample_${newname}_jellyfish.sh
+done
 ```
