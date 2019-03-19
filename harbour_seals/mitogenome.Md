@@ -1,3 +1,5 @@
+## Checking for convergence and stationarity
+```
 library(rwty)
 interspecies <- load.multi("/Users/alanaalexander/Dropbox/seal/Emma/processed_mito_alignment/",format="beast")
 interspecies.rwty <- analyze.rwty(interspecies,burnin=500,fill.color = 'posterior')
@@ -16,3 +18,4 @@ interspecies.rwty$topology.trace.plot$density.plot
 interspecies.rwty$splitfreq.matrix
 #Tree space (100 trees)
 interspecies.rwty$treespace.points.plot
+```
