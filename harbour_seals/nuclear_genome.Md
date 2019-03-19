@@ -428,13 +428,14 @@ ggplot(outputtibble,mapping=aes(x=Reads,y=overall_alignment_rate,color=File_name
   ```
 
 ### Estimated individual heterozygosity using genomescope and jellyfish (example for Sample_1-D079)
+A kmer of 17 did not appear to be long enough (underestimated genome length and appeared to overestimate heterozygosity)
 ```
 #!/bin/bash -e 
 #SBATCH -A uoo02423
 #SBATCH -J 1-D029_jellyfish
 #SBATCH -n 1
 #SBATCH -c 36
-#SBATCH -t 24:00:00
+#SBATCH -t 4:00:00
 #SBATCH --mem=105G
 #SBATCH -D /nesi/nobackup/uoo02423/data
 #SBATCH --mail-type=ALL
@@ -443,8 +444,9 @@ ggplot(outputtibble,mapping=aes(x=Reads,y=overall_alignment_rate,color=File_name
 #SBATCH --hint=nomultithread option
 
 module load Jellyfish/2.2.6-gimkl-2017a
-zcat trimmed/1-D079*.gz >> merged_data.fastq
-jellyfish count -m 17 -o fastq.counts.jf -C merged_data.fastq -s 10000000000 -U 500 -t 36
-rm merged_data.fastq
-jellyfish histo -o fastq.counts.histo fastq.counts.jf
+zcat trimmed/1-D079*.gz >> 1-D079_merged_data.fastq
+jellyfish count -m 21 -o 1-D079_fastq.counts.jf -C 1-D079_merged_data.fastq -s 10000000000 -U 500 -t 36
+rm 1-D079_merged_data.fastq
+jellyfish histo -o 1-D079_fastq.counts.histo 1-D079_fastq.counts.jf
+rm 1-D079_fastq.counts.jf
 ```
