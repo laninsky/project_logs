@@ -1,0 +1,166 @@
+Catalog_number	Tissue_number	BC_genetic_cluster_assignment	CC_genetic_cluster_assignment	DecimalLongitude	DecimalLatitude	Sampling_period	Location_code	Sex	Wing	Tail	Weight	Comments_on_measurements	Specific_locality	County	Remarks	Gonads	Molt	Day	Month	Year	Macaulay_Library_catalog	Song_summary
+99703	649325	0.997333333	0.002666667	-94.497	38.31	SMITHSONIAN	1	male	67.2	64.6			"Miami Cr. Drainage, 3.0 mi N & 8.0 mi W Butler"	Bates				1	Apr	1980		
+99704	649329	0.997666667	0.002333333	-94.497	38.31	SMITHSONIAN	1	female	63.3	60.4			"Miami Cr. Drainage, 3.0 mi N & 8.0 mi W Butler"	Bates				1	Apr	1980		
+99705	649330	0.996333333	0.003666667	-94.497	38.31	SMITHSONIAN	1	male	67.6	64.8			"Miami Cr. Drainage, 3.0 mi N & 8.0 mi W Butler"	Bates				1	Apr	1980	210187	
+99706	649331	0.998666667	0.001333333	-94.497	38.31	SMITHSONIAN	1	female	61.4	62.5			"Miami Cr. Drainage, 3.0 mi N & 8.0 mi W Butler"	Bates				1	Apr	1980		
+99712	649326	0.998333333	0.001666667	-94.444	38.295	SMITHSONIAN	1	female	63.1	61			"Miami Cr. Drainage, 3.0 mi N & 5.0 mi W Butler"	Bates				1	Apr	1980		
+99713	649327	0.994	0.006	-94.444	38.295	SMITHSONIAN	1	female	63.8	63.8			"Miami Cr. Drainage, 3.0 mi N & 5.0 mi W Butler"	Bates				1	Apr	1980		
+99714	649328	0.997333333	0.002666667	-94.444	38.295	SMITHSONIAN	1	male	65.7	65.3			"Miami Cr. Drainage, 3.0 mi N & 5.0 mi W Butler"	Bates				1	Apr	1980	210189	
+99715	649332	0.998	0.002	-94.444	38.295	SMITHSONIAN	1	male	64.7	62.1			"Miami Cr. Drainage, 3.0 mi N & 5.0 mi W Butler"	Bates				1	Apr	1980		
+99716	649333	0.998	0.002	-94.444	38.295	SMITHSONIAN	1	female	62.6	damaged			"Miami Cr. Drainage, 3.0 mi N & 5.0 mi W Butler"	Bates				1	Apr	1980		
+99717	649334	0.998333333	0.001666667	-94.444	38.295	SMITHSONIAN	1	male	67.2	molt			"Miami Cr. Drainage, 3.0 mi N & 5.0 mi W Butler"	Bates				1	Apr	1980	210190	
+99718	649353	0.994333333	0.005666667	-94.128	38.134	SMITHSONIAN	2	male	70	67.9			5.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210627	
+99719	649359	0.996666667	0.003333333	-94.128	38.134	SMITHSONIAN	2	female	63.7	61.3			5.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980		
+99720	649352	0.998666667	0.001333333	-94.119	38.119	SMITHSONIAN	3	male	66.6	64.3			4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210621	
+99741	649354	0.998	0.002	-94.119	38.119	SMITHSONIAN	3	male					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210622	
+99742	649355	0.995333333	0.004666667	-94.119	38.119	SMITHSONIAN	3	male					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210624	
+99743	649356	0.648666667	0.351333333	-94.119	38.119	SMITHSONIAN	3	female					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980		
+99744	649357	0.984666667	0.015333333	-94.119	38.119	SMITHSONIAN	3	female					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980		
+99745	649358	0.995	0.005	-94.119	38.119	SMITHSONIAN	3	female					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980		
+99746	649360	0.998333333	0.001666667	-94.119	38.119	SMITHSONIAN	3	male					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210620	
+99747	649361	0.994666667	0.005333333	-94.119	38.119	SMITHSONIAN	3	male					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210625	
+99748	649362	0.774	0.226	-94.119	38.119	SMITHSONIAN	3	male					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210623	
+99749	649363	0.443333333	0.556666667	-94.119	38.119	SMITHSONIAN	3	female					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980		
+99750	649364	0.979666667	0.020333333	-94.119	38.119	SMITHSONIAN	3	male					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980	210626	
+99751	649365	0.772666667	0.227333333	-94.119	38.119	SMITHSONIAN	3	female					4.0 mi N & 2.5 mi W Rockville	Bates				4	Apr	1980		
+99752	649252	0.997333333	0.002666667	-94.113	38.105	SMITHSONIAN	6	unknown					2 mi W & 2 mi N Rockville	Bates				5	Apr	1980	210192	
+99754	649249	0.006	0.994	-93.682	37.845	SMITHSONIAN	20	male	62.8	54.4			3.0 mi S & 3.0 mi W Collins	St. Clair				30	Mar	1980	210179	
+99755	649279	0.002666667	0.997333333	-93.682	37.845	SMITHSONIAN	20	female	60	52.2			3.0 mi S & 3.0 mi W Collins	St. Clair				31	Mar	1980		
+99760	649278	0.001666667	0.998333333	-93.682	37.845	SMITHSONIAN	20	male	62	57			3.0 mi S & 3.0 mi W Collins	St. Clair				30	Mar	1980	210180	
+99764	649342	0.002666667	0.997333333	-93.682	37.845	SMITHSONIAN	20	male	62.5	57.7			3.0 mi S & 3.0 mi W Collins	St. Clair				31	Mar	1980		
+99765	649344	0.003	0.997	-93.682	37.845	SMITHSONIAN	20	female	63	56.1			3.0 mi S & 3.0 mi W Collins	St. Clair				31	Mar	1980		
+99767	649346	0.004666667	0.995333333	-93.682	37.845	SMITHSONIAN	20	female	60.1	53			3.0 mi S & 3.0 mi W Collins	St. Clair				31	Mar	1980		
+99772	649247	0.002666667	0.997333333	-93.709	37.875	SMITHSONIAN	19	male	65.4	damaged			1.0 mi S & 4.5 mi W Collins	St. Clair				29	Mar	1980	210171	
+99773	649348	0.002666667	0.997333333	-93.709	37.875	SMITHSONIAN	18	female	61.7	damaged			1.0 mi S & 4.5 mi W Collins	St. Clair				29	Mar	1980		
+99774	649246	0.001666667	0.998333333	-93.708	37.89	SMITHSONIAN	19	male	64.7	58.1			4.5 mi W Collins	St. Clair				29	Mar	1980	210170	
+99775	649248	0.002	0.998	-93.708	37.89	SMITHSONIAN	19	male	64.2	damaged			4.5 mi W Collins	St. Clair				29	Mar	1980	210174	
+99786	649255	0.995333333	0.004666667	-94.01	38.183	SMITHSONIAN	4	male					1.0 mi E & 0.5 mi S Appleton City	St. Clair				3	Apr	1980	210618	
+99787	649256	0.004666667	0.995333333	-94.01	38.183	SMITHSONIAN	4	female					1.0 mi E & 0.5 mi S Appleton City	St. Clair				3	Apr	1980		
+99788	649257	0.302	0.698	-94.01	38.183	SMITHSONIAN	4	female					1.0 mi E & 0.5 mi S Appleton City	St. Clair				3	Apr	1980		
+99789	649258	0.999	0.001	-94.01	38.183	SMITHSONIAN	4	female					1.0 mi E & 0.5 mi S Appleton City	St. Clair				3	Apr	1980		
+99790	649259	0.999	0.001	-94.01	38.183	SMITHSONIAN	4	male					1.0 mi E & 0.5 mi S Appleton City	St. Clair				3	Apr	1980	210617	
+99791	649251	0.444666667	0.555333333	-94.01	38.183	SMITHSONIAN	4	male					1.0 mi E & 0.5 mi S Appleton City	St. Clair				3	Apr	1980	210615	
+99792	649230	0.525666667	0.474333333	-93.961	38.147	SMITHSONIAN	8	male					3.5 mi E & 2.5 mi S Appleton City	St. Clair				23	Apr	1978		
+99793	649231	0.004333333	0.995666667	-93.961	38.14	SMITHSONIAN	9	male					3.5 mi E & 3.0 mi S Appleton City	St. Clair				23	Apr	1978	209697	
+99794	649240	0.010333333	0.989666667	-93.961	38.14	SMITHSONIAN	9	male					3.5 mi E & 3.0 mi S Appleton City	St. Clair				23	Apr	1978	209695	
+99795	649241	0.998666667	0.001333333	-93.961	38.14	SMITHSONIAN	8	female					3.5 mi E & 3.0 mi S Appleton City	St. Clair				23	Apr	1978		
+99796	649234	0.308	0.692	-93.943	38.14	SMITHSONIAN	13	male					4.5 mi E & 3.0 mi S Appleton City	St. Clair				23	Apr	1978		
+99797	649239	0.929666667	0.070333333	-93.979	38.13	SMITHSONIAN	12	male					4.0 mi S & 2.5 mi E Appleton City	St. Clair				22	Apr	1978	209693	
+99798	649232	0.372	0.628	-93.961	38.147	SMITHSONIAN	8	male					3.5 mi E & 2.5 mi S Appleton City	St. Clair				23	Apr	1978	209696	
+99800	649315	0.002333333	0.997666667	-94.054	38.065	SMITHSONIAN	11	female					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980		
+99801	649323	0.356	0.644	-94.054	38.065	SMITHSONIAN	11	male					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				31	Mar	1980	210186	
+99802	649313	0.002666667	0.997333333	-94.054	38.065	SMITHSONIAN	11	male					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980	210195	
+99803	649314	0.293666667	0.706333333	-94.054	38.065	SMITHSONIAN	11	male					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980	210196	
+99804	649317	0.002	0.998	-94.055	38.105	SMITHSONIAN	7	female					"Campbell Branch Cr., 2.0 mi N & 1.0 mi E Rockville"	St. Clair				2	Apr	1980		
+99805	649318	0.615333333	0.384666667	-94.054	38.065	SMITHSONIAN	11	female					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980		
+99806	649319	0.997666667	0.002333333	-94.054	38.065	SMITHSONIAN	11	female					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980		
+99807	649320	0.997666667	0.002333333	-94.054	38.065	SMITHSONIAN	11	female					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980		
+99808	649321	0.002333333	0.997666667	-94.054	38.065	SMITHSONIAN	11	female					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980		
+99809	649322	0.172333333	0.827666667	-94.054	38.065	SMITHSONIAN	11	female					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980		
+99810	649324	0.397	0.603	-94.054	38.065	SMITHSONIAN	11	male					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair				2	Apr	1980	210194	
+99811	649316	0.002666667	0.997333333	-94.055	38.105	SMITHSONIAN	7	male					"Campbell Branch Cr., 2.0 mi N & 1.0 mi E Rockville"	St. Clair				2	Apr	1980	210198	
+99812	649253	0.003	0.997	-94.011	38	SMITHSONIAN	17	male					0.5 mi S & 1.0 mi W Taberville	St. Clair				5	Apr	1980		
+99813	649254	0.003666667	0.996333333	-94.011	38	SMITHSONIAN	17	female					0.5 mi S & 1.0 mi W Taberville	St. Clair				5	Apr	1980	210628	
+99851	649235	0.997666667	0.002333333	-94.439	37.565	SMITHSONIAN	14	male					4.5 mi E Liberal	Barton				15	Apr	1978	209684	
+99854	649229	0.006666667	0.993333333	-94.089	38.075	SMITHSONIAN		male					0.25 mi W Rockville	Bates				22	Apr	1978	209691	
+99858	649236	0.492	0.508	-94.424	37.755	SMITHSONIAN	10	male					1.5 mi E Moundville	Vernon				15	Apr	1978	209686	
+99859	649233	0.002666667	0.997333333	-94.406	37.757	SMITHSONIAN	5	male					2.5 mi E Moundville	Vernon				15	Apr	1978		
+99861	649237	0.036333333	0.963666667	-94.425	37.7	SMITHSONIAN	15	male					2.5 mi E & 0.5 mi N Bronaugh	Vernon				15	Apr	1978		
+99862	649238	0.997666667	0.002333333	-94.424	37.707	SMITHSONIAN	16	male					2.5 mi E & 1.0 mi N Bronaugh	Vernon				15	Apr	1978		
+132041	32562	0.002	0.998	-94.1084	38.0112	MODERN	47	male			11.2		"Schell-Osage Conservation Area, southwest section"	Vernon	with MBR # 9033 (KU 132042); 	"testes 8 x 5 mm, seminal vesicles enlarged"	no	5	Apr	2016	523580	PURECC
+132042	32561	0.002666667	0.997333333	-94.1084	38.0112	MODERN	47	female			11		"Schell-Osage Conservation Area, southwest section"	Vernon	with MBR # 9034 (KU 132041)	"ovary mass 5 x 4 mm, oviduct 2 mm in diameter & slightly convoluted"	no	5	Apr	2016		
+132043	32565	0.002666667	0.997333333	-94.1084	38.0112	MODERN	47	male			9.9		"Schell-Osage Conservation Area, southwest section"	Vernon	"with female, but she was not collected"	"testes 7 x 4.5 mm, seminal vesicles enlarged"	no	5	Apr	2016	523583	PURECC
+132044	32606	0.002	0.998	-94.1034	38.0116	MODERN	48	female			10.6		"Schell-Osage Conservation Area, southwest section"	Vernon	with KU 132045	"lg. ovum 5 x 5 mm, oviduct 3 m in diameter & mostly straight"	no	5	Apr	2016		
+132045	32605	0.01	0.99	-94.1034	38.0116	MODERN	48	male			11.5		"Schell-Osage Conservation Area, southwest section"	Vernon	with KU 132044	"testes 8 x 5 mm, seminal vesicles enlarged"	no	5	Apr	2016	523579	
+132046	32564	0.001	0.999	-94.1107	38.0125	MODERN	44	female			13.1		"Schell-Osage Conservation Area, southwest section"	Vernon	with KU 132047	unshelled egg in oviduct	no	5	Apr	2016		
+132047	32563	0.003666667	0.996333333	-94.1107	38.0125	MODERN	44	male			11.4		"Schell-Osage Conservation Area, southwest section"	Vernon	with KU 132046	"testes 9 x 6 mm, seminal vesicles enlarged"	no	5	Apr	2016		
+132048	32619	0.003	0.997	-93.713	37.875	MODERN	50	male	63.8	56.7	11.6		Bird Song Conservation Area	St. Clair	with KU 132049	"testes 8 x 5 mm, seminal vesicles enlarged"	no	4	Apr	2016	519671	PURECC
+132049	32602	0.003666667	0.996333333	-93.713	37.875	MODERN	50	female	60.5	55.3	9.9		Bird Song Conservation Area	St. Clair	with KU 132048	"ovary mass 6 x 5 mm, ova = 1 mm; oviduct 2 mm in diameter & straight"	no	4	Apr	2016		
+132050	32620	0.003666667	0.996333333	-93.713	37.875	MODERN	50	female	62.5	57.2	11.9		Bird Song Conservation Area	St. Clair	"this bird is in the background giving calls as the male sing's audio ref cut, MBR-MO-2016-025 (original cut 49), male was not collected"	unshelled egg in oviduct	no	4	Apr	2016	519675	PURECC
+132051	32626	0.001666667	0.998333333	-93.713	37.875	MODERN	50	male	65.9	57.5	11.9		Bird Song Conservation Area	St. Clair	with presumed female who was carrying nesting material	"testes 8.5 x 5.5 mm, seminal vesicles enlarged"	no	4	Apr	2016	519677	
+132052	32625	0.002666667	0.997333333	-93.713	37.875	MODERN	50	male	64.1	55.7	11.5		Bird Song Conservation Area	St. Clair		"testes 9.5 x 5.5 mm, seminal vesicles enlarged"	no	4	Apr	2016	519679	PURECC
+132053	32624	0.002	0.998	-93.713	37.875	MODERN	50	male	64	56.6	10.7		Bird Song Conservation Area	St. Clair		"testes 7 x 5 mm, seminal vesicles enlarged"	no	4	Apr	2016	519680	PURECC
+132054	32618	0.003333333	0.996666667	-93.713	37.875	MODERN	50	male	65.3	60.5	11.5		Bird Song Conservation Area	St. Clair	in adjacent territory to KU 132048	"testes 10 x 6 mm, seminal vesciles enlarged"	no	4	Apr	2016	519672	PURECC
+132055	32621	0.002	0.998	-93.713	37.875	MODERN	50	female	58.2	51.4	10.8		Bird Song Conservation Area	St. Clair	with KU # 132056	"ovary mass 6 x 4 mm, ova = 1 mm"	no	4	Apr	2016		
+132056	32622	0.007333333	0.992666667	-93.713	37.875	MODERN	50	male	64.2	56.4	11.3		Bird Song Conservation Area	St. Clair	with KU # 132055	"testes 7 x 4 mm, seminal vesicles enlarged"	no	4	Apr	2016		
+132057	32623	0.004	0.996	-93.713	37.875	MODERN	50	male	61.7	59	11		Bird Song Conservation Area	St. Clair		"testes 7.5 x 5 mm, seminal vesicles enlarged"	no	4	Apr	2016		
+132058	32617	0.999	0.001	-94.4273	38.2794	MODERN	4	male	65.6	63.5	13.5		"north side of Butler Lake, Miami Creek"	Bates	with KU 132059	"testes 8 x 5 mm, seminal vesicles enlarged"	no	13	Apr	2016		
+132059	32616	0.999	0.001	-94.4273	38.2794	MODERN	4	female	62.2	55.4	14.5		"north side of Butler Lake, Miami Creek"	Bates	with KU 132058	unshelled egg in oviduct; lg. ovum 7 x 7 mm	no	13	Apr	2016		
+132060	32615	0.994666667	0.005333333	-94.4342	38.2843	MODERN	1	male	67.5	66.5	13.4	worn	"north side of Butler Lake, Miami Creek"	Bates		"testes 8 x 4.5 mm, seminal vesicles enlarged"	no	13	Apr	2016		
+132061	32612	0.997666667	0.002333333	-94.4279	38.2809	MODERN	3	male	66.7	65.8	13.5	white wing panels quite different between the wings	"north side of Butler Lake, Miami Creek"	Bates	with KU 132062	"testes 9 x 5 mm, seminal vesicles enlarged"	no	13	Apr	2016		
+132062	32611	0.997666667	0.002333333	-94.4279	38.2809	MODERN	3	female	60.7		14	missing most tail	"north side of Butler Lake, Miami Creek"	Bates	with KU 132061	oviduct 3 mm in diameter & convoluted; 2 collapsed ova	no	13	Apr	2016		
+132063	32614	0.994	0.006	-94.4336	38.2822	MODERN	2	male	65.6	63.2	14		"north side of Butler Lake, Miami Creek"	Bates	with KU 132064	"testes 8 x 6 mm, seminal vesicles enlarged"	no	13	Apr	2016		
+132064	32613	0.999	0.001	-94.4336	38.2822	MODERN	2	female	61.2	59.6	13.3		"north side of Butler Lake, Miami Creek"	Bates	with KU 132063	oviduct 4 mm in diameter & convoluted; 1 collapsed ovum; lg. ovum 5 x 5 mm	no	13	Apr	2016		
+132065	32601	0.006333333	0.993666667	-94.0333	38.001	MODERN	49	male			11.8		"Schell-Osage Conservation Area, east side"	St. Clair		"testes 8 x 5.5 mm, seminal vesicles enlarged"	no	4	Apr	2016	519681	PURECC
+132066	32599	0.003	0.997	-94.099	38.0304	MODERN	46	male			11.2		"Schell-Osage Conservation Area, northeast section"	St. Clair	with KU 132067	"testes 8 x 5 mm, seminal vesicles enlarged"	no	4	Apr	2016	519685	PURECC
+132067	32600	0.002	0.998	-94.099	38.0304	MODERN	46	female			11.7		"Schell-Osage Conservation Area, northeast section"	St. Clair	with KU 132066	"lg. ovum 6 x 5 mm, oviduct 4 mm in diameter and convoluted"	no	4	Apr	2016		
+132068	32609	0.001666667	0.998333333	-94.1045	38.0452	MODERN	38	female			11.8		"Schell-Osage Conservation Area, northwest section"	Vernon	sang soft (quiet) Carolina song; carrying nesting material; in almost the exact same site as KU 132069; male was not collected	unshelled egg in oviduct; 2 large ova; brood batch present	no	5	Apr	2016		
+132069	32610	0.002333333	0.997666667	-94.1045	38.0452	MODERN	38	female			10.1		"Schell-Osage Conservation Area, northwest section"	Vernon	"almost in the exact same site as KU 132068, who was in breeding condition; male was not collected"	"ovary mass 4.5 x 2.5 mm, ova < 1 mm"	no	5	Apr	2016		
+132070	32598	0.002	0.998	-94.1033	38.0477	MODERN	39	female			11		"Schell-Osage Conservation Area, northwest section"	Vernon	"with male, who was not collected, but was audio recorded (audio ref #: MBR-MO-2016-044, original cuts 85 & 87)"	"lg. ovum 2 x 2 mm, oviduct 2 mm & slightly convoluted"	no	5	Apr	2016		
+132071	32604	0.197333333	0.802666667	-94.1033	38.0441	MODERN	42	male			11.2		"Schell-Osage Conservation Area, northwest section"	Vernon		"testes 7.5 x 5 mm, seminal vesicles enlarged"	"outer rectrix on right side only, no molt elsewhere"	5	Apr	2016		
+132072	32603	0.002	0.998	-94.1011	38.047	MODERN	40	male			11		"Schell-Osage Conservation Area, northwest section"	Vernon		"testes 9 x 5 mm, seminal vesciles enlarged"	no	5	Apr	2016	523587	PURECC
+132073	32593	0.982333333	0.017666667	-94.2187	38.1737	MODERN	7	male			12.3		"Pleasant Gap, west of"	Bates		"testes 7 x 5 mm, seminal vesicles enlarged"	no	28	Apr	2016		
+132074	32591	0.997666667	0.002333333	-94.1942	38.1713	MODERN	9	male			12.2		"Pleasant Gap, west of"	Bates	with KU 132075	"testes 8 x 6 mm, seminal vesicles enlarged"	no	28	Apr	2016	523629	PUREBC
+132075	32592	0.002666667	0.997333333	-94.1942	38.1713	MODERN	9	female			11.9		"Pleasant Gap, west of"	Bates	with KU 132074	"unshelled egg in oviduct, lg. ovum 8 x 8 mm"	no	28	Apr	2016		
+132076	32608	0.627333333	0.372666667	-94.2007	38.1717	MODERN	8	male			11		"Pleasant Gap, west of"	Bates	with KU 132077	"testes 8 x 5 mm, seminal vesicles enlarged"	no	28	Apr	2016		
+132077	32607	0.975666667	0.024333333	-94.2007	38.1717	MODERN	8	female			11.9		"Pleasant Gap, west of"	Bates	with KU 132076	"ovary mass 5 x 3 mm, ova < 1 mm, oviduct straight, developing brood patch"	no	28	Apr	2016		
+132078	32595	0.532333333	0.467666667	-94.2072	38.1764	MODERN	5	male			13.3		"Pleasant Gap, west of"	Bates	with KU 132079	"testes 6.5 x 4.5 mm, seminal vesicles enlarged"	no	28	Apr	2016	523630	PUREBC
+132079	32596	0.995	0.005	-94.2072	38.1764	MODERN	5	female			13.3		"Pleasant Gap, west of"	Bates	with KU 132078	unshelled egg in oviduct	no	28	Apr	2016		
+132080	32594	0.988333333	0.011666667	-94.2011	38.1827	MODERN	6	male			12.3		"Pleasant Gap, west of"	Bates		"testes 9 x 5.5 mm, seminal vesicles enlarged"		28	Apr	2016		
+132081	32576	0.002	0.998	-94.154	38.0771	MODERN	16	male			10.5		"Rockville, 4.1 miles west (east of Prairie City)"	Bates	with KU 132086 in riparian woodland strip	"testes 7.5 x 5 mm, seminal vesicles enlarged"	no	8	Apr	2016	523592	
+132082	32577	0.005	0.995	-94.154	38.0771	MODERN	16	male			11.8		"Rockville, 4.1 miles west (east of Prairie City)"	Bates		"testes 9 x 6 mm, seminal vesicles enlarged"	no	8	Apr	2016	523590	BOTH
+132083	32572	0.275666667	0.724333333	-94.154	38.0771	MODERN	16	female			10.3		"Rockville, 4.1 miles west (east of Prairie City)"	Bates	with KU 132084	not found	"outer 2 trectrices on right side of tail, very light molt on neck"	8	Apr	2016		
+132084	32573	0.998	0.002	-94.154	38.0771	MODERN	16	male			14		"Rockville, 4.1 miles west (east of Prairie City)"	Bates	with KU 132083	"testes 8 x 5 mm, seminal vesicles enlarged"	no	8	Apr	2016	523589	BOTH
+132085	32566	0.002666667	0.997333333	-94.154	38.0771	MODERN	16	male			10.3		"Rockville, 4.1 miles west (east of Prairie City)"	Bates		"testes 8.5 x 5.5 mm, seminal vesicles enlarged"	no	8	Apr	2016	523591	BOTH
+132086	32575	0.002	0.998	-94.154	38.0771	MODERN	16	female			11.1		"Rockville, 4.1 miles west (east of Prairie City)"	Bates	with KU 132081	oviduct 3 mm in diameter & convoluted; 1 collasped ovum; lg. ovum 3 x 3 mm		8	Apr	2016		
+132087	32556	0.608666667	0.391333333	-94.0863	38.1168	MODERN	34	male			12.1		"Rockville, 3.2 miles north"	Bates		"testes 9 x 5 mm, seminal vesicles enlarged"	no	9	Apr	2016	523601	PURECC
+132088	32559	0.003	0.997	-94.0858	38.1178	MODERN	35	male			11.6		"Rockville, 3.2 miles north"	Bates	with KU 132089	"testes 8 x 5 mm, seminal vesicles enlarged"	no	9	Apr	2016	523603	PURECC
+132089	32560	0.001666667	0.998333333	-94.0858	38.1178	MODERN	35	female			11.6		"Rockville, 3.2 miles north"	Bates	with KU 132088	oviduct 2.5 mm in diameter & convoluted; 2 collasped ova; brood patch present	no	9	Apr	2016		
+132090	32586	0.997	0.003	-94.0847	38.1161	MODERN	37	female			12.3		"Rockville, 3.2 miles north"	Bates	with KU 132091	"ovary mass 8 x 6 mm, lg. ovum 1.5 x 1.5 mm, oviduct not visible"	no	9	Apr	2016		
+132091	32585	0.001666667	0.998333333	-94.0847	38.1161	MODERN	37	male			11.3		"Rockville, 3.2 miles north"	Bates	with KU 132090	"testes 8 x 5 mm, seminal vesicles enlarged"	no	9	Apr	2016	523602	BOTH
+132092	32553	0.001	0.999	-94.0878	38.1191	MODERN	22	male			11.5		"Rockville, 3.2 miles north"	Bates		"testes 8.5 x 5.5 mm, seminal vesicles enlarged"	no	9	Apr	2016	523604	PUREBC
+132093	32568	0.988333333	0.011666667	-94.0872	38.1193	MODERN	23	male			12.4		"Rockville, 3.2 miles north"	Bates	with KU 132094	"testes 9 x 5.5 mm, seminal vesicles enlarged"	no	9	Apr	2016	523600	PUREBC
+132094	32555	0.967666667	0.032333333	-94.0872	38.1193	MODERN	23	female			12.3		"Rockville, 3.2 miles north"	Bates	with KU 132093	oviduct 3.5 mm in diameter & convoluted; lg. ovum 1.5 x 1.5 mm; brood patch present	no	9	Apr	2016		
+132095	32571	0.965	0.035	-94.1182	38.1198	MODERN	10	male			12.8		"Rockville, 4 miles northwest"	Bates		"testes 8.5 x 5.5 mm, seminal vesicles enlarged"	no	9	Apr	2016	523597	BOTH
+132096	32574	0.538666667	0.461333333	-94.1163	38.1195	MODERN	13	male			11.6		"Rockville, 4 miles northwest"	Bates		"testes 8 x 5 mm, seminal vesicles enlarged"	no	9	Apr	2016	523598	BOTH
+132097	32589	0.001	0.999	-94.1163	38.1195	MODERN	13	male			10.7		"Rockville, 4 miles northwest"	Bates	with KU 132098	"testes 8 x 5 mm, seminal vesicles enlarged"	no	9	Apr	2016		
+132098	32590	0.247	0.753	-94.1163	38.1195	MODERN	13	female			10.6		"Rockville, 4 miles northwest"	Bates	with KU 132097	"ovary minute, oviduct straight"	no	9	Apr	2016		
+132099	32584	0.022	0.978	-94.1198	38.0525	MODERN	31	male	64	59	11.7		"Rockville, 2.3 miles west"	Bates	"with female, who was carrying nesting material; she gave muted Carolina song after male was collected; she was not collected"	"testes 7.5 x 5 mm, seminal vesicles enlarged"	no	8	Apr	2016	523595	PURECC
+132100	32587	0.635	0.365	-94.1213	38.0639	MODERN	19	male	62.5	57.7	12.3		"Rockville, 2.3 miles west"	Bates	with KU 132101	"testes 7 x 5 mm, seminal vesicles enlarged"	no	8	Apr	2016		
+132101	32588	0.008666667	0.991333333	-94.1213	38.0639	MODERN	19	female	60.1	54.6	11.4	worn	"Rockville, 2.3 miles west"	Bates	with KU 132100	3 collapsed ova; brood patch present; oviduct 4 mm in diameter & convoluted	no	8	Apr	2016		
+132102	32567	0.589666667	0.410333333	-94.1211	38.0641	MODERN	20	male	66.5	64.8	13.6		"Rockville, 2.3 miles west"	Bates	"initially audio recorder on 5 April, recorded again and collected on 8 April"	"testes 8 x 5 mm, seminal vesicles enlarged"	no	8	Apr	2016	"523587, 523594"	PURECC_ABERRANT
+132103	32578	0.454333333	0.545666667	-94.1848	38.0774	MODERN	14	male			12.4		"Rockville, 5.8 miles west (west of Prairie City)"	Bates	with KU 132104	"testes 7 x 3.5 mm, seminal vesicles enlarged"	no	8	Apr	2016	523593	PUREBC
+132104	32579	0.008666667	0.991333333	-94.1848	38.0774	MODERN	14	female			10.5		"Rockville, 5.8 miles west (west of Prairie City)"	Bates	with KU 132104	ovary undeveloped	no	8	Apr	2016		
+132105	32542	0.56	0.44	-94.1857	38.0781	MODERN	11	female			12.8		"Rockville, 5.8 miles west (west of Prairie City)"	Bates	with KU 132106	egg in oviduct; oviduct 6 mm in diameter & convoluted; 1 collapsed follicle; lg. ovum 6 x 6 mm	no	12	Apr	2016		
+132106	32541	0.005666667	0.994333333	-94.1857	38.0781	MODERN	11	male			11.4		"Rockville, 5.8 miles west (west of Prairie City)"	Bates	with KU 132105	"testes 10 x 5 mm, seminal vesicles enlarged"	no	12	Apr	2016	523613	PUREBC
+132107	32580	0.723666667	0.276333333	-94.0548	38.0655	MODERN	41	male			12.4		"Rockville, 1.5 miles southeast"	St. Clair	"with female (not collected); male responded to Carolina song playback by giving Carolina song (not recorded, too windy)"	"testes 8 x 5 mm, seminal vesicles enlarged"	no	8	Apr	2016		
+132108	32570	0.002	0.998	-94.0528	38.0674	MODERN	43	female			12.4		"Rockville, 1.5 miles southeast"	St. Clair	with KU 132109; male gave Carolina song in response to Carolina song playback	brood patch; oviduct 4 mm in diameter and convoluted; collapsed ovum	no	8	Apr	2016		
+132109	32569	0.002666667	0.997333333	-94.0528	38.0674	MODERN	43	male			11.4		"Rockville, 1.5 miles southeast"	St. Clair	"with KU 132108; male sang Carolina song in response to Carolina playback (not recorded, too windy)"	"testes 7 x 4.5 mm, seminal vesicles enlarged"	no	8	Apr	2016		
+132110	32558	0.002666667	0.997333333	-94.0537	38.0636	MODERN	45	male			11.5		"Rockville, 1.5 miles southeast"	St. Clair	with KU 132111	"testes 8.5 x 5 mm, seminal vesicles enlarged"	no	8	Apr	2016	523596	PURECC
+132111	32557	0.022	0.978	-94.0537	38.0636	MODERN	45	female			10.1		"Rockville, 1.5 miles southeast"	St. Clair	with KU 132110	oviduct 3.5 mm in diameter & convoluted; lg. ovum 2 x 2 mm	no	8	Apr	2016		
+132112	32581	0.005	0.995	-94.0118	38.1753	MODERN	30	male			10.7		"Appleton City, 1.7 miles southeast"	St. Clair	"with female, neither sang; in reclaimed min with scrubby woods that had dense understory of Japanese honeysuckle"	"testes 7 x 4 mm, seminal vesicles enlarged"	no	9	Apr	2016		
+132113	32536	0.024	0.976	-94.0046	38.1759	MODERN	24	male	65.1	58.8	11.4		"Appleton City, 1.7 miles southeast"	St. Clair	Heard singing both Carolina & Black-capped songs; counter singing with 2 other males ((KU 132114-5) in reclaimed min with scrubby woods that had dense understory of Japanese honeysuckle	"testes 8 x 5 mm, seminal vesicles enlarged"	no	12	Apr	2016	523610	PUREBC
+132114	32534	0.569666667	0.430333333	-94.0046	38.1749	MODERN	33	male			10.7		"Appleton City, 1.7 miles southeast"	St. Clair	counter singing with 2 other males ((KU 132113 & 132115) in reclaimed min with scrubby woods that had dense understory of Japanese honeysuckle	"testes 7 x 4 mm, seminal vesciles enlarged"	no	12	Apr	2016	523609	PUREBC
+132115	32543	0.181333333	0.818666667	-94.0046	38.1749	MODERN	33	male			12.6		"Appleton City, 1.7 miles southeast"	St. Clair	counter singing with 2 other males (KU 132113-4) in reclaimed min with scrubby woods that had dense understory of Japanese honeysuckle	testes 4 x 3 mm	no	12	Apr	2016	523608	PUREBC
+132116	32537	0.206333333	0.793666667	-93.992	38.1745	MODERN	36	male			12		"Appleton City, 2.2 miles southeast"	St. Clair	with mate in reclaimed mine	"testes 9 x 5 mm, seminal vesicles enlarged"	no	12	Apr	2016		
+132117	32583	0.041666667	0.958333333	-94.0251	38.1735	MODERN	32	female			11.2		Appleton City Cemetery	St. Clair	with KU 132118	2 collapsed ova; oviduct 2 mm in diameter & convoluted; brood patch present	no	9	Apr	2016		
+132118	32582	0.620333333	0.379666667	-94.0251	38.1735	MODERN	32	male			12.6		Appleton City Cemetery	St. Clair	"with KU 132117 in scrubby woodland (reclaimed mine); sang only Black-capped song, but not recorded"	"testes 7 x 5.5 mm, seminal vesicles enlarged"	no	9	Apr	2016		
+132119	32554	0.356	0.644	-94.0221	38.1748	MODERN	29	male			11.5		Appleton City Cemetery	St. Clair	"heard singing Black-capped song, but not recorded; in reclaimed mine scrubby woodland"	"testes 8 x 5 mm, seminal vesicles enlarged"	no	9	Apr	2016		
+132120	32545	0.001666667	0.998333333	-94.0207	38.1757	MODERN	21	female			12.7		"Appleton City Cemetery, adjacent to east side"	St. Clair	with KU 132121 in reclaimed mine scrubby woodland	"unshelled egg in oviduct, oviduct 6 mm in diameter & convoluted; 2 collapsed ova"	no	12	Apr	2016		
+132121	32546	0.049666667	0.950333333	-94.0207	38.1757	MODERN	21	male	62.9	55.5	10.7		"Appleton City Cemetery, adjacent to east side"	St. Clair	with KU 132120 in reclaimed mine scrubby woodland	"testes 8.5 x 5 mm, seminal vesicles enlarged"	no	12	Apr	2016	523612	PUREBC
+132122	32538	0.787333333	0.212666667	-94.3459	37.9701	MODERN	25	male	67.8	62.7	12		"Four Rivers Conservation Area, Unit 1, Prairie tract"	Vernon	"recorded over different days; sang both Black-capped & Carolina songs, as did other individuals at this site"	"testes 8 x 5 mm, seminal vesicles enlarged"	no	13	Apr	2016	"518372, 523625"	PUREBC_ABERRANT
+132123	32551	0.333666667	0.666333333	-94.2394	38.0344	MODERN	15	male	64.5	64.2	13.2		"Four Rivers Conservation Area, east side of Unit 2, pool 12"	Vernon	with KU 132124	"testes 9 x 5 mm, seminal vesicles enlarged"	no	12	Apr	2016	523616	PUREBC
+132124	32552	0.295333333	0.704666667	-94.2394	38.0344	MODERN	15	female	59.6	54	12.2	worn	"Four Rivers Conservation Area, east side of Unit 2, pool 12"	Vernon	with KU 132123	oviduct 4.5 mm in diameter & convoluted; 1 collapsed ovum	no	12	Apr	2016		
+132125	32548	0.622666667	0.377333333	-94.2208	38.0161	MODERN	27	male	65.2	59.7	12.3		"Four Rivers Conservation Area, east side of Unit 4"	Vernon	with KU 132126	"testes 8 x 5.5 mm, seminal vesicles enlarged"	no	13	Apr	2016	523626	PUREBC_ABERRANT
+132126	32547	0.669	0.331	-94.2208	38.0161	MODERN	27	female	65.4	63.1	13.7		"Four Rivers Conservation Area, east side of Unit 4"	Vernon	with KU 132125	"unshelled egg in oviduct, oviduct 5 mm in diameter & convoluted; brood patch present"	no	13	Apr	2016		
+132127	32549	0.346666667	0.653333333	-94.2206	38.0181	MODERN	28	male	65.9	60.7	12.5		"Four Rivers Conservation Area, east side of Unit 4"	Vernon	with KU 132128	"testes 8 x 5.5. mm, seminal vesicles enlarged"	no	13	Apr	2016	523627	PURECC
+132128	32550	0.998	0.002	-94.2206	38.0181	MODERN	28	female	61.1	58.6	12.7		"Four Rivers Conservation Area, east side of Unit 4"	Vernon	with KU 132127	"ovary mass 5 x 4 mm, lg. ovum 2 x 2 mm"	no	13	Apr	2016		
+132129	32540	0.364	0.636	-94.2216	38.0207	MODERN	18	female	61.1	56.1	11.6		"Four Rivers Conservation Area, east side of Unit 4"	Vernon	"with mate, not collected"	2 collapsed ova; oviduct 5 mm in diameter & convoluted; lg. ovum 6 x 6 mm		13	Apr	2016		
+132130	32535	0.602	0.398	-94.2243	38.0236	MODERN	17	unknown	63.1	59.4	10.8		"Four Rivers Conservation Area, east side of Unit 4"	Vernon	"note: if this is not a female, then the mate of this individual was audio recorded (see above)"	not found	no	13	Apr	2016	523628	PUREBC
+132131	32597	0.847666667	0.152333333	-94.3209	38	MODERN	26	male	65	61.6	12.8		"Four Rivers Conservation Area, south end of Unit 1"	Vernon	with female (not collected); male sang Black-capped in response to playback	"testes 9 x 5 mm, seminal vesicles enlarged"	no	13	Apr	2016	523632	PUREBC
+132132	32539	0.587	0.413	-94.2539	38.0449	MODERN	12	male	64.8	58.2	11.6		"Four Rivers Conservation Area, east side of Unit 2"	Vernon		testes 6 x 4 mm	no	13	Apr	2016		
+3474_            		0.998	0.002	ATR(REF)		REFERENCE																
+6281_            		0.994666667	0.005333333	ATR(REF)		REFERENCE																
+7420_            		0.001	0.999	CAR(REF)		REFERENCE																
+7421_            		0.002	0.998	CAR(REF)		REFERENCE																
+9898_            		0.977	0.023	ATR(REF)		REFERENCE																
