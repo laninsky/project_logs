@@ -82,7 +82,7 @@ modernpies + geom_label_repel(modern,mapping=aes(fontface="bold",x=DecimalLongit
   scale_fill_manual(values=c("#CE1B26", "#15326C","#FFFFFF", "#F2B01F")) + 
   scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) 
 
-ggsave(filename="Fig_1_modern_aggregated_by_site.pdf",plot = last_plot(),width=11.64,height=9.41,units="in")
+ggsave(filename="Fig_1_modern_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
 historicalpies <- ggmap(sq_map) +  
   geom_scatterpie(aes(x=DecimalLongitude,y=DecimalLatitude,r=r/100),
@@ -97,7 +97,7 @@ historicalpies + geom_label_repel(historical,mapping=aes(fontface="bold",x=Decim
   scale_fill_manual(values=c("#CE1B26", "#15326C","#FFFFFF", "#F2B01F")) + 
   scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) 
 
-ggsave(filename="Fig_1_historical_aggregated_by_site.pdf",plot = last_plot(),width=11.64,height=9.41,units="in")
+ggsave(filename="Fig_1_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
 sessionInfo()
 #R version 3.5.1 (2018-07-02)
