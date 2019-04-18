@@ -1,6 +1,7 @@
 # 1. Loading required libraries and scripts
 #library(devtools)
 #devtools::install_github("bcm-uga/TESS3_encho_sen")
+library(tidyverse)
 library(tess3r)
 library(ggplot2)
 library(ggrepel)
@@ -38,7 +39,7 @@ modern_mymarkers <- temp %>% filter(Sampling_period=="MODERN") %>% filter(Includ
   summarise(BCsum=sum(BC_genetic_cluster_assignment),CCsum=sum(CC_genetic_cluster_assignment),max_admixture=max(min(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment))) %>%
   mutate(r=BCsum+CCsum,hybrid_status=ifelse(((BCsum/r)>=0.95 & max_admixture <= 0.05),"BC",ifelse(((CCsum/r)>=0.95 & max_admixture <= 0.05),"CC","Hybrid"))) 
 
-modern <- ggplot(grid, aes(x = grid$V1, y = grid$V2)) + geom_point(modern_mymarkers, mapping=aes(x = DecimalLongitude, y = DecimalLatitude,fill = hybrid_status), shape=21,color = "gold",size=24, stroke = 2)+scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.position="none") + geom_label_repel(data=modern_mymarkers, aes(x = DecimalLongitude, y = DecimalLatitude, label = modern_mymarkers$Location_code, color= hybrid_status),fill="gold",segment.size=0,size=15, force=1.5, max.iter = 40000)+scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF"))+
+modern <- ggplot(grid, aes(x = grid$V1, y = grid$V2)) + geom_point(modern_mymarkers, mapping=aes(x = DecimalLongitude, y = DecimalLatitude,fill = hybrid_status), shape=21,color = "#F2B01E",size=24, stroke = 2)+scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.position="none") + geom_label_repel(data=modern_mymarkers, aes(x = DecimalLongitude, y = DecimalLatitude, label = modern_mymarkers$Location_code, color= hybrid_status),fill="#F2B01E",segment.size=0,size=15, force=1.5, max.iter = 40000)+scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF"))+
   xlim(min(grid$V1),max(grid$V1)) +
   ylim(min(grid$V2),max(grid$V2))
 # Manually exported as a *.png 2000*2000 pixels in size
@@ -47,7 +48,7 @@ historical_mymarkers <- temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filt
   summarise(BCsum=sum(BC_genetic_cluster_assignment),CCsum=sum(CC_genetic_cluster_assignment),max_admixture=max(min(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment))) %>%
   mutate(r=BCsum+CCsum,hybrid_status=ifelse(((BCsum/r)>=0.95 & max_admixture <= 0.05),"BC",ifelse(((CCsum/r)>=0.95 & max_admixture <= 0.05),"CC","Hybrid"))) 
 
-historical <- ggplot(grid, aes(x = grid$V1, y = grid$V2)) + geom_point(historical_mymarkers, mapping=aes(x = DecimalLongitude, y = DecimalLatitude,fill = hybrid_status), shape=21,color = "gold",size=24, stroke = 2)+scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.position="none") + geom_label_repel(data=historical_mymarkers, aes(x = DecimalLongitude, y = DecimalLatitude, label = historical_mymarkers$Location_code, color= hybrid_status),fill="gold",segment.size=0,size=15, force=1.5, max.iter = 40000)+scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF"))+
+historical <- ggplot(grid, aes(x = grid$V1, y = grid$V2)) + geom_point(historical_mymarkers, mapping=aes(x = DecimalLongitude, y = DecimalLatitude,fill = hybrid_status), shape=21,color = "#F2B01E",size=24, stroke = 2)+scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.position="none") + geom_label_repel(data=historical_mymarkers, aes(x = DecimalLongitude, y = DecimalLatitude, label = historical_mymarkers$Location_code, color= hybrid_status),fill="#F2B01E",segment.size=0,size=15, force=1.5, max.iter = 40000)+scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF"))+
   xlim(min(grid$V1),max(grid$V1)) +
   ylim(min(grid$V2),max(grid$V2))
 # Manually exported as a *.png 2000*2000 pixels in size
@@ -65,24 +66,28 @@ sessionInfo()
 #  [1] en_NZ.UTF-8/en_NZ.UTF-8/en_NZ.UTF-8/C/en_NZ.UTF-8/en_NZ.UTF-8
 #
 #attached base packages:
-#  [1] grid      stats     graphics  grDevices utils     datasets  methods   base     
+#  [1] grid      stats     graphics  grDevices utils     datasets  methods  
+#[8] base     
 #
 #other attached packages:
-#  [1] RColorBrewer_1.1-2 fields_9.6         maps_3.3.0         spam_2.2-1         dotCall64_1.0-0   
-#[6] tess3r_1.1.0       usethis_1.4.0      devtools_2.0.1     bindrcpp_0.2.2     ggrepel_0.8.0.9000
-#[11] ggmap_2.7.904      scatterpie_0.1.2   ggplot2_3.1.0.9000 dplyr_0.7.8        readr_1.3.1       
+#  [1] bindrcpp_0.2.2     forcats_0.3.0      stringr_1.3.1      dplyr_0.7.8       
+#[5] purrr_0.3.0        readr_1.3.1        tidyr_0.8.2        tibble_2.0.1      
+#[9] tidyverse_1.2.1    RColorBrewer_1.1-2 fields_9.6         maps_3.3.0        
+#[13] spam_2.2-1         dotCall64_1.0-0    ggrepel_0.8.0.9000 ggplot2_3.1.0.9000
+#[17] tess3r_1.1.0      
 #
 #loaded via a namespace (and not attached):
-#  [1] Rcpp_1.0.1          lattice_0.20-38     tidyr_0.8.2         prettyunits_1.0.2   png_0.1-7          
-#[6] ps_1.3.0            assertthat_0.2.0    rprojroot_1.3-2     digest_0.6.18       utf8_1.1.4         
-#[11] ggforce_0.1.3       R6_2.3.0            plyr_1.8.4          backports_1.1.3     httr_1.4.0         
-#[16] pillar_1.3.1        RgoogleMaps_1.4.3   rlang_0.3.1         lazyeval_0.2.1      curl_3.3           
-#[21] rstudioapi_0.9.0    callr_3.1.1         Matrix_1.2-15       desc_1.2.0          labeling_0.3       
-#[26] stringr_1.3.1       RcppEigen_0.3.3.5.0 munsell_0.5.0       compiler_3.5.1      pkgconfig_2.0.2    
-#[31] pkgbuild_1.0.2      tidyselect_0.2.5    tibble_2.0.1        fansi_0.4.0         crayon_1.3.4       
-#[36] withr_2.1.2         MASS_7.3-51.1       bitops_1.0-6        gtable_0.2.0        magrittr_1.5       
-#[41] units_0.6-2         scales_1.0.0        cli_1.0.1           stringi_1.2.4       farver_1.1.0       
-#[46] fs_1.2.6            remotes_2.0.2       rvcheck_0.1.3       rjson_0.2.20        tools_3.5.1        
-#[51] glue_1.3.0          tweenr_1.0.1        purrr_0.3.0         hms_0.4.2           jpeg_0.1-8         
-#[56] processx_3.2.1      pkgload_1.0.2       yaml_2.2.0          colorspace_1.4-0    sessioninfo_1.1.1  
-#[61] memoise_1.1.0       bindr_0.1.1 
+#  [1] RcppEigen_0.3.3.5.0 tidyselect_0.2.5    haven_2.0.0        
+#[4] lattice_0.20-38     colorspace_1.4-0    generics_0.0.2     
+#[7] yaml_2.2.0          rlang_0.3.1         pillar_1.3.1       
+#[10] glue_1.3.0          withr_2.1.2         modelr_0.1.2       
+#[13] readxl_1.2.0        bindr_0.1.1         munsell_0.5.0      
+#[16] gtable_0.2.0        cellranger_1.1.0    rvest_0.3.2        
+#[19] labeling_0.3        broom_0.5.1         Rcpp_1.0.1         
+#[22] scales_1.0.0        backports_1.1.3     jsonlite_1.6       
+#[25] hms_0.4.2           stringi_1.2.4       cli_1.0.1          
+#[28] tools_3.5.1         magrittr_1.5        lazyeval_0.2.1     
+#[31] crayon_1.3.4        pkgconfig_2.0.2     Matrix_1.2-15      
+#[34] xml2_1.2.0          lubridate_1.7.4     assertthat_0.2.0   
+#[37] httr_1.4.0          rstudioapi_0.9.0    R6_2.3.0           
+#[40] nlme_3.1-137        compiler_3.5.1  
