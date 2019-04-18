@@ -120,15 +120,15 @@ Catalog_number	Tissue_number	BC_genetic_cluster_assignment	CC_genetic_cluster_as
 99749	649363	0.443333333	0.556666667	-94.119	38.119	SMITHSONIAN	4	YES	female					4.0 mi N & 2.5 mi W Rockville	Bates	Missouri				4	Apr	1980															
 99750	649364	0.979666667	0.020333333	-94.119	38.119	SMITHSONIAN	4	YES	male					4.0 mi N & 2.5 mi W Rockville	Bates	Missouri				4	Apr	1980	210626														
 99751	649365	0.772666667	0.227333333	-94.119	38.119	SMITHSONIAN	4	YES	female					4.0 mi N & 2.5 mi W Rockville	Bates	Missouri				4	Apr	1980															
-99752	649252	0.997333333	0.002666667	-94.113	38.105	SMITHSONIAN	6	YES	unknown					2.0 mi N & 2.0 mi W Rockville	Bates	Missouri				5	Apr	1980	210192														
+99752	649252	0.997333333	0.002666667	-94.113	38.105	SMITHSONIAN	6	YES	unknown					2.0 mi N & 2.0 mi W Rockville	Bates	Missouri				5	Apr	1980	210631														
 99754	649249	0.006	0.994	-93.682	37.845	SMITHSONIAN	22	NO	male	62.8	54.4			3.0 mi S & 3.0 mi W Collins	St. Clair	Missouri				30	Mar	1980	210179														
 99755	649279	0.002666667	0.997333333	-93.682	37.845	SMITHSONIAN	22	NO	female	60	52.2			3.0 mi S & 3.0 mi W Collins	St. Clair	Missouri				31	Mar	1980															
 99760	649278	0.001666667	0.998333333	-93.682	37.845	SMITHSONIAN	22	NO	male	62	57			3.0 mi S & 3.0 mi W Collins	St. Clair	Missouri				30	Mar	1980	210180														
 99764	649342	0.002666667	0.997333333	-93.682	37.845	SMITHSONIAN	22	NO	male	62.5	57.7			3.0 mi S & 3.0 mi W Collins	St. Clair	Missouri				31	Mar	1980															
 99765	649344	0.003	0.997	-93.682	37.845	SMITHSONIAN	22	NO	female	63	56.1			3.0 mi S & 3.0 mi W Collins	St. Clair	Missouri				31	Mar	1980															
 99767	649346	0.004666667	0.995333333	-93.682	37.845	SMITHSONIAN	22	NO	female	60.1	53			3.0 mi S & 3.0 mi W Collins	St. Clair	Missouri				31	Mar	1980															
-99772	649247	0.002666667	0.997333333	-93.709	37.875	SMITHSONIAN	20	NO	male	65.4	damaged			1.0 mi S & 4.5 mi W Collins	St. Clair	Missouri				29	Mar	1980	210171														
-99773	649348	0.002666667	0.997333333	-93.709	37.875	SMITHSONIAN	20	NO	female	61.7	damaged			1.0 mi S & 4.5 mi W Collins	St. Clair	Missouri				29	Mar	1980															
+99772	649247	0.002666667	0.997333333	-93.709	37.875	SMITHSONIAN	20	NO	male	65.4	damaged			1.0 mi S & 4.5 mi W Collins	St. Clair	Missouri				29	Mar	1980															
+99773	649348	0.002666667	0.997333333	-93.709	37.875	SMITHSONIAN	20	NO	female	61.7	damaged			1.0 mi S & 4.5 mi W Collins	St. Clair	Missouri				29	Mar	1980	210178; voice of male who was not collected														
 99774	649246	0.001666667	0.998333333	-93.708	37.89	SMITHSONIAN	21	NO	male	64.7	58.1			4.5 mi W Collins	St. Clair	Missouri				29	Mar	1980	210170														
 99775	649248	0.002	0.998	-93.708	37.89	SMITHSONIAN	21	NO	male	64.2	damaged			4.5 mi W Collins	St. Clair	Missouri				29	Mar	1980	210174														
 99786	649255	0.995333333	0.004666667	-94.01	38.183	SMITHSONIAN	5	YES	male					1.0 mi E & 0.5 mi S Appleton City	St. Clair	Missouri				3	Apr	1980	210618														
@@ -137,8 +137,8 @@ Catalog_number	Tissue_number	BC_genetic_cluster_assignment	CC_genetic_cluster_as
 99789	649258	0.999	0.001	-94.01	38.183	SMITHSONIAN	5	YES	female					1.0 mi E & 0.5 mi S Appleton City	St. Clair	Missouri				3	Apr	1980															
 99790	649259	0.999	0.001	-94.01	38.183	SMITHSONIAN	5	YES	male					1.0 mi E & 0.5 mi S Appleton City	St. Clair	Missouri				3	Apr	1980	210617														
 99791	649251	0.444666667	0.555333333	-94.01	38.183	SMITHSONIAN	5	YES	male					1.0 mi E & 0.5 mi S Appleton City	St. Clair	Missouri				3	Apr	1980	210615														
-99792	649230	0.525666667	0.474333333	-93.961	38.147	SMITHSONIAN	9	YES	male					3.5 mi E & 2.5 mi S Appleton City	St. Clair	Missouri				23	Apr	1978															
-99793	649231	0.004333333	0.995666667	-93.961	38.14	SMITHSONIAN	10	YES	male					3.5 mi E & 3.0 mi S Appleton City	St. Clair	Missouri				23	Apr	1978	209697														
+99792	649230	0.525666667	0.474333333	-93.961	38.147	SMITHSONIAN	9	YES	male					3.5 mi E & 2.5 mi S Appleton City	St. Clair	Missouri				23	Apr	1978	209697														
+99793	649231	0.004333333	0.995666667	-93.961	38.14	SMITHSONIAN	10	YES	male					3.5 mi E & 3.0 mi S Appleton City	St. Clair	Missouri				23	Apr	1978															
 99794	649240	0.010333333	0.989666667	-93.961	38.14	SMITHSONIAN	10	YES	male					3.5 mi E & 3.0 mi S Appleton City	St. Clair	Missouri				23	Apr	1978	209695														
 99795	649241	0.998666667	0.001333333	-93.961	38.14	SMITHSONIAN	10	YES	female					3.5 mi E & 3.0 mi S Appleton City	St. Clair	Missouri				23	Apr	1978															
 99796	649234	0.308	0.692	-93.943	38.14	SMITHSONIAN	14	YES	male					4.5 mi E & 3.0 mi S Appleton City	St. Clair	Missouri				23	Apr	1978															
@@ -156,8 +156,8 @@ Catalog_number	Tissue_number	BC_genetic_cluster_assignment	CC_genetic_cluster_as
 99809	649322	0.172333333	0.827666667	-94.054	38.065	SMITHSONIAN	18	YES	female					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair	Missouri				2	Apr	1980															
 99810	649324	0.397	0.603	-94.054	38.065	SMITHSONIAN	18	YES	male					"Campbell Branch Cr., 1.0 mi E Rockville"	St. Clair	Missouri				2	Apr	1980	210194														
 99811	649316	0.002666667	0.997333333	-94.055	38.105	SMITHSONIAN	8	YES	male					"Campbell Branch Cr., 2.0 mi N & 1.0 mi E Rockville"	St. Clair	Missouri				2	Apr	1980	210198														
-99812	649253	0.003	0.997	-94.011	38	SMITHSONIAN	19	YES	male					0.5 mi S & 1.0 mi W Taberville	St. Clair	Missouri				5	Apr	1980															
-99813	649254	0.003666667	0.996333333	-94.011	38	SMITHSONIAN	19	YES	female					0.5 mi S & 1.0 mi W Taberville	St. Clair	Missouri				5	Apr	1980	210628														
+99812	649253	0.003	0.997	-94.011	38	SMITHSONIAN	19	YES	male					0.5 mi S & 1.0 mi W Taberville	St. Clair	Missouri				5	Apr	1980	210628														
+99813	649254	0.003666667	0.996333333	-94.011	38	SMITHSONIAN	19	YES	female					0.5 mi S & 1.0 mi W Taberville	St. Clair	Missouri				5	Apr	1980															
 99851	649235	0.997666667	0.002333333	-94.439	37.565	SMITHSONIAN	15	NO	male					4.5 mi E Liberal	Barton	Missouri				15	Apr	1978	209684														
 99854	649229	0.006666667	0.993333333	-94.089	38.075	SMITHSONIAN	7	YES	male					0.25 mi W Rockville	Bates	Missouri				22	Apr	1978	209691														
 99858	649236	0.492	0.508	-94.424	37.755	SMITHSONIAN	11	NO	male					1.5 mi E Moundville	Vernon	Missouri				15	Apr	1978	209686														
