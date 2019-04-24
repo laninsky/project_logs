@@ -8,7 +8,7 @@ library(ggrepel)
 source("http://membres-timc.imag.fr/Olivier.Francois/POPSutilities.R")
 
 # 2. Setwd
-setwd("chickadees/output/")
+setwd("chickadee/output/")
 
 # 3. Reading in data (tab delimited), dropping last blank row
 temp <- read_table2("../data/S2.txt")
