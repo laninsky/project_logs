@@ -1,5 +1,6 @@
 # 1. Loading required libraries and scripts
 library(tidyverse)
+library(gridExtra)
 
 # 2. Setwd
 setwd("chickadee/output/")
@@ -90,31 +91,55 @@ for (i in 1:dim(pairwise_comparisons)[1]) {
 
 }
 
+#backup_pairwise_comparisons  <- pairwise_comparisons
+
 # 6. Transforming pairwise_comparisons into a tibble so we can aggregate it and get plotting
 pairwise_comparisons <- as_tibble(pairwise_comparisons)
 names(pairwise_comparisons) <- c("sample_1","sample_2","overlapping_loci","average_cluster","abs_cluster_diff","average_read_cov")
 pairwise_comparisons[,3:6] <- pairwise_comparisons[,3:6] %>% mutate_if(is.character, as.numeric)
 
-breakpoints <- seq(0,1,0.02)
+breakpoints <- seq(0,1,0.025)
 breakpoints[1] <- -0.00001
 breakpoints[length(breakpoints)] <- 1.00001
 
 # Creating a column aggregating on average cluster
-pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_av_cluster=cut(average_cluster,breaks = breakpoints))
+pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_av_cluster=cut(average_cluster,breaks = breakpoints)) %>% mutate(grouped_av_cluster=(as.numeric(gsub("-1e-05","0",gsub(",.*","",gsub("\\(","",as.character(grouped_av_cluster)))))))
 
 # Creating a column aggregating on abs_cluster_diff
-pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_cluster_diff=cut(abs_cluster_diff,breaks = breakpoints))
+pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_cluster_diff=cut(abs_cluster_diff,breaks = breakpoints)) %>% mutate(grouped_cluster_diff=(as.numeric(gsub("-1e-05","0",gsub(",.*","",gsub("\\(","",as.character(grouped_cluster_diff)))))))
 
 # Creating a column aggregating on read depth - first getting appropriate break points
-(max(pairwise_comparisons$average_read_cov/1000000)-min(pairwise_comparisons$average_read_cov/1000000))/50
+readbreakpointinterval <- (max(pairwise_comparisons$average_read_cov/1000000)-min(pairwise_comparisons$average_read_cov/1000000))/(length(breakpoints)-1)
 
-readbreakpoints <- seq(min(pairwise_comparisons$average_read_cov/1000000),max(pairwise_comparisons$average_read_cov/1000000),0.06226106)
+readbreakpoints <- seq(min(pairwise_comparisons$average_read_cov/1000000),max(pairwise_comparisons$average_read_cov/1000000),readbreakpointinterval)
 
-pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_read_depth=cut(average_read_cov/1000000,breaks = readbreakpoints))
+readbreakpoints[1] <- readbreakpoints[1]-0.00001
+readbreakpoints[length(breakpoints)] <- readbreakpoints[length(breakpoints)] +0.00001
+
+pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_read_depth=cut(average_read_cov/1000000,breaks = readbreakpoints)) %>% mutate(grouped_read_depth=(as.numeric(gsub("-1e-05","0",gsub(",.*","",gsub("\\(","",as.character(grouped_read_depth)))))))
 
 # 7. Now grouping for the first plot
 firstplot <- pairwise_comparisons %>% group_by(grouped_av_cluster,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_cluster=mean(average_cluster),av_diff=mean(abs_cluster_diff))
 
-ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cluster,fill=mean_loci)) + geom_tile() + coord_fixed() 
+firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cluster,fill=mean_loci)) + geom_tile(color="black") + 
+  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + theme(panel.background  = element_rect(color="black")) + 
+  theme(aspect.ratio = 1) + theme_bw(base_size = 16) + scale_x_continuous(limits = c(0,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + scale_y_continuous(limits = c(0,1),expand = c(0, 0),name = str_wrap("Average assignment to BC cluster across samples in pair",width=40))  + theme(axis.title=element_text(size=18,face="bold")) + theme(legend.title = element_blank()) 
 
-                     
+numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) + geom_bar(stat='identity', width=0.025,fill="black",color="black") + theme_bw(base_size = 16) + scale_x_continuous(expand = c(0, 0),,name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + scale_y_continuous(expand = c(0, 0),name=str_wrap("Number of pairs"))  + theme(axis.title=element_text(size=18,face="bold"))
+
+numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) + geom_bar(stat='identity', width=0.025,fill="black",color="black") + theme_bw(base_size = 16) + scale_x_continuous(expand = c(0, 0), name = str_wrap("Average assignment to BC cluster across samples in pair",width=40)) + scale_y_continuous(expand = c(0, 0),name=str_wrap("Number of pairs")) + coord_flip()  + theme(axis.title=element_text(size=18,face="bold"))
+
+# 8. Now grouping for the second plot
+secondplot <- pairwise_comparisons %>% group_by(grouped_read_depth,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_readdepth=mean(average_read_cov),av_diff=mean(abs_cluster_diff))
+
+secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_read_depth,fill=mean_loci)) + geom_tile(color="black") +
+  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + theme(panel.background  = element_rect(color="black")) + 
+  theme(aspect.ratio = 1) + theme_bw(base_size = 16) + scale_x_continuous(limits = c(0,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + scale_y_continuous(expand = c(0, 0), name = str_wrap("Average read depth across members of pair (× 1,000,000)",width=40))  + theme(axis.title=element_text(size=18,face="bold"))   + theme(legend.title = element_blank())               
+
+numpairsreads <- ggplot(secondplot,aes(x=grouped_read_depth,y=num_pairs)) + geom_bar(stat='identity', width=0.07,fill="black",color="black") + theme_bw(base_size = 16) + scale_x_continuous(expand = c(0, 0), name=str_wrap("Average read depth across members of pair (× 1,000,000)", width=40)) + scale_y_continuous(expand = c(0, 0), name=str_wrap("Number of pairs")) + coord_flip() + theme(axis.title=element_text(size=18,face="bold"))
+
+# STUCK HERE 
+grobs=c(numpairsdiff,firstplot_to_save,numpairsav),
+grid.arrange(ncol=2,nrow=3,layout_matrix=rbind(c(1,2,2),
+                                 c(1,2,2),
+                                c(NA,3,3)))
