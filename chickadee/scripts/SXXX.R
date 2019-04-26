@@ -1,6 +1,6 @@
 # 1. Loading required libraries and scripts
 library(tidyverse)
-library(gridExtra)
+library(ggpubr)
 
 # 2. Setwd
 setwd("chickadee/output/")
@@ -91,8 +91,6 @@ for (i in 1:dim(pairwise_comparisons)[1]) {
 
 }
 
-#backup_pairwise_comparisons  <- pairwise_comparisons
-
 # 6. Transforming pairwise_comparisons into a tibble so we can aggregate it and get plotting
 pairwise_comparisons <- as_tibble(pairwise_comparisons)
 names(pairwise_comparisons) <- c("sample_1","sample_2","overlapping_loci","average_cluster","abs_cluster_diff","average_read_cov")
@@ -121,25 +119,66 @@ pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_read_depth=cut(a
 # 7. Now grouping for the first plot
 firstplot <- pairwise_comparisons %>% group_by(grouped_av_cluster,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_cluster=mean(average_cluster),av_diff=mean(abs_cluster_diff))
 
-firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cluster,fill=mean_loci)) + geom_tile(color="black") + 
-  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + theme(panel.background  = element_rect(color="black")) + 
-  theme(aspect.ratio = 1) + theme_bw(base_size = 16) + scale_x_continuous(limits = c(0,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + scale_y_continuous(limits = c(0,1),expand = c(0, 0),name = str_wrap("Average assignment to BC cluster across samples in pair",width=40))  + theme(axis.title=element_text(size=18,face="bold")) + theme(legend.title = element_blank()) 
+# export as 1000 pixels width
+firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cluster,fill=mean_loci)) + 
+  geom_tile(color="black") + 
+  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
+  theme(panel.background  = element_rect(color="black")) + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits = c(NA,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + 
+  scale_y_continuous(limits = c(0,1),expand = c(0, 0),name = str_wrap("Average assignment to BC cluster across samples in pair",width=40))  + 
+  theme(axis.title=element_text(size=18,face="bold")) + 
+  theme(legend.title = element_blank())   +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
+  theme(aspect.ratio = 1)
 
-numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) + geom_bar(stat='identity', width=0.025,fill="black",color="black") + theme_bw(base_size = 16) + scale_x_continuous(expand = c(0, 0),,name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + scale_y_continuous(expand = c(0, 0),name=str_wrap("Number of pairs"))  + theme(axis.title=element_text(size=18,face="bold"))
+# export as 840 pixels width, 210 high
+numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) + 
+  geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits=c(NA,1),expand = c(0, 0),name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + 
+  scale_y_continuous(expand = c(0, 0),name=str_wrap("Number of pairs", width=10))  + 
+  theme(axis.title=element_text(size=18,face="bold")) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
-numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) + geom_bar(stat='identity', width=0.025,fill="black",color="black") + theme_bw(base_size = 16) + scale_x_continuous(expand = c(0, 0), name = str_wrap("Average assignment to BC cluster across samples in pair",width=40)) + scale_y_continuous(expand = c(0, 0),name=str_wrap("Number of pairs")) + coord_flip()  + theme(axis.title=element_text(size=18,face="bold"))
+# export as 225 pixels width, 840 high
+numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) + 
+  geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits=c(NA,1),expand = c(0, 0), name = str_wrap("Average assignment to BC cluster across samples in pair",width=40)) + 
+  scale_y_reverse(expand = c(0, 0),name=str_wrap("Number of pairs", width=10),breaks=c(0,1000,2000,3000)) +
+  coord_flip()  + 
+  theme(axis.title=element_text(size=18,face="bold")) + 
+  theme(axis.text.x = element_text(angle = 270)) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
 # 8. Now grouping for the second plot
 secondplot <- pairwise_comparisons %>% group_by(grouped_read_depth,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_readdepth=mean(average_read_cov),av_diff=mean(abs_cluster_diff))
 
-secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_read_depth,fill=mean_loci)) + geom_tile(color="black") +
-  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + theme(panel.background  = element_rect(color="black")) + 
-  theme(aspect.ratio = 1) + theme_bw(base_size = 16) + scale_x_continuous(limits = c(0,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + scale_y_continuous(expand = c(0, 0), name = str_wrap("Average read depth across members of pair (× 1,000,000)",width=40))  + theme(axis.title=element_text(size=18,face="bold"))   + theme(legend.title = element_blank())               
+# export as 1000 pixels wide
+secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_read_depth,fill=mean_loci)) + 
+  geom_tile(color="black") +
+  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
+  theme(panel.background  = element_rect(color="black")) + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits = c(0,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + 
+  scale_y_continuous(expand = c(0, 0), name = str_wrap("Average read depth across members of pair (× 1,000,000)",width=40))  + 
+  theme(axis.title=element_text(size=18,face="bold"))   + 
+  theme(legend.title = element_blank()) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
+  theme(aspect.ratio = 1)
 
-numpairsreads <- ggplot(secondplot,aes(x=grouped_read_depth,y=num_pairs)) + geom_bar(stat='identity', width=0.07,fill="black",color="black") + theme_bw(base_size = 16) + scale_x_continuous(expand = c(0, 0), name=str_wrap("Average read depth across members of pair (× 1,000,000)", width=40)) + scale_y_continuous(expand = c(0, 0), name=str_wrap("Number of pairs")) + coord_flip() + theme(axis.title=element_text(size=18,face="bold"))
+# export as 210 pixels width, 840 high
+numpairsreads <- ggplot(secondplot,aes(x=grouped_read_depth,y=num_pairs)) + 
+  geom_bar(stat='identity', width=0.07,fill="black",color="black") + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(expand = c(0, 0), name=str_wrap("Average read depth across members of pair (× 1,000,000)", width=40)) + 
+  scale_y_reverse(expand = c(0, 0), name=str_wrap("Number of pairs", width=10)) + 
+  coord_flip() + 
+  theme(axis.title=element_text(size=18,face="bold")) +
+  theme(axis.text.x = element_text(angle = 270)) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
-# STUCK HERE 
-grobs=c(numpairsdiff,firstplot_to_save,numpairsav),
-grid.arrange(ncol=2,nrow=3,layout_matrix=rbind(c(1,2,2),
-                                 c(1,2,2),
-                                c(NA,3,3)))
+# assembled the plots manually in ppt/illustrator
+
+# do session info
