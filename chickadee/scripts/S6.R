@@ -14,7 +14,7 @@ library(ggrepel)
 setwd("chickadee/output/")
 
 # 3. Reading in data (tab delimited), dropping last blank row
-temp <- read_table2("../data/S2.txt")
+temp <- read_tsv("../data/S2.txt")
 temp <- temp[1:165,]
 
 # 4. Creating a new table with the variables we are interested in
@@ -100,32 +100,32 @@ historicalpies + geom_label_repel(historical,mapping=aes(fontface="bold",x=Decim
 ggsave(filename="Fig_1_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
 sessionInfo()
-#R version 3.5.1 (2018-07-02)
+#R version 3.5.2 (2018-12-20)
 #Platform: x86_64-apple-darwin15.6.0 (64-bit)
-#Running under: macOS Sierra 10.12.6
+#Running under: macOS High Sierra 10.13.6
 #
 #Matrix products: default
 #BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
 #LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 #
 #locale:
-#  [1] en_NZ.UTF-8/en_NZ.UTF-8/en_NZ.UTF-8/C/en_NZ.UTF-8/en_NZ.UTF-8
+#  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 #
 #attached base packages:
 #  [1] stats     graphics  grDevices utils     datasets  methods   base     
 #
 #other attached packages:
-#  [1] bindrcpp_0.2.2     ggrepel_0.8.0.9000 ggmap_2.7.904      scatterpie_0.1.2   ggplot2_3.1.0.9000
-#[6] dplyr_0.7.8        readr_1.3.1       
+#  [1] ggrepel_0.8.0.9000 ggmap_3.0.0        scatterpie_0.1.2   ggplot2_3.1.1.9000 dplyr_0.8.0.1     
+#[6] readr_1.3.1       
 #
 #loaded via a namespace (and not attached):
-#  [1] Rcpp_1.0.0        plyr_1.8.4        pillar_1.3.1      compiler_3.5.1    bindr_0.1.1      
-#[6] bitops_1.0-6      tools_3.5.1       digest_0.6.18     tibble_2.0.1      gtable_0.2.0     
-#[11] pkgconfig_2.0.2   png_0.1-7         rlang_0.3.1       cli_1.0.1         rstudioapi_0.9.0 
-#[16] rvcheck_0.1.3     yaml_2.2.0        stringr_1.3.1     httr_1.4.0        withr_2.1.2      
-#[21] RgoogleMaps_1.4.3 hms_0.4.2         grid_3.5.1        tidyselect_0.2.5  glue_1.3.0       
-#[26] R6_2.3.0          jpeg_0.1-8        fansi_0.4.0       purrr_0.3.0       tweenr_1.0.1     
-#[31] farver_1.1.0      tidyr_0.8.2       magrittr_1.5      scales_1.0.0      MASS_7.3-51.1    
-#[36] units_0.6-2       assertthat_0.2.0  ggforce_0.1.3     colorspace_1.4-0  labeling_0.3     
-#[41] utf8_1.1.4        stringi_1.2.4     lazyeval_0.2.1    munsell_0.5.0     rjson_0.2.20     
-#[46] crayon_1.3.4
+#  [1] Rcpp_1.0.1        pillar_1.3.1      compiler_3.5.2    plyr_1.8.4        bitops_1.0-6     
+#[6] tools_3.5.2       digest_0.6.18     tibble_2.1.1      gtable_0.3.0      pkgconfig_2.0.2  
+#[11] png_0.1-7         rlang_0.3.4       cli_1.1.0         rstudioapi_0.9.0  rvcheck_0.1.3    
+#[16] curl_3.3          yaml_2.2.0        withr_2.1.2       httr_1.4.0        stringr_1.4.0    
+#[21] hms_0.4.2         RgoogleMaps_1.4.3 grid_3.5.2        tidyselect_0.2.5  glue_1.3.1       
+#[26] R6_2.4.0          jpeg_0.1-8        fansi_0.4.0       polyclip_1.10-0   purrr_0.3.2      
+#[31] tidyr_0.8.3       tweenr_1.0.1      farver_1.1.0      magrittr_1.5      scales_1.0.0     
+#[36] MASS_7.3-51.1     assertthat_0.2.1  ggforce_0.2.2     colorspace_1.4-1  labeling_0.3     
+#[41] utf8_1.1.4        stringi_1.4.3     lazyeval_0.2.2    munsell_0.5.0     crayon_1.3.4     
+#[46] rjson_0.2.20  
