@@ -1,5 +1,11 @@
 # 1. Loading required libraries and scripts
-#library(devtools)
+# library(devtools)
+# Before the next step need to have openmp installed if on mac. Did this by:
+# brew install llvm
+# mkdir -p ~/.R
+# vi ~/.R/Makevars # Then inserting the following
+# C=/usr/local/opt/llvm/bin/clang
+# CXX=/usr/local/opt/llvm/bin/clang++
 #devtools::install_github("bcm-uga/TESS3_encho_sen")
 library(tidyverse)
 library(tess3r)
@@ -11,7 +17,7 @@ source("http://membres-timc.imag.fr/Olivier.Francois/POPSutilities.R")
 setwd("chickadee/output/")
 
 # 3. Reading in data (tab delimited), dropping last blank row
-temp <- read_table2("../data/S2.txt")
+temp <- read_tsv("../data/S2.txt")
 temp <- temp[1:165,]
 
 # 4. Creating variables with our variables of interest
