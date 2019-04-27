@@ -22,7 +22,7 @@ tempS2 <- read_table2("../data/S2.txt")
 tempS2 <- tempS2[1:165,]
 
 # 3C. Reading in ipyrad summary, including read depth data (tab delimited)
-tempread <- read_table2("../data/ipyrad_summary.txt")
+tempread <- read_tsv("../data/ipyrad_summary.txt")
 tempread[,1] <- as_tibble(gsub("_.*","",as.matrix(tempread[,1])))
 
 # Some minor tweaking of reference sample names based on tissue number used in readfile vs catalog number in S2
