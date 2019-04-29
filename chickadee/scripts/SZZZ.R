@@ -22,4 +22,11 @@ ggplot(longtemp, aes(fill=cluster_assignment,y=assignment_value,x=as.factor(Cata
   annotate("text",x=as.character(as.matrix(temp %>% filter(str_detect(Specific_locality,"Appleton City")) %>% select(Catalog_number))),y=0.025,label="*",color="orange",size=12)
 
 # 6. Extracting information for doing t-tests etc
+# Mean and SD for black-capped genetic for black-capped singing birds
+temp %>% filter(Song_summary=="PUREBC") %>% group_by(Song_summary) %>% summarise(mean(BC_genetic_cluster_assignment),sd(BC_genetic_cluster_assignment))
 
+# Mean and SD for Carolina genetic for Carolina singing birds
+temp %>% filter(Song_summary=="PURECC") %>% group_by(Song_summary) %>% summarise(mean(CC_genetic_cluster_assignment),sd(CC_genetic_cluster_assignment))
+
+# t.test
+t.test((as.numeric(as.matrix(temp %>% filter(Song_summary=="PUREBC") %>% select(BC_genetic_cluster_assignment)))),(as.numeric(as.matrix(temp %>% filter(Song_summary=="PURECC") %>% select(CC_genetic_cluster_assignment)))))
