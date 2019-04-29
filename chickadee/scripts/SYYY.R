@@ -11,15 +11,16 @@ temp <- temp[1:165,]
 # 4. Plot and rsq for Weight vs cluster assignment. Saved plot as 1000 pixels in width.
 ggplot(temp,aes(y=Weight,x=BC_genetic_cluster_assignment,fill=BC_genetic_cluster_assignment,shape=Sampling_period),color="black") + 
   geom_smooth(method = "lm",color="black") +
-  geom_point(size=5) +  
-  scale_x_continuous(limits=c(0,1),expand = c(0, 0),name = str_wrap("Assignment to BC genetic cluster",width=40)) + 
-  scale_y_continuous(expand = c(0, 0),name=str_wrap("Weight (g)", width=40))  + 
+  geom_point(size=10) +  
+  scale_x_continuous(limits=c(0,1),expand = c(0, 0),name = str_wrap("Assignment to BC genetic cluster",width=20)) + 
+  scale_y_continuous(expand = c(0, 0),name=str_wrap("Weight (g)", width=20))  + 
   scale_fill_gradientn(colors=c("#15326C","#9437FF","#CE1B26")) + 
   scale_shape_manual(values = c(21,22,23,24)) +
-  theme_bw(base_size = 16) +
+  theme_bw(base_size = 40) +
   theme(aspect.ratio = 1) +
   theme(legend.position = "none") +
-  coord_cartesian(clip = 'off') 
+  coord_cartesian(clip = 'off') + 
+  theme(axis.title=element_text(size=48,face="bold"))
 
 temptemp <- temp %>% 
   filter(!is.na(Weight)) %>% filter(!is.na(BC_genetic_cluster_assignment)) %>% 
@@ -37,30 +38,32 @@ tempwingtail <- temp %>%
     
 ggplot(tempwingtail,aes(x=Wing_Tail_Ratio,y=BC_genetic_cluster_assignment,fill=BC_genetic_cluster_assignment),color="black") + 
       geom_smooth(method = "lm",color="black") +
-      geom_point(tempwingtail,size=5,mapping=aes(shape=Sampling_period)) +  
-      scale_x_reverse(expand = c(0, 0),name = str_wrap("Wing/Tail ratio",width=40)) + 
-      scale_y_continuous(limits=c(0,1),expand = c(0, 0),name=str_wrap("Assignment to BC genetic cluster", width=40))  + 
+      geom_point(tempwingtail,size=10,mapping=aes(shape=Sampling_period)) +  
+      scale_x_reverse(expand = c(0, 0),name = str_wrap("Wing/Tail ratio",width=20)) + 
+      scale_y_continuous(limits=c(0,1),expand = c(0, 0),name=str_wrap("Assignment to BC genetic cluster", width=20))  + 
       scale_fill_gradientn(colors=c("#15326C","#9437FF","#CE1B26")) + 
       scale_shape_manual(values = c(21,22,23,24)) +
-      theme_bw(base_size = 16) +
+      theme_bw(base_size = 40) +
       theme(aspect.ratio = 1) +
       theme(legend.position = "none") +
-      coord_cartesian(clip = 'off') 
+      coord_cartesian(clip = 'off') + 
+      theme(axis.title=element_text(size=48,face="bold"))
 
 cor(tempwingtail$Wing_Tail_Ratio,tempwingtail$BC_genetic_cluster_assignment)^2    
 
 # 6. Plot and rsq for Wing/Tail ratio vs Weight. Saved plot as 1000 pixels in width.
 ggplot(tempwingtail,aes(x=Wing_Tail_Ratio,y=Weight,fill=BC_genetic_cluster_assignment),color="black") + 
   geom_smooth(method = "lm",color="black") +
-  geom_point(tempwingtail,size=5,mapping=aes(shape=Sampling_period)) +  
-  scale_x_reverse(expand = c(0, 0),name = str_wrap("Wing/Tail ratio",width=40)) + 
-  scale_y_continuous(expand = c(0, 0),name=str_wrap("Weight (g)", width=40))  + 
+  geom_point(tempwingtail,size=10,mapping=aes(shape=Sampling_period)) +  
+  scale_x_reverse(expand = c(0, 0),name = str_wrap("Wing/Tail ratio",width=20)) + 
+  scale_y_continuous(expand = c(0, 0),name=str_wrap("Weight (g)", width=20))  + 
   scale_fill_gradientn(colors=c("#15326C","#9437FF","#CE1B26")) + 
   scale_shape_manual(values = c(21,22,23,24)) +
-  theme_bw(base_size = 16) +
+  theme_bw(base_size = 40) +
   theme(aspect.ratio = 1) +
   theme(legend.position = "none") +
-  coord_cartesian(clip = 'off') 
+  coord_cartesian(clip = 'off') + 
+  theme(axis.title=element_text(size=48,face="bold"))
 
 tempwingtail <- tempwingtail %>% 
   filter(!is.na(Weight))
