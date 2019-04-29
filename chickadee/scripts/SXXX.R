@@ -118,7 +118,7 @@ pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_read_depth=cut(a
 # 7. Now grouping for the first plot
 firstplot <- pairwise_comparisons %>% group_by(grouped_av_cluster,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_cluster=mean(average_cluster),av_diff=mean(abs_cluster_diff))
 
-# export as 1000 pixels width
+# export as 1000 pixels width, SupFig1_firstplot_main.png in output folder
 firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cluster,fill=mean_loci)) + 
   geom_tile(color="black") + 
   scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
@@ -131,7 +131,7 @@ firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cl
   theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
   theme(aspect.ratio = 1)
 
-# export as 840 pixels width, 210 high
+# export as 840 pixels width, 210 high, SupFig1_numpairs_cluster_diff.png in output folder
 numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) + 
   geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
   theme_bw(base_size = 16) + 
@@ -140,7 +140,7 @@ numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) +
   theme(axis.title=element_text(size=18,face="bold")) +
   theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
-# export as 225 pixels width, 840 high
+# export as 225 pixels width, 840 high, SupFig1_numpairs_cluster_av.png in output folder
 numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) + 
   geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
   theme_bw(base_size = 16) + 
@@ -154,7 +154,7 @@ numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) +
 # 8. Now grouping for the second plot
 secondplot <- pairwise_comparisons %>% group_by(grouped_read_depth,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_readdepth=mean(average_read_cov),av_diff=mean(abs_cluster_diff))
 
-# export as 1000 pixels wide
+# export as 1000 pixels wide, SupFig1_secondplot_main.png in output folder
 secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_read_depth,fill=mean_loci)) + 
   geom_tile(color="black") +
   scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
@@ -167,7 +167,7 @@ secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_rea
   theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
   theme(aspect.ratio = 1)
 
-# export as 210 pixels width, 840 high
+# export as 210 pixels width, 840 high, SupFig1_numpairs_read.png in output folder
 numpairsreads <- ggplot(secondplot,aes(x=grouped_read_depth,y=num_pairs)) + 
   geom_bar(stat='identity', width=0.07,fill="black",color="black") + 
   theme_bw(base_size = 16) + 

@@ -9,6 +9,7 @@ temp <- read_tsv("../data/S2.txt")
 temp <- temp[1:165,]
 
 # 4. Plot and rsq for Weight vs cluster assignment. Saved plot as 1000 pixels in width.
+# FigS4_weight_cluster.png in output folder
 ggplot(temp,aes(y=Weight,x=BC_genetic_cluster_assignment,fill=BC_genetic_cluster_assignment,shape=Sampling_period),color="black") + 
   geom_smooth(method = "lm",color="black") +
   geom_point(size=10) +  
@@ -29,6 +30,7 @@ temptemp <- temp %>%
 cor(temptemp[,1],temptemp[,2])^2
 
 # 5. Plot and rsq for Wing/Tail ratio vs cluster assignment. Saved plot as 1000 pixels in width.
+# FigS4_cluster_wingtailratio.png in output folder
 tempwingtail <- temp %>% 
   mutate(Tail=as.numeric(Tail)) %>% 
   filter(!is.na(Wing)) %>% 
@@ -52,6 +54,7 @@ ggplot(tempwingtail,aes(x=Wing_Tail_Ratio,y=BC_genetic_cluster_assignment,fill=B
 cor(tempwingtail$Wing_Tail_Ratio,tempwingtail$BC_genetic_cluster_assignment)^2    
 
 # 6. Plot and rsq for Wing/Tail ratio vs Weight. Saved plot as 1000 pixels in width.
+# FigS4_weight_wingtailratio.png in output folder
 ggplot(tempwingtail,aes(x=Wing_Tail_Ratio,y=Weight,fill=BC_genetic_cluster_assignment),color="black") + 
   geom_smooth(method = "lm",color="black") +
   geom_point(tempwingtail,size=10,mapping=aes(shape=Sampling_period)) +  

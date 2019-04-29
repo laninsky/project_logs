@@ -33,10 +33,10 @@ grid <- createGrid(min(mod_coords[,1],hist_coords[,1]),max(mod_coords[,1], hist_
 
 # 5. Creating the base maps of interpolated genome make up
 maps(matrix = mod_q.matrix, mod_coords, grid, method = "max", colorGradientsList = list(c("gray95",brewer.pal(9,"Reds")),c("gray95",brewer.pal(9,"Blues"))))
-# Manually exported as a *.png 2000*2000 pixels in size
+# Manually exported as a *.png 2000*2000 pixels in size, Fig_2_modern_baselayer.png in output folder
 
 maps(matrix = hist_q.matrix, hist_coords, grid, method = "max", colorGradientsList = list(c("gray95",brewer.pal(9,"Reds")),c("gray95",brewer.pal(9,"Blues"))))
-# Manually exported as a *.png 2000*2000 pixels in size
+# Manually exported as a *.png 2000*2000 pixels in size, Fig_2_historical_baselayer.png in output folder
 
 # 6. Creating site-specific points to manually overlay on base maps
 grid <- as.data.frame(grid)
@@ -48,7 +48,7 @@ modern_mymarkers <- temp %>% filter(Sampling_period=="MODERN") %>% filter(Includ
 modern <- ggplot(grid, aes(x = grid$V1, y = grid$V2)) + geom_point(modern_mymarkers, mapping=aes(x = DecimalLongitude, y = DecimalLatitude,fill = hybrid_status), shape=21,color = "#F2B01E",size=24, stroke = 2)+scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.position="none") + geom_label_repel(data=modern_mymarkers, aes(x = DecimalLongitude, y = DecimalLatitude, label = modern_mymarkers$Location_code, color= hybrid_status),fill="#F2B01E",segment.size=0,size=15, force=1.5, max.iter = 40000)+scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF"))+
   xlim(min(grid$V1),max(grid$V1)) +
   ylim(min(grid$V2),max(grid$V2))
-# Manually exported as a *.png 2000*2000 pixels in size
+# Manually exported as a *.png 2000*2000 pixels in size, Fig_2_modern_overlay.png in output folder
 
 historical_mymarkers <- temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filter(Included_in_tess3r=="YES") %>% group_by(Location_code, DecimalLongitude, DecimalLatitude) %>% 
   summarise(BCsum=sum(BC_genetic_cluster_assignment),CCsum=sum(CC_genetic_cluster_assignment),max_admixture=max(min(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment))) %>%
@@ -57,7 +57,7 @@ historical_mymarkers <- temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filt
 historical <- ggplot(grid, aes(x = grid$V1, y = grid$V2)) + geom_point(historical_mymarkers, mapping=aes(x = DecimalLongitude, y = DecimalLatitude,fill = hybrid_status), shape=21,color = "#F2B01E",size=24, stroke = 2)+scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.position="none") + geom_label_repel(data=historical_mymarkers, aes(x = DecimalLongitude, y = DecimalLatitude, label = historical_mymarkers$Location_code, color= hybrid_status),fill="#F2B01E",segment.size=0,size=15, force=1.5, max.iter = 40000)+scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF"))+
   xlim(min(grid$V1),max(grid$V1)) +
   ylim(min(grid$V2),max(grid$V2))
-# Manually exported as a *.png 2000*2000 pixels in size
+# Manually exported as a *.png 2000*2000 pixels in size, Fig_2_historical_overlay.png in output folder
 
 sessionInfo()
 #R version 3.5.1 (2018-07-02)
