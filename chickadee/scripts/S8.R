@@ -101,3 +101,15 @@ scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) +
 
 ggsave(filename="Fig_S2_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
+# 9. Creating the structure plots order by location
+
+modernindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(DecimalLongitude) %>% arrange(Location_code) %>% filter(Sampling_period=="MODERN")
+
+modernindividual <- temp %>% filter(Sampling_period=="MODERN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(DecimalLongitude) %>% arrange(Location_code)  
+
+ggplot(modernindividual, aes(fill=cluster_assignment,y=assignment_value,x=as.factor(Catalog_number))) +
+  geom_bar(stat="identity",color="black",width=1) + theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank()) + scale_y_continuous(limits=c(0,1),expand = c(0, 0)) +
+  theme(aspect.ratio = 1/3) +
+  scale_x_discrete(limits=modernindividualnames$Catalog_number) +
+  scale_fill_manual(values = (c("#CE1B26","#15326C"))) +
+  annotate("text",x=as.character(as.matrix(temp %>% filter(str_detect(Specific_locality,"Appleton City")) %>% select(Catalog_number))),y=0.025,label="*",color="orange",size=12)
