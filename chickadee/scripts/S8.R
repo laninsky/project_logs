@@ -447,7 +447,7 @@ for (i in (dim(modern)[1]-1):1) {
 modernlat <- modernlat + geom_hline(yintercept = vlinepos, linetype="dashed")
 
 # and adding text label annotation on to the baseplot for left-most site
-modernlat <- modernlat + annotate("label",y=labelx[1],x=labely[1],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)],fill=fillcolor,color=colorcolor,size=12)
+modernlat <- modernlat + annotate("label",y=labelx[1],x=labely[1],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)],fill=fillcolor,color=colorcolor,size=11)
 
 # and now doing this for all the remaining labels
 for (i in 2:length(labelx)) {
@@ -465,7 +465,7 @@ for (i in 2:length(labelx)) {
       colorcolor <- "#CE1B26"
     }
   }
-  modernlat <- modernlat + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=12)
+  modernlat <- modernlat + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=11)
 }  
 
 # Exporting as 1500 pixels height, FigS2_modern_lat_sites.png
