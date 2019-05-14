@@ -1,13 +1,6 @@
 # 1. Loading necessary libraries
-library(readr)
-library(dplyr)
-library(ggplot2)
-# install.packages("scatterpie")
-library(scatterpie)
-# if(!requireNamespace("devtools")) install.packages("devtools")
-# devtools::install_github("dkahle/ggmap", ref = "tidyup")
+library(tidyverse)
 library(ggmap)
-# devtools::install_github("slowkow/ggrepel")
 library(ggrepel)
 
 # 2. Setwd
@@ -54,7 +47,7 @@ if (latbound > longbound) {
   minlong <- midlong-longbound/2
   maxlong <- midlong+longbound/2
   minlat <- min(reduced_table$DecimalLatitude)-0.1
-  maxlat <- max(treduced_table$DecimalLatitude)+0.1
+  maxlat <- max(reduced_table$DecimalLatitude)+0.1
 } else {
   midlat <- (max(reduced_table$DecimalLatitude)+min(reduced_table$DecimalLatitude))/2
   minlat <- midlat-longbound/2
@@ -63,69 +56,417 @@ if (latbound > longbound) {
   maxlong <- max(reduced_table$DecimalLongitude)+0.1
 }
 
-sbbox <- make_bbox(lon=c(minlong,maxlong), lat=c(minlat,maxlat),f=0)
+# Taking the extent of the plot out to the kansas border if it doesn't
+# already overlap with it.
+if (minlong > -94.6333333) {
+  original_extent <- maxlong - minlong
+  minlong <- -94.6333333
+  new_extent <- maxlong - minlong
+  minlat <- minlat - (new_extent-original_extent)/2
+  maxlat <- maxlat + (new_extent-original_extent)/2
+  sbbox <- make_bbox(lon=c(minlong,maxlong), lat=c(minlat,maxlat),f=0)
+} else {
+  sbbox <- make_bbox(lon=c(minlong,maxlong), lat=c(minlat,maxlat),f=0)
+}
 
 # 7. Using the sbbox object to retrieve a map covering the sample sites
 sq_map <- get_map(location = sbbox, maptype = "terrain-background", source = "stamen", crop=TRUE)
 
-# 8. Mapping pies on to underlying maps using scatterpie
-modernpies <- ggmap(sq_map) + 
-  geom_scatterpie(aes(x=DecimalLongitude,y=DecimalLatitude,r=r/100),
-                  data=modern,cols=c("BCsum","CCsum"),sorted_by_radius = TRUE) +
-  scale_fill_manual(values=c("#CE1B26", "#15326C")) + theme(legend.position="none") +
-  coord_fixed(ratio=1)+ xlab("Longitude") + ylab("Latitude") + 
-  theme(axis.text=element_text(size=16), axis.title=element_text(size=18,face="bold"),
-        panel.border=element_rect(fill = NA)) + 
-  geom_scatterpie_legend(modern$r/100,x=-94.4,y=37.6,labeller=function(x) 100*x)
-
-modernpies + geom_label_repel(modern,mapping=aes(fontface="bold",x=DecimalLongitude,y=DecimalLatitude,label=Location_code,fill=Included_in_tess3r,color=status),size=8,force=20, max.iter = 40000, segment.color="black") +
-  scale_fill_manual(values=c("#CE1B26", "#15326C","#FFFFFF", "#F2B01F")) + 
-  scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) 
-
-ggsave(filename="Fig_1_modern_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
-
-historicalpies <- ggmap(sq_map) +  
-  geom_scatterpie(aes(x=DecimalLongitude,y=DecimalLatitude,r=r/100),
-                  data=historical,cols=c("BCsum","CCsum"),sorted_by_radius=T) +
-  scale_fill_manual(values=c("#CE1B26", "#15326C")) + theme(legend.position="none") +
+# 8. Creating maps of sample locations by "hybrid status"
+modernsamplelocations <- ggmap(sq_map) + geom_vline(xintercept=-94.63333) +
+  geom_point(data = modern, mapping = aes(x = DecimalLongitude, y = DecimalLatitude,fill = status), shape=21,color = "black",size=12)+
+  scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) +
   coord_fixed(ratio=1) + xlab("Longitude") + ylab("Latitude") + 
-  theme(axis.text=element_text(size=16), axis.title=element_text(size=18,face="bold"),
-        panel.border=element_rect(fill = NA)) +
-  geom_scatterpie_legend(historical$r/100,x=-93.76,y=38.25,labeller=function(x) 100*x)
+  theme_bw(base_size = 20) +
+  theme(legend.position="none",panel.border=element_rect(fill = NA)) + 
+  theme(axis.title=element_text(size=28,face="bold"))
 
-historicalpies + geom_label_repel(historical,mapping=aes(fontface="bold",x=DecimalLongitude,y=DecimalLatitude,label=Location_code,fill=Included_in_tess3r,color=status),size=8, force=10, max.iter = 40000, segment.color="black") +
-  scale_fill_manual(values=c("#CE1B26", "#15326C","#FFFFFF", "#F2B01F")) + 
-  scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) 
+modernsamplelocations + geom_label_repel(modern,mapping=aes(fontface="bold",x=DecimalLongitude,y=DecimalLatitude,label=Location_code,fill=Included_in_tess3r,color=status),size=8, force=20, max.iter = 40000, segment.color="black") + scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF","#FFFFFF", "#F2B01F")) +
+  scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
-ggsave(filename="Fig_1_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
+ggsave(filename="Fig_S2_modern_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
-sessionInfo()
-#R version 3.5.2 (2018-12-20)
-#Platform: x86_64-apple-darwin15.6.0 (64-bit)
-#Running under: macOS High Sierra 10.13.6
-#
-#Matrix products: default
-#BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-#LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
-#
-#locale:
-#  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-#
-#attached base packages:
-#  [1] stats     graphics  grDevices utils     datasets  methods   base     
-#
-#other attached packages:
-#  [1] ggrepel_0.8.0.9000 ggmap_3.0.0        scatterpie_0.1.2   ggplot2_3.1.1.9000 dplyr_0.8.0.1     
-#[6] readr_1.3.1       
-#
-#loaded via a namespace (and not attached):
-#  [1] Rcpp_1.0.1        pillar_1.3.1      compiler_3.5.2    plyr_1.8.4        bitops_1.0-6     
-#[6] tools_3.5.2       digest_0.6.18     tibble_2.1.1      gtable_0.3.0      pkgconfig_2.0.2  
-#[11] png_0.1-7         rlang_0.3.4       cli_1.1.0         rstudioapi_0.9.0  rvcheck_0.1.3    
-#[16] curl_3.3          yaml_2.2.0        withr_2.1.2       httr_1.4.0        stringr_1.4.0    
-#[21] hms_0.4.2         RgoogleMaps_1.4.3 grid_3.5.2        tidyselect_0.2.5  glue_1.3.1       
-#[26] R6_2.4.0          jpeg_0.1-8        fansi_0.4.0       polyclip_1.10-0   purrr_0.3.2      
-#[31] tidyr_0.8.3       tweenr_1.0.1      farver_1.1.0      magrittr_1.5      scales_1.0.0     
-#[36] MASS_7.3-51.1     assertthat_0.2.1  ggforce_0.2.2     colorspace_1.4-1  labeling_0.3     
-#[41] utf8_1.1.4        stringi_1.4.3     lazyeval_0.2.2    munsell_0.5.0     crayon_1.3.4     
-#[46] rjson_0.2.20  
+historicalsamplelocations <- ggmap(sq_map)  + geom_vline(xintercept=-94.63333) + 
+  geom_point(data = historical, mapping = aes(x = DecimalLongitude, y = DecimalLatitude,fill = status), shape=21,color = "black",size=12) +
+  scale_x_continuous(expand=c(0,0),position = "top") +
+  scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF")) +
+  coord_fixed(ratio=1) + xlab("Longitude") + ylab("Latitude") + 
+  theme_bw(base_size = 20) +
+          theme(legend.position="none",panel.border=element_rect(fill = NA)) + 
+  theme(axis.title=element_text(size=28,face="bold")) 
+
+historicalsamplelocations + geom_label_repel(historical,mapping=aes(fontface="bold",x=DecimalLongitude,y=DecimalLatitude,label=Location_code,fill=Included_in_tess3r,color=status),size=8, force=10, max.iter = 40000, segment.color="black") + scale_fill_manual(values=c("#CE1B26", "#15326C","#9437FF","#FFFFFF", "#F2B01F")) +
+scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
+
+ggsave(filename="Fig_S2_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
+
+# 9. Creating the structure plots ordered by location
+# Modern by longitude, export as 1000 pixels wide: FigS2_modern_long.png
+modernindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude) %>% filter(Sampling_period=="MODERN")
+
+modernindividual <- temp %>% filter(Sampling_period=="MODERN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude)
+
+ggplot(modernindividual, aes(fill=cluster_assignment,y=assignment_value,x=as.factor(Catalog_number))) +
+  geom_bar(stat="identity",color="black",width=1) + theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank()) + scale_y_continuous(limits=c(0,1),expand = c(0, 0)) +
+  theme(aspect.ratio = 1/4) +
+  scale_x_discrete(limits=modernindividualnames$Catalog_number) +
+  scale_fill_manual(values = (c("#CE1B26","#15326C")))
+
+# Historical by longitude, export as 1000 pixels wide: FigS2_historical_long.png
+historicalindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude) %>% filter(Sampling_period=="SMITHSONIAN")
+
+historicalindividual <- temp %>% filter(Sampling_period=="SMITHSONIAN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude)
+
+ggplot(historicalindividual, aes(fill=cluster_assignment,y=assignment_value,x=as.factor(Catalog_number))) +
+  geom_bar(stat="identity",color="black",width=1) + theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank()) + scale_y_continuous(limits=c(0,1),expand = c(0, 0)) +
+  theme(aspect.ratio = 1/4) +
+  scale_x_discrete(limits=historicalindividualnames$Catalog_number) +
+  scale_fill_manual(values = (c("#CE1B26","#15326C")))
+
+# Modern by latitude, export as 1000 pixels height: FigS2_modern_lat.png
+modernindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude) %>% filter(Sampling_period=="MODERN")
+
+modernindividual <- temp %>% filter(Sampling_period=="MODERN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude)
+
+ggplot(modernindividual, aes(fill=cluster_assignment,y=assignment_value,x=as.factor(Catalog_number))) +
+  geom_bar(stat="identity",color="black",width=1) + theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank()) + scale_y_continuous(limits=c(0,1),expand = c(0, 0)) +
+  theme(aspect.ratio = 4/1) +
+  scale_x_discrete(limits=modernindividualnames$Catalog_number) +
+  scale_fill_manual(values = (c("#CE1B26","#15326C"))) +
+  coord_flip()
+
+# Modern by latitude, export as 1000 pixels height: FigS2_historical_lat.png
+historicalindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude) %>% filter(Sampling_period=="SMITHSONIAN")
+
+historicalindividual <- temp %>% filter(Sampling_period=="SMITHSONIAN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude)
+
+ggplot(historicalindividual, aes(fill=cluster_assignment,y=assignment_value,x=as.factor(Catalog_number))) +
+  geom_bar(stat="identity",color="black",width=1) + theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank()) + scale_y_continuous(limits=c(0,1),expand = c(0, 0)) +
+  theme(aspect.ratio = 4/1) +
+  scale_x_discrete(limits=historicalindividualnames$Catalog_number) +
+  scale_fill_manual(values = (c("#CE1B26","#15326C"))) +
+  coord_flip()
+
+# 10. Generating site labels, first for modern by longitude (the x-axis for the plot)
+modern <- modern %>% arrange(Location_code) %>% arrange(DecimalLongitude)
+
+# replacing "status" with the appropriate color
+fill_codes <- as.matrix(modern$status)[,1]
+fill_codes <- gsub("Hybrid","#9437FF",gsub("CC","#15326C",gsub("BC","#CE1B26",fill_codes)))
+
+# creating a vector for the position of our sampling site text labels
+labelx <- modern$r[length(modern$r)]/2
+for (i in (dim(modern)[1]-1):1) {
+  labelx <- c(labelx, (labelx[length(labelx)]+(modern$r[i+1]/2)+(modern$r[i]/2)))
+}
+
+# creating a vector for the y-position of the labels to stagger them
+# and avoid overlap
+labely <- rep(4,length(modern$r))
+labely[seq(2,length(modern$r),4)] <- 1
+labely[seq(3,length(modern$r),4)] <- 3
+labely[seq(4,length(modern$r),4)] <- 0
+
+# building the base colored plot
+modernlong <- ggplot(modern,aes(y=r,x=2)) + geom_bar(stat="identity",color="black",aes(fill=factor(modern$Location_code,levels=as.numeric(modern$Location_code)))) +
+  theme_classic() +
+  theme(panel.border = element_blank(),axis.line=element_blank()) +
+  scale_x_continuous(limits=c(-1,5)) +
+  scale_fill_manual(values = c(fill_codes)) +
+  theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank())  +
+  theme(aspect.ratio = 1/5) +
+  coord_flip() 
+
+# Figuring out what the colors should be for fill and outline of the 
+# first site label
+if (modern$Included_in_tess3r[length(modern$Included_in_tess3r)]=="NO") {
+  fillcolor <- "#FFFFFF"
+} else {
+  fillcolor <- "#F2B01F"
+}
+if (modern$status[length(modern$Included_in_tess3r)]=="Hybrid") {
+  colorcolor <- "#9437FF"
+} else {
+  if (modern$status[length(modern$Included_in_tess3r)]=="CC") {
+    colorcolor <- "#15326C"
+  }  else {
+    colorcolor <- "#CE1B26"
+  }
+}
+
+# creating a vector to put in some vlines separating the labels
+vlinepos <- c(0,modern$r[length(modern$r)])
+for (i in (dim(modern)[1]-1):1) {
+  vlinepos <- c(vlinepos, (vlinepos[length(vlinepos)]+(modern$r[i])))
+}
+
+# and adding this annotation on to the baseplot
+modernlong <- modernlong + geom_hline(yintercept = vlinepos, linetype="dashed")
+
+# and adding text label annotation on to the baseplot for left-most site
+modernlong <- modernlong + annotate("label",y=labelx[1],x=labely[1],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)],fill=fillcolor,color=colorcolor,size=12)
+
+# and now doing this for all the remaining labels
+for (i in 2:length(labelx)) {
+  if (modern$Included_in_tess3r[length(modern$Included_in_tess3r)-i+1]=="NO") {
+    fillcolor <- "#FFFFFF"
+  } else {
+    fillcolor <- "#F2B01F"
+  }
+  if (modern$status[length(modern$Included_in_tess3r)-i+1]=="Hybrid") {
+    colorcolor <- "#9437FF"
+  } else {
+    if (modern$status[length(modern$Included_in_tess3r)-i+1]=="CC") {
+      colorcolor <- "#15326C"
+    }  else {
+    colorcolor <- "#CE1B26"
+    }
+  }
+  modernlong <- modernlong + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=12)
+}  
+
+# Exporting as 1500 pixels width, FigS2_modern_long_sites.png
+modernlong + scale_y_reverse() 
+
+# 11. Generating site labels, next historical by longitude (the x-axis for the plot)
+historical <- historical %>% arrange(Location_code) %>% arrange(DecimalLongitude)
+
+# replacing "status" with the appropriate color
+fill_codes <- as.matrix(historical$status)[,1]
+fill_codes <- gsub("Hybrid","#9437FF",gsub("CC","#15326C",gsub("BC","#CE1B26",fill_codes)))
+
+# creating a vector for the position of our sampling site text labels
+labelx <- historical$r[length(historical$r)]/2
+for (i in (dim(historical)[1]-1):1) {
+  labelx <- c(labelx, (labelx[length(labelx)]+(historical$r[i+1]/2)+(historical$r[i]/2)))
+}
+
+# creating a vector for the y-position of the labels to stagger them
+# and avoid overlap
+labely <- rep(4,length(historical$r))
+labely[seq(2,length(historical$r),4)] <- 1
+labely[seq(3,length(historical$r),4)] <- 3
+labely[seq(4,length(historical$r),4)] <- 0
+
+# building the base colored plot
+historicallong <- ggplot(historical,aes(y=r,x=2)) + geom_bar(stat="identity",color="black",aes(fill=factor(historical$Location_code,levels=as.numeric(historical$Location_code)))) +
+  theme_classic() +
+  theme(panel.border = element_blank(),axis.line=element_blank()) +
+  scale_x_continuous(limits=c(-1,5)) +
+  scale_fill_manual(values = c(fill_codes)) +
+  theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank())  +
+  theme(aspect.ratio = 1/5) +
+  coord_flip() 
+
+# Figuring out what the colors should be for fill and outline of the 
+# first site label
+if (historical$Included_in_tess3r[length(historical$Included_in_tess3r)]=="NO") {
+  fillcolor <- "#FFFFFF"
+} else {
+  fillcolor <- "#F2B01F"
+}
+if (historical$status[length(historical$Included_in_tess3r)]=="Hybrid") {
+  colorcolor <- "#9437FF"
+} else {
+  if (historical$status[length(historical$Included_in_tess3r)]=="CC") {
+    colorcolor <- "#15326C"
+  }  else {
+    colorcolor <- "#CE1B26"
+  }
+}
+
+# creating a vector to put in some vlines separating the labels
+vlinepos <- c(0,historical$r[length(historical$r)])
+for (i in (dim(historical)[1]-1):1) {
+  vlinepos <- c(vlinepos, (vlinepos[length(vlinepos)]+(historical$r[i])))
+}
+
+# and adding this annotation on to the baseplot
+historicallong <- historicallong + geom_hline(yintercept = vlinepos, linetype="dashed")
+
+# and adding text label annotation on to the baseplot for left-most site
+historicallong <- historicallong + annotate("label",y=labelx[1],x=labely[1],fontface="bold",label=historical$Location_code[length(historical$Included_in_tess3r)],fill=fillcolor,color=colorcolor,size=12)
+
+# and now doing this for all the remaining labels
+for (i in 2:length(labelx)) {
+  if (historical$Included_in_tess3r[length(historical$Included_in_tess3r)-i+1]=="NO") {
+    fillcolor <- "#FFFFFF"
+  } else {
+    fillcolor <- "#F2B01F"
+  }
+  if (historical$status[length(historical$Included_in_tess3r)-i+1]=="Hybrid") {
+    colorcolor <- "#9437FF"
+  } else {
+    if (historical$status[length(historical$Included_in_tess3r)-i+1]=="CC") {
+      colorcolor <- "#15326C"
+    }  else {
+      colorcolor <- "#CE1B26"
+    }
+  }
+  historicallong <- historicallong + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=historical$Location_code[length(historical$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=12)
+}  
+
+# Exporting as 1500 pixels width, FigS2_historical_long_sites.png
+historicallong + scale_y_reverse() 
+
+# 12. Generating site labels, next historical by latitude (the y-axis for the plot)
+historical <- historical %>% arrange(Location_code) %>% arrange(desc(DecimalLatitude))
+
+# replacing "status" with the appropriate color
+fill_codes <- as.matrix(historical$status)[,1]
+fill_codes <- gsub("Hybrid","#9437FF",gsub("CC","#15326C",gsub("BC","#CE1B26",fill_codes)))
+
+# creating a vector for the position of our sampling site text labels
+labelx <- historical$r[length(historical$r)]/2
+for (i in (dim(historical)[1]-1):1) {
+  labelx <- c(labelx, (labelx[length(labelx)]+(historical$r[i+1]/2)+(historical$r[i]/2)))
+}
+
+# creating a vector for the y-position of the labels to stagger them
+# and avoid overlap
+labely <- rep(4,length(historical$r))
+labely[seq(2,length(historical$r),4)] <- 1
+labely[seq(3,length(historical$r),4)] <- 3
+labely[seq(4,length(historical$r),4)] <- 0
+
+# building the base colored plot
+historicallat <- ggplot(historical,aes(y=r,x=2)) + geom_bar(stat="identity",color="black",aes(fill=factor(historical$Location_code,levels=as.numeric(historical$Location_code)))) +
+  theme_classic() +
+  theme(panel.border = element_blank(),axis.line=element_blank()) +
+  scale_x_continuous(limits=c(-1,5)) +
+  scale_fill_manual(values = c(fill_codes)) +
+  theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank())  +
+  theme(aspect.ratio = 5/1)
+
+# Figuring out what the colors should be for fill and outline of the 
+# first site label
+if (historical$Included_in_tess3r[length(historical$Included_in_tess3r)]=="NO") {
+  fillcolor <- "#FFFFFF"
+} else {
+  fillcolor <- "#F2B01F"
+}
+if (historical$status[length(historical$Included_in_tess3r)]=="Hybrid") {
+  colorcolor <- "#9437FF"
+} else {
+  if (historical$status[length(historical$Included_in_tess3r)]=="CC") {
+    colorcolor <- "#15326C"
+  }  else {
+    colorcolor <- "#CE1B26"
+  }
+}
+
+# creating a vector to put in some vlines separating the labels
+vlinepos <- c(0,historical$r[length(historical$r)])
+for (i in (dim(historical)[1]-1):1) {
+  vlinepos <- c(vlinepos, (vlinepos[length(vlinepos)]+(historical$r[i])))
+}
+
+# and adding this annotation on to the baseplot
+historicallat <- historicallat + geom_hline(yintercept = vlinepos, linetype="dashed")
+
+# and adding text label annotation on to the baseplot for left-most site
+historicallat <- historicallat + annotate("label",y=labelx[1],x=labely[1],fontface="bold",label=historical$Location_code[length(historical$Included_in_tess3r)],fill=fillcolor,color=colorcolor,size=12)
+
+# and now doing this for all the remaining labels
+for (i in 2:length(labelx)) {
+  if (historical$Included_in_tess3r[length(historical$Included_in_tess3r)-i+1]=="NO") {
+    fillcolor <- "#FFFFFF"
+  } else {
+    fillcolor <- "#F2B01F"
+  }
+  if (historical$status[length(historical$Included_in_tess3r)-i+1]=="Hybrid") {
+    colorcolor <- "#9437FF"
+  } else {
+    if (historical$status[length(historical$Included_in_tess3r)-i+1]=="CC") {
+      colorcolor <- "#15326C"
+    }  else {
+      colorcolor <- "#CE1B26"
+    }
+  }
+  historicallat <- historicallat + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=historical$Location_code[length(historical$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=12)
+}  
+
+# Exporting as 1500 pixels height, FigS2_historical_lat_sites.png
+historicallat
+
+# 13. Generating site labels, finally modern by latitude (the y-axis for the plot)
+modern <- modern %>% arrange(Location_code) %>% arrange(desc(DecimalLatitude))
+
+# replacing "status" with the appropriate color
+fill_codes <- as.matrix(modern$status)[,1]
+fill_codes <- gsub("Hybrid","#9437FF",gsub("CC","#15326C",gsub("BC","#CE1B26",fill_codes)))
+
+# creating a vector for the position of our sampling site text labels
+labelx <- modern$r[length(modern$r)]/2
+for (i in (dim(modern)[1]-1):1) {
+  labelx <- c(labelx, (labelx[length(labelx)]+(modern$r[i+1]/2)+(modern$r[i]/2)))
+}
+
+# creating a vector for the y-position of the labels to stagger them
+# and avoid overlap
+labely <- rep(4,length(modern$r))
+labely[seq(2,length(modern$r),4)] <- 1
+labely[seq(3,length(modern$r),4)] <- 3
+labely[seq(4,length(modern$r),4)] <- 0
+
+# building the base colored plot
+modernlat <- ggplot(modern,aes(y=r,x=2)) + geom_bar(stat="identity",color="black",aes(fill=factor(modern$Location_code,levels=as.numeric(modern$Location_code)))) +
+  theme_classic() +
+  theme(panel.border = element_blank(),axis.line=element_blank()) +
+  scale_x_continuous(limits=c(-1,5)) +
+  scale_fill_manual(values = c(fill_codes)) +
+  theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank())  +
+  theme(aspect.ratio = 5/1)
+
+# Figuring out what the colors should be for fill and outline of the 
+# first site label
+if (modern$Included_in_tess3r[length(modern$Included_in_tess3r)]=="NO") {
+  fillcolor <- "#FFFFFF"
+} else {
+  fillcolor <- "#F2B01F"
+}
+if (modern$status[length(modern$Included_in_tess3r)]=="Hybrid") {
+  colorcolor <- "#9437FF"
+} else {
+  if (modern$status[length(modern$Included_in_tess3r)]=="CC") {
+    colorcolor <- "#15326C"
+  }  else {
+    colorcolor <- "#CE1B26"
+  }
+}
+
+# creating a vector to put in some vlines separating the labels
+vlinepos <- c(0,modern$r[length(modern$r)])
+for (i in (dim(modern)[1]-1):1) {
+  vlinepos <- c(vlinepos, (vlinepos[length(vlinepos)]+(modern$r[i])))
+}
+
+# and adding this annotation on to the baseplot
+modernlat <- modernlat + geom_hline(yintercept = vlinepos, linetype="dashed")
+
+# and adding text label annotation on to the baseplot for left-most site
+modernlat <- modernlat + annotate("label",y=labelx[1],x=labely[1],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)],fill=fillcolor,color=colorcolor,size=11)
+
+# and now doing this for all the remaining labels
+for (i in 2:length(labelx)) {
+  if (modern$Included_in_tess3r[length(modern$Included_in_tess3r)-i+1]=="NO") {
+    fillcolor <- "#FFFFFF"
+  } else {
+    fillcolor <- "#F2B01F"
+  }
+  if (modern$status[length(modern$Included_in_tess3r)-i+1]=="Hybrid") {
+    colorcolor <- "#9437FF"
+  } else {
+    if (modern$status[length(modern$Included_in_tess3r)-i+1]=="CC") {
+      colorcolor <- "#15326C"
+    }  else {
+      colorcolor <- "#CE1B26"
+    }
+  }
+  modernlat <- modernlat + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=11)
+}  
+
+# Exporting as 1500 pixels height, FigS2_modern_lat_sites.png
+modernlat

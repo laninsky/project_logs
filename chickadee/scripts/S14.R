@@ -4,29 +4,208 @@ library(tidyverse)
 # 2. Setwd
 setwd("chickadee/output/")
 
-# 3. Reading in data (tab delimited), dropping last blank row and filtering for samples where song data available
-temp <- read_tsv("../data/S2.txt")
-temp <- temp[1:165,]
-temp <- temp %>% filter(!is.na(Song_summary))  %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Song_summary)
+# 3A. Reading in structure data (tab delimited) and standardizing names
+temp <- read.table("../data/chickadee_structure_file.txt")
+temp <- t(temp)
+temp[1,seq(1,length(temp[1,]),2)] <- gsub("_.*","_A",temp[1,seq(1,length(temp[1,]),2)])
+temp[1,seq(2,length(temp[1,]),2)] <- gsub("_.*","_B",temp[1,seq(2,length(temp[1,]),2)])
 
-# 4. Expanding dataset into "long" format 
-longtemp <- gather(temp,cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(assignment_value) %>% arrange(desc(cluster_assignment)) %>% arrange(Song_summary)
+# Some minor tweaking of reference sample names based on tissue number used in structure file vs catalog number in S2
+temp[1,which(grepl("3474",temp[1,]))] <- c("90612_A","90612_B")
+temp[1,which(grepl("6281",temp[1,]))] <- c("95776_A","95776_B")
+temp[1,which(grepl("9898",temp[1,]))] <- c("131638_A","131638_B")
+temp[1,which(grepl("7420",temp[1,]))] <- c("92269_A","92269_B")
+temp[1,which(grepl("7421",temp[1,]))] <- c("92270_A","92270_B")
 
-# 5. Creating structure plot based on "long" format and annotating Appleton City samples
-# Saving as 1000 pixels wide, preserving aspect ratio as FigS5.png (in output folder)
-ggplot(longtemp, aes(fill=cluster_assignment,y=assignment_value,x=factor(longtemp$Catalog_number,levels=as.numeric(temp$Catalog_number)))) +
-  geom_bar(stat="identity",color="black",width=1) + theme (legend.position="none", axis.text = element_blank(),axis.title=element_blank(), axis.ticks = element_blank()) + scale_y_continuous(limits=c(0,1),expand = c(0, 0)) +
-  theme(aspect.ratio = 1/3) +
-  scale_x_discrete(limits=temp$Catalog_number) +
-  scale_fill_manual(values = (c("#CE1B26","#15326C"))) +
-  annotate("text",x=as.character(as.matrix(temp %>% filter(str_detect(Specific_locality,"Appleton City")) %>% select(Catalog_number))),y=0.025,label="*",color="orange",size=12)
+# 3B. Reading in S2 data (tab delimited), dropping last blank row
+tempS2 <- read_table2("../data/S2.txt")
+tempS2 <- tempS2[1:165,]
 
-# 6. Extracting information for doing t-tests etc
-# Mean and SD for black-capped genetic for black-capped singing birds
-temp %>% filter(Song_summary=="PUREBC") %>% group_by(Song_summary) %>% summarise(mean(BC_genetic_cluster_assignment),sd(BC_genetic_cluster_assignment))
+# 3C. Reading in ipyrad summary, including read depth data (tab delimited)
+tempread <- read_tsv("../data/ipyrad_summary.txt")
+tempread[,1] <- as_tibble(gsub("_.*","",as.matrix(tempread[,1])))
 
-# Mean and SD for Carolina genetic for Carolina singing birds
-temp %>% filter(Song_summary=="PURECC") %>% group_by(Song_summary) %>% summarise(mean(CC_genetic_cluster_assignment),sd(CC_genetic_cluster_assignment))
+# Some minor tweaking of reference sample names based on tissue number used in readfile vs catalog number in S2
+tempread[which(grepl("3474",as.matrix(tempread[,1]))),1] <- "90612"
+tempread[which(grepl("6281",as.matrix(tempread[,1]))),1] <- "95776"
+tempread[which(grepl("9898",as.matrix(tempread[,1]))),1] <- "131638"
+tempread[which(grepl("7420",as.matrix(tempread[,1]))),1] <- "92269"
+tempread[which(grepl("7421",as.matrix(tempread[,1]))),1] <- "92270"
 
-# t.test
-t.test((as.numeric(as.matrix(temp %>% filter(Song_summary=="PUREBC") %>% select(BC_genetic_cluster_assignment)))),(as.numeric(as.matrix(temp %>% filter(Song_summary=="PURECC") %>% select(CC_genetic_cluster_assignment)))))
+# 4. Creating a new data object to store our comparisons and populating it with sample codes
+norows <- factorial(dim(tempS2)[1])/(factorial(dim(tempS2)[1]-2)*factorial(2))
+
+pairwise_comparisons <- matrix(NA,ncol=6,nrow=norows)
+x <- 1
+for (i in 1:(dim(tempS2)[1]-1)) {
+  for (j in (i+1):((dim(tempS2)[1]))) {
+    pairwise_comparisons[x,1] <- as.character(tempS2[i,1])
+    pairwise_comparisons[x,2] <- as.character(tempS2[j,1])
+    x <- x + 1
+  }
+}
+
+# 5. Populating our data with things of interest
+for (i in 1:dim(pairwise_comparisons)[1]) {
+  # Only need to look at one "allele" per sample in structure file, finding those columns
+  structure_sample_1 <- which(grepl(pairwise_comparisons[i,1], temp[1,]))[1]
+  # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
+  if (is.na(structure_sample_1)) {
+    structure_sample_1 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,1]),2]), temp[1,]))[1]
+  }
+  structure_sample_2 <- which(grepl(pairwise_comparisons[i,2], temp[1,]))[1]
+  # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
+  if (is.na(structure_sample_2)) {  
+    structure_sample_2 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,2]),2]), temp[1,]))[1]
+  }
+  
+  # Finding the rows in S2 so we can extract cluster assignments
+  S2_sample_1 <- which(grepl(pairwise_comparisons[i,1], as.matrix(tempS2[,1])))
+  S2_sample_2 <- which(grepl(pairwise_comparisons[i,2], as.matrix(tempS2[,1])))
+  
+  # Finding the rows in tempread so we can pull our read depth
+  read_sample_1 <- which(grepl(pairwise_comparisons[i,1], as.matrix(tempread[,1])))
+  # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
+  if(length(read_sample_1)==0) {
+    as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,1]),2])
+    read_sample_1 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,1]),2]), as.matrix(tempread[,1])))
+  }
+  read_sample_2 <- which(grepl(pairwise_comparisons[i,2], as.matrix(tempread[,1])))
+  # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
+  if(length(read_sample_2)==0) {
+    read_sample_2 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,2]),2]), as.matrix(tempread[,1])))
+  }  
+  
+  # Number of loci that overlap between the samples
+  pairwise_comparisons[i,3] <- length(which(temp[,structure_sample_1]!="-9" & temp[,structure_sample_2]!="-9"))-1
+  
+  # Mean cluster assignment across the pair of samples
+  pairwise_comparisons[i,4] <- (as.matrix(tempS2[S2_sample_1,3])+as.matrix(tempS2[S2_sample_2,3]))/2
+  
+  # Absolute difference in cluster assignment between pairs
+  pairwise_comparisons[i,5] <- abs(as.matrix(tempS2[S2_sample_1,3])-as.matrix(tempS2[S2_sample_2,3]))
+  
+  # Mean read depth across the pair of samples
+  pairwise_comparisons[i,6] <- (as.numeric(as.matrix(tempread[read_sample_1,3]))+as.numeric(as.matrix(tempread[read_sample_2,3])))/2
+
+}
+
+# 6. Transforming pairwise_comparisons into a tibble so we can aggregate it and get plotting
+pairwise_comparisons <- as_tibble(pairwise_comparisons)
+names(pairwise_comparisons) <- c("sample_1","sample_2","overlapping_loci","average_cluster","abs_cluster_diff","average_read_cov")
+pairwise_comparisons[,3:6] <- pairwise_comparisons[,3:6] %>% mutate_if(is.character, as.numeric)
+
+breakpoints <- seq(0,1,0.025)
+breakpoints[1] <- -0.00001
+breakpoints[length(breakpoints)] <- 1.00001
+
+# Creating a column aggregating on average cluster
+pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_av_cluster=cut(average_cluster,breaks = breakpoints)) %>% mutate(grouped_av_cluster=(as.numeric(gsub("-1e-05","0",gsub(",.*","",gsub("\\(","",as.character(grouped_av_cluster)))))))
+
+# Creating a column aggregating on abs_cluster_diff
+pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_cluster_diff=cut(abs_cluster_diff,breaks = breakpoints)) %>% mutate(grouped_cluster_diff=(as.numeric(gsub("-1e-05","0",gsub(",.*","",gsub("\\(","",as.character(grouped_cluster_diff)))))))
+
+# Creating a column aggregating on read depth - first getting appropriate break points
+readbreakpointinterval <- (max(pairwise_comparisons$average_read_cov/1000000)-min(pairwise_comparisons$average_read_cov/1000000))/(length(breakpoints)-1)
+
+readbreakpoints <- seq(min(pairwise_comparisons$average_read_cov/1000000),max(pairwise_comparisons$average_read_cov/1000000),readbreakpointinterval)
+
+readbreakpoints[1] <- readbreakpoints[1]-0.00001
+readbreakpoints[length(breakpoints)] <- readbreakpoints[length(breakpoints)] +0.00001
+
+pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_read_depth=cut(average_read_cov/1000000,breaks = readbreakpoints)) %>% mutate(grouped_read_depth=(as.numeric(gsub("-1e-05","0",gsub(",.*","",gsub("\\(","",as.character(grouped_read_depth)))))))
+
+# 7. Now grouping for the first plot
+firstplot <- pairwise_comparisons %>% group_by(grouped_av_cluster,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_cluster=mean(average_cluster),av_diff=mean(abs_cluster_diff))
+
+# export as 1000 pixels width, SupFig1_firstplot_main.png in output folder
+firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cluster,fill=mean_loci)) + 
+  geom_tile(color="black") + 
+  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
+  theme(panel.background  = element_rect(color="black")) + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits = c(NA,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + 
+  scale_y_continuous(limits = c(0,1),expand = c(0, 0),name = str_wrap("Average assignment to BC cluster across samples in pair",width=40))  + 
+  theme(axis.title=element_text(size=18,face="bold")) + 
+  theme(legend.title = element_blank())   +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
+  theme(aspect.ratio = 1)
+
+# export as 840 pixels width, 210 high, SupFig1_numpairs_cluster_diff.png in output folder
+numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) + 
+  geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits=c(NA,1),expand = c(0, 0),name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + 
+  scale_y_continuous(expand = c(0, 0),name=str_wrap("Number of pairs", width=10))  + 
+  theme(axis.title=element_text(size=18,face="bold")) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
+
+# export as 225 pixels width, 840 high, SupFig1_numpairs_cluster_av.png in output folder
+numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) + 
+  geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits=c(NA,1),expand = c(0, 0), name = str_wrap("Average assignment to BC cluster across samples in pair",width=40)) + 
+  scale_y_reverse(expand = c(0, 0),name=str_wrap("Number of pairs", width=10),breaks=c(0,1000,2000,3000)) +
+  coord_flip()  + 
+  theme(axis.title=element_text(size=18,face="bold")) + 
+  theme(axis.text.x = element_text(angle = 270)) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
+
+# 8. Now grouping for the second plot
+secondplot <- pairwise_comparisons %>% group_by(grouped_read_depth,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_readdepth=mean(average_read_cov),av_diff=mean(abs_cluster_diff))
+
+# export as 1000 pixels wide, SupFig1_secondplot_main.png in output folder
+secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_read_depth,fill=mean_loci)) + 
+  geom_tile(color="black") +
+  scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
+  theme(panel.background  = element_rect(color="black")) + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(limits = c(0,1),expand = c(0, 0), name = str_wrap("Average absolute difference in cluster assignment between samples in pair",width=40)) + 
+  scale_y_continuous(expand = c(0, 0), name = str_wrap("Average read depth across members of pair (× 1,000,000)",width=40))  + 
+  theme(axis.title=element_text(size=18,face="bold"))   + 
+  theme(legend.title = element_blank()) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
+  theme(aspect.ratio = 1)
+
+# export as 210 pixels width, 840 high, SupFig1_numpairs_read.png in output folder
+numpairsreads <- ggplot(secondplot,aes(x=grouped_read_depth,y=num_pairs)) + 
+  geom_bar(stat='identity', width=0.07,fill="black",color="black") + 
+  theme_bw(base_size = 16) + 
+  scale_x_continuous(expand = c(0, 0), name=str_wrap("Average read depth across members of pair (× 1,000,000)", width=40)) + 
+  scale_y_reverse(expand = c(0, 0), name=str_wrap("Number of pairs", width=10)) + 
+  coord_flip() + 
+  theme(axis.title=element_text(size=18,face="bold")) +
+  theme(axis.text.x = element_text(angle = 270)) +
+  theme(plot.margin=unit(c(1,1,1,1),"cm"))
+
+# assembled the plots manually in ppt/illustrator
+
+sessionInfo()
+#R version 3.5.2 (2018-12-20)
+#Platform: x86_64-apple-darwin15.6.0 (64-bit)
+#Running under: macOS High Sierra 10.13.6
+#
+#Matrix products: default
+#BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+#LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+#
+#locale:
+#  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+#
+#attached base packages:
+#  [1] stats     graphics  grDevices utils     datasets  methods   base     
+#
+#other attached packages:
+#  [1] bindrcpp_0.2.2  forcats_0.3.0   stringr_1.3.1   dplyr_0.7.8     purrr_0.2.5     readr_1.3.1    
+#[7] tidyr_0.8.2     tibble_2.0.1    ggplot2_3.1.0   tidyverse_1.2.1
+#
+#loaded via a namespace (and not attached):
+#  [1] Rcpp_1.0.0       cellranger_1.1.0 pillar_1.3.1     compiler_3.5.2   plyr_1.8.4      
+#[6] bindr_0.1.1      tools_3.5.2      digest_0.6.18    jsonlite_1.6     lubridate_1.7.4 
+#[11] nlme_3.1-137     gtable_0.2.0     lattice_0.20-38  pkgconfig_2.0.2  rlang_0.3.1     
+#[16] cli_1.0.1        rstudioapi_0.9.0 yaml_2.2.0       haven_2.0.0      withr_2.1.2     
+#[21] xml2_1.2.0       httr_1.4.0       generics_0.0.2   hms_0.4.2        grid_3.5.2      
+#[26] tidyselect_0.2.5 glue_1.3.0       R6_2.3.0         readxl_1.2.0     modelr_0.1.2    
+#[31] magrittr_1.5     backports_1.1.3  scales_1.0.0     rvest_0.3.2      assertthat_0.2.0
+#[36] colorspace_1.4-0 labeling_0.3     stringi_1.2.4    lazyeval_0.2.1   munsell_0.5.0   
+#[41] broom_0.5.1      crayon_1.3.4 
