@@ -57,11 +57,17 @@ ggplot(data) + geom_rect(mapping=aes(xmin=18000,
 # Saving this graph
 ggsave("combined_cubSFS.pdf",height=8.7,width=8.7,units="cm")
 
-# Getting some summary statistics from our data
+# Getting some summary statistics from our data based on median values
 data_summary <- data %>% group_by(Species) %>% summarise(`N at time 0`=median[time==0],`N at time 1000`=median[time==1000],`Is population expanding?`=ifelse(`N at time 0`>`N at time 1000`,"Yes","No"),`N at start of expansion`=ifelse(`Is population expanding?`=="Yes",min(median),NA),`Fold expansion`=ifelse(`Is population expanding?`=="Yes",`N at time 0`/`N at start of expansion`,NA),`Time at start of expansion`=ifelse(`Is population expanding?`=="Yes",time[median==`N at start of expansion`],NA)) %>% arrange(desc(`Time at start of expansion`),`N at time 0`)
 
 # Saving this data
-write.csv(data_summary,"CubSFS_pop_expansion_summary.csv",quote=FALSE,row.names = FALSE)
+write.csv(data_summary,"CubSFS_pop_expansion_median_summary.csv",quote=FALSE,row.names = FALSE)
+
+# Getting some summary statistics from our data based on observed values
+data_summary_observed <- data %>% group_by(Species) %>% summarise(`N at time 0`=Nt[time==0],`N at time 1000`=Nt[time==1000],`Is population expanding?`=ifelse(`N at time 0`>`N at time 1000`,"Yes","No"),`N at start of expansion`=ifelse(`Is population expanding?`=="Yes",min(Nt),NA),`Fold expansion`=ifelse(`Is population expanding?`=="Yes",`N at time 0`/`N at start of expansion`,NA),`Time at start of expansion`=ifelse(`Is population expanding?`=="Yes",time[Nt==`N at start of expansion`],NA)) %>% arrange(desc(`Time at start of expansion`),`N at time 0`)
+
+# Saving this data
+write.csv(data_summary_observed,"CubSFS_pop_expansion_observed_summary.csv",quote=FALSE,row.names = FALSE)
 
 #Creating a vector tying species name to colour so we can manipulate the order
 #Using the results from data_summary, rather than manually
