@@ -6,7 +6,7 @@ Theresa L. Cole, Ludovic Dutoit, Nic Dussex, Tom Hart, Alana Alexander, María J
 ## Input
 For CubSFS analyses, the input were folded SFS files formatted for fastsimcoal2. Although they were folded, the full number of sites were present (but the second half of the SFS file had '0' counts, reflecting this).
 
-For the SNAPP analysis, the input was a tab delimited file with the following variables (also detailed in the R script comments):
+For the SNAPP analysis, the input was a tab delimited file with the following variables (also detailed in the R script comments):  
 Replicate - 1, 2 or 3  
 Delta_theta - change in theta for each replicate, inferred from comparing theta at terminal to theta at nearest internal node  
 Location - name of terminal lineages used in each SNAPP replicate  
