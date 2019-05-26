@@ -21,3 +21,13 @@ Overall_order - overall order for plotting of locations (order fields were used 
 The CubSFS scripts describe the steps taken to infer demographic history from an SFS, and to plot this comparatively across species (more details are given in the comments in the R scripts).
 
 The SNAPP script describes the steps taken to plot the change in theta inferred from SNAPP across species.
+
+## To cite:
+Theresa L. Cole, Ludovic Dutoit, Nic Dussex, Tom Hart, Alana Alexander, María José Frugone, Jane L. Younger,  Gemma V. Clucas, Yves Cherel, Richard Cuthbert, Ursula Ellenberg, Steven R. Fiddaman, David Houston, Pierre Jouventin, Thomas Mattern, Gary Miller, Colin Miskelly, Paul Nolan, Michael J. Polito, Petra Quillfeldt, Peter G. Ryan, Adrian Smith, Alan JD Tennyson, David Thompson, Barbara Wienecke, Juliana A. Vianna, Jonathan M. Waters. Receding ice drove rapid expansions in eight Southern Ocean penguins. 
+
+Please also cite these packages, without which the analyses would not be possible:  
+- CubSFS
+- gridExtra
+- parallel
+- scales
+- tidyverse
