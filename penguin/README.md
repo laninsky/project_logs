@@ -15,7 +15,9 @@ Taxa_common_name - common name of species included in analysis
 Taxa_scientific - scientific name of species included in analysis  
 Taxa_order_for_graphing - desired order (left to right) for plotting of taxa  
 Location_order_for_graphing  - desired order (left to right) for plotting of locations  
-Overall_order - overall order for plotting of locations (order fields were used to sort data before importing into R)  
+Overall_order - overall order for plotting of locations (order fields were used to sort data before importing into R)
+Node_height - in substitutions per site
+Gen_time - generation time in years
 
 ## Description
 The CubSFS scripts describe the steps taken to infer demographic history from an SFS, and to plot this comparatively across species (more details are given in the comments in the R scripts).
