@@ -1,9 +1,7 @@
 This sub-repository contains analyses relating to:
 ### “Hologenomics for conservation: a first test of utility.”
 
-This project is funded by a [Royal Society of New Zealand Te Apārangi Rutherford Postdoctoral fellowship](https://royalsociety.org.nz/what-we-do/funds-and-opportunities/rutherford-foundation/rutherford-foundation-recipients/alana-alexander/) to @laninsky
-
-The rough order of how I carried out analyses are listed below:
+This project was funded by a [Royal Society of New Zealand Te Apārangi Rutherford Postdoctoral fellowship](https://royalsociety.org.nz/what-we-do/funds-and-opportunities/rutherford-foundation/rutherford-foundation-recipients/alana-alexander/) to @laninsky
 
 #### 1. Sample selection
 For the high-quality reference genomes, we on single representatives from the Māui and Hector's subspecies that had adequate tissue available (for 10x and Hi-C library construction), and that we undertook iwi consultation for.
