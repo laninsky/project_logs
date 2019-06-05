@@ -107,7 +107,67 @@ Maui_recapture
 ##   `2018_match_status` <lgl>
 
 #### 3. Massaging data so that there are columns that line up ####
+
+# Tweaking the pathology_code so it matches up
 NZCETA_archive <- NZCETA_archive %>% rowwise() %>% mutate(pathology_code=gsub("-.*","",gsub(").*","",gsub("/.*","",unlist(strsplit(Code,"\\(H"))[2]))))
 NZCETA_archive <- NZCETA_archive %>% mutate(pathology_code=ifelse(nchar(pathology_code)==2,
                                                 paste("H0",pathology_code,sep=""),
                                                 paste("H",pathology_code,sep="")))
+
+DOC_Massey_database <- DOC_Massey_database %>% rowwise() %>% mutate(pathology_code=gsub("-.*","",gsub("/.*","",gsub("N/A",NA,Doc_incident_no))))
+                                             
+DOC_Massey_database <- DOC_Massey_database %>% rowwise() %>% mutate(pathology_code=ifelse(nchar(pathology_code)==3,
+                                 gsub("H","H0",pathology_code),
+                                 pathology_code)) 
+
+# Tweaking the UOA_code so it matches up
+NZCETA_archive <- NZCETA_archive %>% rowwise() %>% mutate(scrubbed_uoa_code=gsub("/.*","",gsub("\\(.*","",gsub(" .*","",Code))))
+
+DOC_Massey_database <- DOC_Massey_database %>% rowwise() %>% mutate(scrubbed_uoa_code=gsub("/.*","",gsub(" .*","",UoA_Code)))
+
+#### 4. Data QC ####
+# Unfortunately joining the NZCETA and DOC_Massey_databases did not go smoothly, so
+# we need to figure out what codes are causing issues
+# Looking for potential duplicate entries
+dim(DOC_Massey_database)[1]-length(unique(DOC_Massey_database$scrubbed_uoa_code))
+# There are duplicate entries for NZCETA (less unique entries than entries in the following table)
+# which will need to be addressed before combining all of these guys into one file
+dim(NZCETA_archive)[1]-length(unique(NZCETA_archive$scrubbed_uoa_code))
+duplicatednames <- unique(NZCETA_archive$scrubbed_uoa_code[(duplicated(NZCETA_archive$scrubbed_uoa_code))])
+
+# In NZCeTA the following Che Code is present twice:
+# Che04NZ15 (H89/04)
+# Che04NZ15 (H91/04)
+# In the DOC_Massey_database, the second sample is called Che04NZ16, so modifying the scrubbed_uoa_code manually:
+NZCETA_archive$scrubbed_uoa_code[(which(NZCETA_archive$Code=="Che04NZ15 (H91/04)"))] <- "Che04NZ16"
+
+# In NZCETA, multiple samples with "CheSIFP" as their code. In the "Other_Info" field, there are
+# CETOS codes which I will append to the scrubbed_uoa_code so that these are unique
+# Some also have pathology_codes which I will add to their record as well.
+
+
+View(NZCETA_archive %>% filter(Code==duplicatednames[2] | Code=="CheTi12" | Code=="CheTi13"))
+
+
+View(NZCETA_archive %>% filter(Code==duplicatednames[2]))
+%>% select(Other_info)
+
+
+In the file with Becca/Dozza's results to update Massey/DOC, the guy associated with the H91 pathology record, is called Che04NZ16.
+
+
+
+NZCETA_archive %>% filter(scrubbed_uoa_code %in% duplicatednames) %>% select(Code)
+
+
+
+full_join(NZCETA_archive,DOC_Massey_database,by = "scrubbed_uoa_code") %>% select(UoA_Code,Code,scrubbed_uoa_code) %>% print(n=400)
+
+
+Should be able to join the DOC_Massey_database ($UoA_Code) and NZCETA_archive ($Code)
+
+DOC_Massey_database ($DOC_incident_no) should be able to be massaged to match up to Pathology_data ($H_no.)
+
+Maui_recapture should be able to be matched up to DOC_Massey_database ($UoA_Code) and NZCETA_archive ($Code) based on $Indiv_ID
+
+
