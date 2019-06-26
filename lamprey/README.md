@@ -65,6 +65,24 @@ module load Boost/1.57.0-GCCcore-7.4.0
 module load Eigen/3.2.2 
 runeems_snps
 ```
-*Back to [top](https://github.com/laninsky/project_logs/tree/master/lamprey#1-installing-eems)*
+##### E) For visualising results
+```
+module load R
+module load GEOS/3.7.1-gimkl-2018b
+/nesi/nobackup/uoo00110/bin/eems/plotting
+R # then within R
+install.packages("rgeos")
+install.packages("rEEMSplots",repos=NULL,type="source")
+```
+After installing these packages, you should be able to just load them the next time you run anything by:
+```
+module load R
+module load GEOS/3.7.1-gimkl-2018b
+R # and then within R
+library(rEEMSplots)
+```
+
+
+*[Back to top](https://github.com/laninsky/project_logs/tree/master/lamprey#1-installing-eems)*
 
 
