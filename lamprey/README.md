@@ -46,14 +46,25 @@ eb Eigen-3.2.2.eb
 ```
 C) Need to throw the paths to Boost and Eigen into the Makefile at `/nesi/nobackup/uoo00110/bin/eems/runeems_snps/src` e.g.
 ```
-
+EIGEN_INC = /nesi/nobackup/uoo00110/bin/Eigen/Eigen/3.2.2/include/Eigen
+BOOST_LIB = /nesi/nobackup/uoo00110/bin/Boost/Boost/1.57.0-GCCcore-7.4.0/lib
+BOOST_INC = /nesi/nobackup/uoo00110/bin/Boost/Boost/1.57.0-GCCcore-7.4.0/include
 ```
 Then:
 ```
 module use /nesi/nobackup/uoo00110/bin/modulefiles/all
-module load Boost/1.57
-module load Eigen/3.2.2
+module load Boost/1.57.0-GCCcore-7.4.0 
+module load Eigen/3.2.2 
 make linux
 ```
+D) To run on subsequent occasions:
+```
+export PATH=/nesi/nobackup/uoo00110/bin/eems/runeems_snps/src:$PATH
+module use /nesi/nobackup/uoo00110/bin/modulefiles/all
+module load Boost/1.57.0-GCCcore-7.4.0 
+module load Eigen/3.2.2 
+runeems_snps
+```
+
 
 
