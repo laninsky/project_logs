@@ -2,9 +2,9 @@ Notes relating to installation/support of lamprey population genomics project.
 
 ### 1. Installing [EEMS](https://github.com/dipetkov/eems)
 
-###### A) In `/nesi/nobackup/uoo00110/bin`, grabbed git by `git clone https://github.com/dipetkov/eems.git`
+##### A) In `/nesi/nobackup/uoo00110/bin`, grabbed git by `git clone https://github.com/dipetkov/eems.git`
 
-###### B) Needs specific versions of Boost and Eigen - installed them using easybuild, following instructions at https://support.nesi.org.nz/hc/en-gb/articles/360000474535-Installing-Third-Party-applications
+##### B) Needs specific versions of Boost and Eigen - installed them using easybuild, following instructions at https://support.nesi.org.nz/hc/en-gb/articles/360000474535-Installing-Third-Party-applications
 ```
 # Installing Boost
 cd /nesi/nobackup/uoo00110/bin
@@ -44,7 +44,7 @@ export EASYBUILD_PREFIX=$EASYBUILD_INSTALLPATH_SOFTWARE/easybuild-resources
 eb Eigen-3.2.2.eb 
 
 ```
-###### C) Need to throw the paths to Boost and Eigen into the Makefile at `/nesi/nobackup/uoo00110/bin/eems/runeems_snps/src` e.g.
+##### C) Need to throw the paths to Boost and Eigen into the Makefile at `/nesi/nobackup/uoo00110/bin/eems/runeems_snps/src` e.g.
 ```
 EIGEN_INC = /nesi/nobackup/uoo00110/bin/Eigen/Eigen/3.2.2/include/Eigen
 BOOST_LIB = /nesi/nobackup/uoo00110/bin/Boost/Boost/1.57.0-GCCcore-7.4.0/lib
@@ -57,7 +57,7 @@ module load Boost/1.57.0-GCCcore-7.4.0
 module load Eigen/3.2.2 
 make linux
 ```
-###### D) To run on subsequent occasions:
+##### D) To run on subsequent occasions:
 ```
 export PATH=/nesi/nobackup/uoo00110/bin/eems/runeems_snps/src:$PATH
 module use /nesi/nobackup/uoo00110/bin/modulefiles/all
