@@ -33,7 +33,12 @@ data$Species <- gsub("Chrysocome","Western rockhopper",data$Species)
 data$Species <- gsub("Moseleyi","Northern rockhopper",data$Species)
 
 # Plotting all CIs on one graph with a logged y axis
-ggplot(data) + geom_rect(mapping=aes(xmin=18000, 
+ggplot(data) + geom_rect(mapping=aes(xmin=135000, 
+                                     xmax=194000,
+                                     ymin=min(Nt,LCL,median,UCL),
+                                     ymax=max(Nt,LCL,median,UCL)), 
+                         color="black", fill="grey",size=0.1) + 
+  geom_rect(mapping=aes(xmin=18000, 
                                      xmax=25000,
                                      ymin=min(Nt,LCL,median,UCL),
                                      ymax=max(Nt,LCL,median,UCL)), 
@@ -118,7 +123,12 @@ penguin_colours <- penguin_colours[order(factor(names(penguin_colours), levels=a
 data2$Species <- factor(data2$Species, levels = as.character(data_summary$Species))
 
 # Plotting all species with the same y-axis (logged)
-ggplot(data2)  + geom_rect(mapping=aes(xmin=18000, 
+ggplot(data2) + geom_rect(mapping=aes(xmin=135000, 
+                                      xmax=194000,
+                                      ymin=min(Nt,LCL,median,UCL),
+                                      ymax=max(Nt,LCL,median,UCL)), 
+                          color="black", fill="grey",size=0.1)  + 
+  geom_rect(mapping=aes(xmin=18000, 
                                        xmax=25000,
                                        ymin=min(Nt,LCL,median,UCL),
                                        ymax=max(Nt,LCL,median,UCL)), 
@@ -141,7 +151,12 @@ data <- data %>% arrange(factor(Species, levels = data_summary$Species))
 
 for (i in 1:length(unique(data$Species))) {
   temp <- data %>% filter(Species==(unique(data$Species))[i])
-  groblist[[i]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=18000, 
+  groblist[[i]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=135000, 
+                                                         xmax=194000,
+                                                         ymin=min(Nt,LCL,median,UCL),
+                                                         ymax=max(Nt,LCL,median,UCL)), 
+                                             color="black", fill="grey",size=0.1) + 
+    geom_rect(mapping=aes(xmin=18000, 
                                                          xmax=25000,
                                                          ymin=min(Nt,LCL,median,UCL),
                                                          ymax=max(Nt,LCL,median,UCL)), 
@@ -166,7 +181,12 @@ groblist <- list()
 
 for (i in 1:length(unique(data$Species))) {
   temp <- data %>% filter(Species==(unique(data$Species))[i])
-  groblist[[i]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=18000, 
+  groblist[[i]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=135000, 
+                                                         xmax=194000,
+                                                         ymin=min(Nt,LCL,median,UCL),
+                                                         ymax=max(Nt,LCL,median,UCL)), 
+                                             color="black", fill="grey",size=0.1) + 
+    geom_rect(mapping=aes(xmin=18000, 
                                                          xmax=25000,
                                                          ymin=min(Nt,LCL,median,UCL),
                                                          ymax=max(Nt,LCL,median,UCL)), 
@@ -181,7 +201,12 @@ for (i in 1:length(unique(data$Species))) {
     facet_grid(~ Species) + scale_y_log10(expand=c(0,0)) + scale_x_reverse(expand=c(0,0))
 }
 temp <- data %>% filter(Species==(unique(data$Species))[7])
-groblist[[7]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=18000, 
+groblist[[7]] <- ggplot(temp) + geom_rect(mapping=aes(xmin=135000, 
+                                                      xmax=194000,
+                                                      ymin=min(Nt,LCL,median,UCL),
+                                                      ymax=max(Nt,LCL,median,UCL)), 
+                                          color="black", fill="grey",size=0.1)  + 
+  geom_rect(mapping=aes(xmin=18000, 
                                                        xmax=25000,
                                                        ymin=min(Nt,LCL,median,UCL),
                                                        ymax=max(Nt,LCL,median,UCL)), 
@@ -217,7 +242,12 @@ data[which(data[,1]==0),1] <- 1
 
 for (i in 1:length(unique(data$Species))) {
   temp <- data %>% filter(Species==(unique(data$Species))[i])
-  groblist[[i]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=18000, 
+  groblist[[i]] <- ggplot(temp) + geom_rect(mapping=aes(xmin=135000, 
+                                                        xmax=194000,
+                                                        ymin=min(Nt,LCL,median,UCL),
+                                                        ymax=max(Nt,LCL,median,UCL)), 
+                                            color="black", fill="grey",size=0.1)+ 
+    geom_rect(mapping=aes(xmin=18000, 
                                                          xmax=25000,
                                                          ymin=min(Nt,LCL,median,UCL),
                                                          ymax=max(Nt,LCL,median,UCL)), 
@@ -232,7 +262,12 @@ for (i in 1:length(unique(data$Species))) {
     facet_grid(~ Species) + scale_y_log10(expand=c(0,0)) + scale_x_continuous(trans=reverselog_trans(10),expand=c(0,0))
 }
 temp <- data %>% filter(Species==(unique(data$Species))[7])
-groblist[[7]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=18000, 
+groblist[[7]] <- ggplot(temp) + geom_rect(mapping=aes(xmin=135000, 
+                                                      xmax=194000,
+                                                      ymin=min(Nt,LCL,median,UCL),
+                                                      ymax=max(Nt,LCL,median,UCL)), 
+                                          color="black", fill="grey",size=0.1)  + 
+  geom_rect(mapping=aes(xmin=18000, 
                                                        xmax=25000,
                                                        ymin=min(Nt,LCL,median,UCL),
                                                        ymax=max(Nt,LCL,median,UCL)), 
@@ -249,4 +284,3 @@ groblist[[7]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=18000,
 
 plot_to_write <- arrangeGrob(grobs=groblist, ncol=2)
 ggsave("facetwrap_diff_log_x_cubSFS_1mill.pdf",plot_to_write,width=8.7,height=17.8,units="cm")
-
