@@ -54,8 +54,11 @@ names(penguin_colours) <- c("Fiordland crested",
 
 # Reading in the order from the cubSFS analysis so we can order these plots the same way
 data_summary <- read_csv("CubSFS_pop_expansion_median_summary.csv")
-data <- data %>% arrange(factor(Taxa_common_name, levels = data_summary$Species))
-penguin_colours <- penguin_colours[order(factor(names(penguin_colours), levels=as.character(data_summary$Species)))]
+
+
+# Getting the order that Tess wants for the manuscript 
+data <- data %>% arrange(factor(Taxa_common_name, levels = c("Macaroni and Royal","Eastern rockhopper","Adélie","Gentoo","Chinstrap","King","Emperor","Northern rockhopper","Western rockhopper","Fiordland crested")))
+penguin_colours <- penguin_colours[order(factor(names(penguin_colours), levels=c("Macaroni and Royal","Eastern rockhopper","Adélie","Gentoo","Chinstrap","King","Emperor","Northern rockhopper","Western rockhopper","Fiordland crested")))]
 
 # 4. Plot data by location
 ggplot(data,aes(x=factor(Location_code,levels=unique(as.character(data$Location_code))),y=Delta_theta)) + 
@@ -86,7 +89,7 @@ ggplot(data,aes(x=factor(Taxa_common_name,levels=names(penguin_colours)),y=Delta
   theme_bw(base_size = 8) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 10))
 
-ggsave("SNAPP_by_species.pdf",height=8.7,width=17.8,units="cm")
+ggsave("SNAPP_by_species_FigS9.pdf",height=8.7,width=17.8,units="cm")
 
 #6. Plot delta theta values by species and by age of node they represent the delta theta over
 # (young nodes may not be showing the overall trends that have occured since the LGM)
@@ -140,8 +143,10 @@ ggsave("SNAPP_node_age_by_species_same_axes.pdf",width=8.7,height=17.8,units="cm
 data <- data %>% mutate(Age_in_thous=Age_years/1000)
 groblist <- list()
 
-for (i in 1:length(unique(data$Taxa_common_name))) {
-  temp <- data %>% filter(Taxa_common_name==(unique(data$Taxa_common_name))[i])
+species_order <- c("Macaroni and Royal","Eastern rockhopper","Adélie","Gentoo","Chinstrap","King","Emperor","Northern rockhopper","Western rockhopper","Fiordland crested", "Snares crested")
+
+for (i in 1:length(species_order)) {
+  temp <- data %>% filter(Taxa_common_name==species_order[i])
   groblist[[i]] <- ggplot(temp)  + geom_rect(mapping=aes(xmin=18, 
                                                           xmax=25,
                                                           ymin=min(Delta_theta)-(max(Delta_theta)-min(Delta_theta))/10,
@@ -164,7 +169,7 @@ for (i in 1:length(unique(data$Taxa_common_name))) {
 
 plot_to_write <- arrangeGrob(grobs=groblist, ncol=2)
 
-ggsave("SNAPP_node_age_by_species_diff_axes.pdf",plot_to_write,width=8.7,height=17.8,units="cm")
+ggsave("SNAPP_node_age_by_species_diff_axes_Figs10.pdf",plot_to_write,width=8.7,height=17.8,units="cm")
 
 sessionInfo()
 #R version 3.5.1 (2018-07-02)
