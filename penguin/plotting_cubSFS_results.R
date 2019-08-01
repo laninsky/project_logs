@@ -22,6 +22,38 @@ data$Species <- gsub("Filholi","Eastern rockhopper",data$Species)
 data$Species <- gsub("Chrysocome","Western rockhopper",data$Species)
 data$Species <- gsub("Moseleyi","Northern rockhopper",data$Species)
 
+# Creating a column so we can facet wrap on whether species are expected to be expanding or not
+data <- data %>% mutate(expanding=ifelse((Species %in% c("Fiordland crested","Western rockhopper","Northern rockhopper")),"Temperate","Ice associated"))
+
+#Creating a vector tying species name to colour so we can manipulate the order
+#Using the results from data_summary, rather than manually
+penguin_colours <- c("#4FA253",
+                     "#BE00FF",
+                     "#a67101",
+                     "#B73331",
+                     "#3E42C1",
+                     "#f97509",
+                     "#8d8d8d",
+                     "#f656a6",
+                     "#03BAFF",
+                     "#e8e8e8")
+
+names(penguin_colours) <- c("Fiordland crested",
+                            "Western rockhopper",
+                            "Chinstrap",
+                            "Macaroni and Royal",
+                            "Eastern rockhopper",
+                            "Gentoo",
+                            "Adélie",
+                            "Emperor",
+                            "Northern rockhopper",
+                            "King")
+
+# Reordering our variables based on data_summary
+penguin_colours <- penguin_colours[order(factor(names(penguin_colours), levels=c("Macaroni and Royal","Eastern rockhopper","Adélie","Gentoo","Chinstrap","King","Emperor","Northern rockhopper","Western rockhopper","Fiordland crested")))]
+data$Species <- factor(data$Species, levels = c("Macaroni and Royal","Eastern rockhopper","Adélie","Gentoo","Chinstrap","King","Emperor","Northern rockhopper","Western rockhopper","Fiordland crested"))
+
+
 # Plotting all CIs on one graph with a logged y axis
 ggplot(data) + geom_rect(mapping=aes(xmin=18000, 
                                      xmax=25000,
@@ -29,33 +61,14 @@ ggplot(data) + geom_rect(mapping=aes(xmin=18000,
                                      ymax=max(Nt,LCL,median,UCL)), 
                          color="black", fill="grey",size=0.1) +
   geom_ribbon(aes(x=time,ymin=LCL,ymax=UCL,
-                  fill=factor(Species,levels=c("Fiordland crested",
-                                               "Western rockhopper",
-                                               "Chinstrap",
-                                               "Macaroni and Royal",
-                                               "Eastern rockhopper",
-                                               "Gentoo",
-                                               "Adélie",
-                                               "Emperor",
-                                               "Northern rockhopper",
-                                               "King")
-                                               )),alpha=0.6,color="black",size=0.1) +
-  scale_fill_manual(name="Species",values=c("#4FA253",
-                                            "#BE00FF",
-                                            "#a67101",
-                                            "#B73331",
-                                            "#3E42C1",
-                                            "#f97509",
-                                            "#8d8d8d",
-                                            "#f656a6",
-                                            "#03BAFF",
-                                            "#e8e8e8")) +
+                  fill=Species),alpha=0.6,color="black",size=0.1) +
+  scale_fill_manual(name="Species",values=penguin_colours) +
   theme_bw(base_size = 4) + scale_y_log10(expand=c(0,0)) + ylab("Effective population size") + xlab ("Time (years)") +
   theme(axis.title=element_text(face="bold"), legend.title = element_text(face="bold")) + theme(aspect.ratio = 1) + 
-  theme(legend.key.size = unit(0.5,"line")) + scale_x_reverse(expand=c(0,0))
+  theme(legend.key.size = unit(0.5,"line")) + scale_x_reverse(expand=c(0,0)) + facet_wrap(~expanding)
 
 # Saving this graph
-ggsave("combined_cubSFS.pdf",height=8.7,width=8.7,units="cm")
+ggsave("combined_cubSFS_figS6.pdf",height=8.7,width=8.7,units="cm")
 
 # Getting some summary statistics from our data based on median values
 data_summary <- data %>% group_by(Species) %>% summarise(`N at time 0`=median[time==0],`N at time 1000`=median[time==1000],`Is population expanding?`=ifelse(`N at time 0`>`N at time 1000`,"Yes","No"),`N at start of expansion`=ifelse(`Is population expanding?`=="Yes",min(median),NA),`Fold expansion`=ifelse(`Is population expanding?`=="Yes",`N at time 0`/`N at start of expansion`,NA),`Time at start of expansion`=ifelse(`Is population expanding?`=="Yes",time[median==`N at start of expansion`],NA)) %>% arrange(desc(`Time at start of expansion`),`N at time 0`)
@@ -68,30 +81,6 @@ data_summary_observed <- data %>% group_by(Species) %>% summarise(`N at time 0`=
 
 # Saving this data
 write.csv(data_summary_observed,"CubSFS_pop_expansion_observed_summary.csv",quote=FALSE,row.names = FALSE)
-
-#Creating a vector tying species name to colour so we can manipulate the order
-#Using the results from data_summary, rather than manually
-penguin_colours <- c("#4FA253",
-                    "#BE00FF",
-                    "#a67101",
-                    "#B73331",
-                    "#3E42C1",
-                    "#f97509",
-                    "#8d8d8d",
-                    "#f656a6",
-                    "#03BAFF",
-                    "#e8e8e8")
-
-names(penguin_colours) <- c("Fiordland crested",
-                                             "Western rockhopper",
-                                             "Chinstrap",
-                                             "Macaroni and Royal",
-                                             "Eastern rockhopper",
-                                             "Gentoo",
-                                             "Adélie",
-                                             "Emperor",
-                                             "Northern rockhopper",
-                                             "King")
 
 # Determining what the cut-off on the y-axis should be based on the maximum minimum in the non expanding species
 ymximum <- as.numeric(data %>% filter(Species %in% (data_summary$Species[data_summary$`Is population expanding?`=="No"])) %>% 
