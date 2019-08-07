@@ -9,18 +9,24 @@ The first approach involved PEAR for merging reads, OBiTools for demultiplexing,
 ##### Installation/modules required
 ```
 module load VSEARCH/2.4.3-gimkl-2017a #instead of USEARCH
-# After signing up online at https://www.h-its.org/downloads/pear-academic/
-# downloaded pear files to local computer and then uploaded them to NeSI via scp
+```
+After signing up online at https://www.h-its.org/downloads/pear-academic/ downloaded pear files to local computer and then uploaded them to NeSI via scp
+```
 tar -zvxf pear-0.9.11-linux-x86_64.tar.gz
 export PATH=/nesi/nobackup/uoo02423/bin/pear/pear-0.9.11-linux-x86_64/bin:$PATH # path to pear
-# followed instructions at https://pythonhosted.org/OBITools/welcome.html#installing-the-obitools for installing OBITools
+```
+Then followed instructions at https://pythonhosted.org/OBITools/welcome.html#installing-the-obitools for installing OBITools
+```
 module load GCCcore/7.4.0 # OBITools dependency
 wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh # obtained miniconda installer
 bash Miniconda2-latest-Linux-x86_64.sh # installed miniconda2
 vi /home/alana.alexander/.bashrc # deleted the bit it added to my bashrc file (so it doesn't conflict with other projects)
 export PATH="/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH" # allowing it to find the minconda2 python
-# going to try installing OBITools without the Python-dev package install, as it is proving problematic to find (so will have to do it manually if it needs it)
+```
+I installed OBITools without explicitly checking for the Python-dev package install, as it is proving problematic to find (so will have to do it manually if it turns out it needs it)
+```
 wget https://pythonhosted.org/OBITools/_downloads/get-obitools.py # obtaining the OBITools installation script
+python get-obitools.py
 ```
 
 #### Submission script
@@ -29,4 +35,7 @@ module load VSEARCH/2.4.3-gimkl-2017a
 export PATH=/nesi/nobackup/uoo02423/bin/pear/pear-0.9.11-linux-x86_64/bin:$PATH
 module load GCCcore/7.4.0
 export PATH="/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH"
+
+# To activate OBITools environment
+/nesi/nobackup/uoo02423/bin/obitools
 ```
