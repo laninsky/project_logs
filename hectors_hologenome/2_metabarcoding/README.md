@@ -1,12 +1,12 @@
-### 2. Metabarcoding
+## 2. Metabarcoding
 This sub-sub-repository contains analyses relating to the metabarcoding component of:
 “Hologenomics for conservation: a first test of utility.”  
 We experimented with a few different approaches for analysing our datasets.
 
-#### Pear/OBITools/VSEARCH/BLAST
+### Pear/OBITools/VSEARCH/BLAST
 The first approach involved PEAR for merging reads, OBiTools for demultiplexing, USEARCH for cleaning the data and clustering, and a homemade BLAST script to get taxonomic data. I'm subbing in VSEARCH instead of USEARCH. I did this on NeSI.
 
-##### Installation/modules required
+#### Installation/modules required
 ```
 module load VSEARCH/2.4.3-gimkl-2017a #instead of USEARCH
 ```
