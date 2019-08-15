@@ -40,7 +40,8 @@ https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_3:_demult
 module load VSEARCH/2.4.3-gimkl-2017a
 export PATH=/nesi/nobackup/uoo02423/bin/pear/pear-0.9.11-linux-x86_64/bin:$PATH
 module load GCCcore/7.4.0
-export PATH="/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH"
+export PATH=/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH
+export PYTHONPATH=/nesi/nobackup/uoo02423/bin/OBITools-1.2.13/lib/python2.7:$PYTHONPATH
 
 # To activate OBITools environment
 /nesi/nobackup/uoo02423/bin/obitools
