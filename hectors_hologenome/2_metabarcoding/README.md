@@ -29,6 +29,9 @@ wget https://pythonhosted.org/OBITools/_downloads/get-obitools.py # obtaining th
 python get-obitools.py
 ```
 
+Gert-Jan demultiplexed and merged my reads via PEAR for me with the following code.
+
+
 #### Submission script
 ```
 module load VSEARCH/2.4.3-gimkl-2017a
