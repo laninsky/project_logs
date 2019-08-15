@@ -82,7 +82,8 @@ I will eventually need to come up with some kind of rule of thumb for this cut-o
 usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
 ```
 denoise = 100% (rather than trying to cluster into OTU at lower % threshold)
-Qiime = ASV (actual sequence variance)
+Qiime = ASV (actual/amplicon sequence variance)
+However ZOTU (zero-radius operational taxonomic unit) was used as a term first.
 
 
 
