@@ -48,7 +48,7 @@ Discarding all sequences larger than 393 bp (10 bp larger than our expected cont
 #SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA 
 #SBATCH -N 1
 
-module load VSEARCH/2.4.3-gimkl-2017a
+module load USEARCH/9.2.64-i86linux32
 export PATH=/nesi/nobackup/uoo02423/bin/pear/pear-0.9.11-linux-x86_64/bin:$PATH
 module load GCCcore/7.4.0
 export PATH=/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH
@@ -58,4 +58,26 @@ srun obigrep -L 393 Alana_assigned_combined.fastq > Alana_assigned_combined_L393
 
 ```
 srun obiannotate -k sample Alana_assigned_combined_L393.fastq > Alana_assigned_combined_L393_annotated.fastq
+```
+```
+obisplit -t sample Alana_assigned_combined_L393_annotated.fastq
+```
+```
+mkdir QC
+mv *.fastq QC
+mv QC/Alana* ./
+```
+use 10 threads for USEARCH
+do these steps inside the QC folder
+```
+for fq in *.fastq; do usearch -fastq_filter $fq -fastq_maxee 1 -fastq_minlen 100 -fastq_maxns 0 -relabel $fq. -fastaout $fq.fasta -fastqout $fq.fastq; done
+```
+```
+cat *.fastq.fastq > pooled.fastq
+cat *.fasta > pooled.fasta
+tr ‘[:lower:]’ ‘[:upper:]’ < pooled.fasta > pooled_upper.fasta
+```
+I will eventually need to come up with some kind of rule of thumb for this cut-off
+```
+usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
 ```
