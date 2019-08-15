@@ -35,11 +35,23 @@ Gert-Jan demultiplexed and merged my reads via PEAR for me with the following co
 https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_3:_demultiplexing  
 
 
-#### Submission script
+#### Submission script for obigrep step
+Discarding all sequences larger than 393 bp (10 bp larger than our expected contig size)
 ```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J obigrep
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA 
+#SBATCH -N 1
+
 module load VSEARCH/2.4.3-gimkl-2017a
 export PATH=/nesi/nobackup/uoo02423/bin/pear/pear-0.9.11-linux-x86_64/bin:$PATH
 module load GCCcore/7.4.0
 export PATH=/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH
 
+srun obigrep -L 393 Alana_assigned_combined.fastq > Alana_assigned_combined_L393.fastq
 ```
