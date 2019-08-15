@@ -3,6 +3,8 @@ This sub-sub-repository contains analyses relating to the metabarcoding componen
 “Hologenomics for conservation: a first test of utility.”  
 We experimented with a few different approaches for analysing our datasets.
 
+Following guide at: https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html
+
 ### Pear/OBITools/VSEARCH/BLAST
 The first approach involved PEAR for merging reads, OBiTools for demultiplexing, USEARCH for cleaning the data and clustering, and a homemade BLAST script to get taxonomic data. I'm subbing in VSEARCH instead of USEARCH. I did this on NeSI.
 
