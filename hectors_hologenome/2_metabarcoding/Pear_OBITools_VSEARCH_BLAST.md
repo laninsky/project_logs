@@ -36,7 +36,7 @@ https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_3:_demult
 
 
 #### Submission script for obigrep step
-Discarding all sequences larger than 393 bp (10 bp larger than our expected contig size)
+Discarding all sequences larger than 393 bp (10 bp larger than our expected contig size). This step took about 40 minutes, and doesn't appear to be able to be multithreaded.
 ```
 #!/bin/bash -e 
 #SBATCH -A uoo02423
