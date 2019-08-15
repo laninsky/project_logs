@@ -31,8 +31,7 @@ wget https://pythonhosted.org/OBITools/_downloads/get-obitools.py # obtaining th
 python get-obitools.py
 ```
 
-Gert-Jan demultiplexed and merged my reads via PEAR for me with the following code.
-
+Gert-Jan demultiplexed and merged my reads via PEAR for me with the following code https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_2:_assembling_paired_reads
 
 #### Submission script
 ```
