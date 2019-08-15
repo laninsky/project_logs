@@ -55,3 +55,7 @@ export PATH=/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH
 
 srun obigrep -L 393 Alana_assigned_combined.fastq > Alana_assigned_combined_L393.fastq
 ```
+
+```
+srun obiannotate -k sample Alana_assigned_combined_L393.fastq > Alana_assigned_combined_L393_annotated.fastq
+```
