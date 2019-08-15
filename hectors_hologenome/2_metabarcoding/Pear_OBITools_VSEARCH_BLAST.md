@@ -23,12 +23,12 @@ module load GCCcore/7.4.0 # OBITools dependency
 wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh # obtained miniconda installer
 bash Miniconda2-latest-Linux-x86_64.sh # installed miniconda2
 vi /home/alana.alexander/.bashrc # deleted the bit it added to my bashrc file (so it doesn't conflict with other projects)
-export PATH="/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH" # allowing it to find the minconda2 python
+export PATH=/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH # allowing it to find the minconda2 python
 ```
-I installed OBITools without explicitly checking for the Python-dev package install, as it is proving problematic to find (so will have to do it manually if it turns out it needs it)
+Install obitools using the conda channel because the python get-obitools recommended on the webpage will not work on NeSI.
+
 ```
-wget https://pythonhosted.org/OBITools/_downloads/get-obitools.py # obtaining the OBITools installation script
-python get-obitools.py
+conda install -c bioconda obitools
 ```
 
 Gert-Jan demultiplexed and merged my reads via PEAR for me with the following code https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_2:_assembling_paired_reads  
@@ -41,8 +41,5 @@ module load VSEARCH/2.4.3-gimkl-2017a
 export PATH=/nesi/nobackup/uoo02423/bin/pear/pear-0.9.11-linux-x86_64/bin:$PATH
 module load GCCcore/7.4.0
 export PATH=/nesi/nobackup/uoo02423/bin/miniconda2/bin:$PATH
-export PYTHONPATH=/nesi/nobackup/uoo02423/bin/OBITools-1.2.13/lib/python2.7:$PYTHONPATH
 
-# To activate OBITools environment
-/nesi/nobackup/uoo02423/bin/obitools
 ```
