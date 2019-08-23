@@ -68,7 +68,7 @@ mv QC/Alana* ./
 cd QC
 ```
 
-#### [Chapter 4: Quality filtering](https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_4:_quality_filtering) with USEARCH
+#### [Chapter 4: Quality filtering](https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_4:_quality_filtering) with USEARCH/VSEARCH
 
 Going to get a list of fastq files together so that can run the next steps as an array
 ```
@@ -102,11 +102,12 @@ cat *.fasta > pooled.fasta
 tr ‘[:lower:]’ ‘[:upper:]’ < pooled.fasta > pooled_upper.fasta
 ```
 
-For the next step I used a cut-off of 10, but I would like to revisit it just jettisoning singletons to see how that affects results downstream. This step took XX min and used XX RAM.
+For the next step I used a cut-off of 10. I could not use USEARCH for this step because I hit the maximum memory threshold. I used VSEARCH instead. I would like to experiment with how a singleton cutoff would potentially affect results and potentially will eventually need to come up with some kind of rule of thumb for this cut-off based on depth distribution. Took less than a minute and didn't come close to touching even a GB of RAM.
+
 ```
 #!/bin/bash -e 
 #SBATCH -A uoo02423
-#SBATCH -J usearch
+#SBATCH -J vsearch
 #SBATCH -n 1
 #SBATCH -c 10 
 #SBATCH -t 1:00:00
@@ -114,19 +115,40 @@ For the next step I used a cut-off of 10, but I would like to revisit it just je
 #SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/QC 
 #SBATCH -N 1
 
-module load USEARCH/9.2.64-i86linux32
+module load VSEARCH/2.4.3-gimkl-2017a
 
-usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
+# usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
+vsearch --derep_fulllength pooled_upper.fasta --output uniques_10.fasta --relabel Uniq --sizeout --minuniquesize 10 --threads 10
+```
+
+Output ranges from 353 to 393 bp, which is a little concerning because this product is meant to range between 363-383 bp. Off-target sequence? I guess we'll find out...high number of clusters discarded at this threshold too.
+```
+vsearch v2.4.3_linux_x86_64, 125.8GB RAM, 72 cores
+https://github.com/torognes/vsearch
+
+Reading file pooled_upper.fasta 100%
+2459366620 nt in 6609403 seqs, min 353, max 393, avg 372
+Dereplicating 100%
+Sorting 100%
+1845977 unique sequences, avg cluster 3.6, median 1, max 134523
+Writing output file 100%
+44635 uniques written, 1801342 clusters discarded (97.6%)
+```
+
+#### [Chapter 5: Denoising or clustering](https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_5:_denoising_or_clustering) with VSEARCH
+(seeing as we hit the usearch memory limit in the last step, going to stick with vsearch)  
+
+Denoise = cluster at 100% (rather than trying to cluster into OTU at lower % threshold). Qiime referse to these as ASV (actual/amplicon sequence variance), however ZOTU (zero-radius operational taxonomic unit) was used as a term first so GJ recommends sticking with this term.
+
+```
+
 ```
 
 
-I will eventually need to come up with some kind of rule of thumb for this cut-off
 ```
-usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
+
 ```
-denoise = 100% (rather than trying to cluster into OTU at lower % threshold)
-Qiime = ASV (actual/amplicon sequence variance)
-However ZOTU (zero-radius operational taxonomic unit) was used as a term first.
+
 
 
 
