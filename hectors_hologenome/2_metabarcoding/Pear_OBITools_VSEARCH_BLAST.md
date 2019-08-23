@@ -131,7 +131,6 @@ Writing output file 100%
 (seeing as we hit the usearch memory limit in the last step, going to stick with vsearch)  
 
 Denoise = cluster at 100% (rather than trying to cluster into OTU at lower % threshold). Qiime referse to these as ASV (actual/amplicon sequence variance), however ZOTU (zero-radius operational taxonomic unit) was used as a term first so GJ recommends sticking with this term. In this first step, sorting our remaining sequences by depth (size). Took 1s, and < 1GB of RAM.
-
 ```
 #!/bin/bash -e 
 #SBATCH -A uoo02423
@@ -159,6 +158,20 @@ Median abundance: 19
 Writing output 100%
 ```
 
+Next step is to denoise the dataset. Switching back to usearch (and crossing my fingers) on this one because I'm not entirely sure what the commands should be in vsearch.
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J usearch
+#SBATCH -n 1
+#SBATCH -c 10 
+#SBATCH -t 1:00:00
+#SBATCH --mem=30G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/QC 
+#SBATCH -N 1
 
+module load USEARCH/9.2.64-i86linux32
+usearch -unoise3 uniques_10_sorted.fasta -zotus zotus_10.fasta -tabbedout unoise3_10.txt
+```
 
 
