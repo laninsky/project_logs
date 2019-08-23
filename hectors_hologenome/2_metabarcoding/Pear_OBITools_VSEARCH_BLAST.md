@@ -158,7 +158,7 @@ Median abundance: 19
 Writing output 100%
 ```
 
-Next step is to denoise the dataset. Switching back to usearch (and crossing my fingers) on this one because I'm not entirely sure what the commands should be in vsearch.
+Next step is to denoise the dataset. Switching back to usearch (and crossing my fingers) on this one because I'm not entirely sure what the commands should be in vsearch. Took 20s and used 75MB of RAM.
 ```
 #!/bin/bash -e 
 #SBATCH -A uoo02423
@@ -173,5 +173,16 @@ Next step is to denoise the dataset. Switching back to usearch (and crossing my 
 module load USEARCH/11.0.667-i86linux32
 usearch -unoise3 uniques_10_sorted.fasta -zotus zotus_10.fasta -tabbedout unoise3_10.txt
 ```
+output:
+```
+00:00 59Mb    100.0% Reading uniques_10_sorted.fasta
+00:00 31Mb      0.0% 0 amplicons, 0 bad (size >= 134523)
+WARNING: Shifted sequences detected
 
+00:03 87Mb    100.0% 4748 amplicons, 1390066 bad (size >= 10)
+01:39 94Mb    100.0% 3604 good, 1144 chimeras                
+01:39 94Mb    100.0% Writing zotus 
+```
+
+Bevo
 
