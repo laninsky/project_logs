@@ -102,8 +102,22 @@ cat *.fasta > pooled.fasta
 tr ‘[:lower:]’ ‘[:upper:]’ < pooled.fasta > pooled_upper.fasta
 ```
 
-For the next step I used a cut-off of 10, but I would like to revisit it just jettisoning singletons to see how that affects results downstream.
+For the next step I used a cut-off of 10, but I would like to revisit it just jettisoning singletons to see how that affects results downstream. This step took XX min and used XX RAM.
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J usearch
+#SBATCH -n 1
+#SBATCH -c 10 
+#SBATCH -t 1:00:00
+#SBATCH --mem=30G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/QC 
+#SBATCH -N 1
 
+module load USEARCH/9.2.64-i86linux32
+
+usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
+```
 
 
 I will eventually need to come up with some kind of rule of thumb for this cut-off
