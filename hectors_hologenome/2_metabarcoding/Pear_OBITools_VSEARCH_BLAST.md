@@ -3,7 +3,7 @@ The first approach involved PEAR for merging reads, OBiTools for demultiplexing,
 
 #### Installation/modules required
 ```
-module load USEARCH/9.2.64-i86linux32
+module load USEARCH/11.0.667-i86linux32
 ```
 After signing up online at https://www.h-its.org/downloads/pear-academic/ downloaded pear files to local computer and then uploaded them to NeSI via scp
 ```
@@ -81,7 +81,7 @@ sbatch script for USEARCH steps. This was super quick (e.g. < 1 min), and had ve
 #SBATCH -N 1
 #SBATCH --array=1-42
 
-module load USEARCH/9.2.64-i86linux32
+module load USEARCH/11.0.667-i86linux32
 
 fq=`head -n ${SLURM_ARRAY_TASK_ID}  filelist.txt | tail -n 1`
 
@@ -170,7 +170,7 @@ Next step is to denoise the dataset. Switching back to usearch (and crossing my 
 #SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/QC 
 #SBATCH -N 1
 
-module load USEARCH/9.2.64-i86linux32
+module load USEARCH/11.0.667-i86linux32
 usearch -unoise3 uniques_10_sorted.fasta -zotus zotus_10.fasta -tabbedout unoise3_10.txt
 ```
 
