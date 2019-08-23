@@ -75,7 +75,7 @@ Going to get a list of fastq files together so that can run the next steps as an
 ls *.fastq > filelist.txt
 ```
 
-sbatch script for USEARCH steps
+sbatch script for USEARCH steps. This was super quick (e.g. < 1 min), and had very low memory overheads (e.g. 30GB was definitely overkill).
 ```
 #!/bin/bash -e 
 #SBATCH -A uoo02423
@@ -94,13 +94,18 @@ fq=`head -n ${SLURM_ARRAY_TASK_ID}  filelist.txt | tail -n 1`
 
 usearch -fastq_filter $fq -fastq_maxee 1 -fastq_minlen 353 -fastq_maxns 0 -relabel $fq. -fastaout $fq.fasta -fastqout $fq.fastq
 ```
-
+Samples had ~93-95% reads pass filter. Following this step pooled sequences together
 
 ```
 cat *.fastq.fastq > pooled.fastq
 cat *.fasta > pooled.fasta
 tr ‘[:lower:]’ ‘[:upper:]’ < pooled.fasta > pooled_upper.fasta
 ```
+
+For the next step I used a cut-off of 10, but I would like to revisit it just jettisoning singletons to see how that affects results downstream.
+
+
+
 I will eventually need to come up with some kind of rule of thumb for this cut-off
 ```
 usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
