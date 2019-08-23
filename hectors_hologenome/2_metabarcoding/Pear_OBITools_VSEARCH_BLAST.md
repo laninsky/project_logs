@@ -1,5 +1,5 @@
 ### Pear/OBITools/VSEARCH/BLAST
-The first approach involved PEAR for merging reads, OBiTools for demultiplexing, USEARCH for cleaning the data and clustering, and a homemade BLAST script to get taxonomic data. I'm subbing in VSEARCH instead of USEARCH. I did this on NeSI.
+The first approach involved PEAR for merging reads, OBiTools for demultiplexing, USEARCH for cleaning the data and clustering, and a homemade BLAST script to get taxonomic data. I'm subbing in VSEARCH instead of USEARCH for a few of the steps. I did this on NeSI following the guidelines at: https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html
 
 #### Installation/modules required
 ```
