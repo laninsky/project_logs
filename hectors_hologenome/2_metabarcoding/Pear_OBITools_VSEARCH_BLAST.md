@@ -184,5 +184,22 @@ WARNING: Shifted sequences detected
 01:39 94Mb    100.0% Writing zotus 
 ```
 
-Bevo
+Before we run the next step to generate the ZOTU table, we need to remove any hyphens from our sample names:
+```
+sed 's/-/_/g' pooled_upper.fasta > pooled_upper_changed.fasta
+```
+Then:
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J usearch
+#SBATCH -n 1
+#SBATCH -c 10 
+#SBATCH -t 1:00:00
+#SBATCH --mem=30G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/QC 
+#SBATCH -N 1
 
+module load USEARCH/11.0.667-i86linux32
+usearch -otutab pooled_upper_changed.fasta -zotus zotus_10.fasta -otutabout zotutab_10_changed.txt
+```
