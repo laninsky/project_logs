@@ -120,7 +120,6 @@ module load VSEARCH/2.4.3-gimkl-2017a
 # usearch -fastx_uniques pooled_upper.fasta -fastaout uniques_10.fasta -relabel Uniq -sizeout -minuniquesize 10
 vsearch --derep_fulllength pooled_upper.fasta --output uniques_10.fasta --relabel Uniq --sizeout --minuniquesize 10 --threads 10
 ```
-
 Output ranges from 353 to 393 bp, which is a little concerning because this product is meant to range between 363-383 bp. Off-target sequence? I guess we'll find out...high number of clusters discarded at this threshold too.
 ```
 vsearch v2.4.3_linux_x86_64, 125.8GB RAM, 72 cores
@@ -138,15 +137,33 @@ Writing output file 100%
 #### [Chapter 5: Denoising or clustering](https://otagomohio.github.io/workshops/eDNA_Metabarcoding.html#chapter_5:_denoising_or_clustering) with VSEARCH
 (seeing as we hit the usearch memory limit in the last step, going to stick with vsearch)  
 
-Denoise = cluster at 100% (rather than trying to cluster into OTU at lower % threshold). Qiime referse to these as ASV (actual/amplicon sequence variance), however ZOTU (zero-radius operational taxonomic unit) was used as a term first so GJ recommends sticking with this term.
+Denoise = cluster at 100% (rather than trying to cluster into OTU at lower % threshold). Qiime referse to these as ASV (actual/amplicon sequence variance), however ZOTU (zero-radius operational taxonomic unit) was used as a term first so GJ recommends sticking with this term. In this first step, sorting our remaining sequences by depth (size). Took 1s, and < 1GB of RAM.
 
 ```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J vsearch
+#SBATCH -n 1
+#SBATCH -c 10 
+#SBATCH -t 1:00:00
+#SBATCH --mem=30G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/QC 
+#SBATCH -N 1
 
+module load VSEARCH/2.4.3-gimkl-2017a
+vsearch --sortbysize uniques_10.fasta --output uniques_10_sorted.fasta --threads 10
 ```
-
-
+output:
 ```
+vsearch v2.4.3_linux_x86_64, 125.8GB RAM, 72 cores
+https://github.com/torognes/vsearch
 
+Reading file uniques_10.fasta 100%
+16609178 nt in 44635 seqs, min 353, max 393, avg 372
+Getting sizes 100%
+Sorting 100%
+Median abundance: 19
+Writing output 100%
 ```
 
 
