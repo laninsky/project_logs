@@ -214,6 +214,18 @@ qiime taxa barplot \
 
 Phylogeny estimation
 ```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
+
+module load QIIME2/2019.7 
+
 qiime phylogeny align-to-tree-mafft-fasttree \
   --i-sequences combined_rep_seqs.qza \
   --o-alignment combined_rep_seqs_aligned.qza \
@@ -222,7 +234,27 @@ qiime phylogeny align-to-tree-mafft-fasttree \
   --o-rooted-tree combined_rep_rooted_tree.qza
 ```
 
+diversity analysis (sampling depth of 1000 did not work)
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
 
+module load QIIME2/2019.7
+
+qiime diversity core-metrics-phylogenetic \
+  --i-phylogeny combined_rep_rooted_tree.qza \
+  --i-table combined_denoise_out_table.qza \
+  --p-sampling-depth 200 \
+  --m-metadata-file sample-metadata.tsv \
+  --output-dir combined_core
+```
 
 For visualization of Qiime2 results, can drag and drop \*.vz files to:  
 https://view.qiime2.org/  
