@@ -62,19 +62,21 @@ qiime dada2 denoise-single \
   --o-denoising-stats run_2_denoise.qza
 ```
 
-
+Post denoising visualisation. This part works as part of a slurm script
 ```
 qiime metadata tabulate \
   --m-input-file run_2_denoise.qza \
   --o-visualization run_2_denoise.qzv
-
+```
+These steps do not work as part of a slurm script - have to execute in interactive mode
+```
 qiime feature-table summarize \
   --i-table run_2_denoise_out.qza \
   --o-visualization run_2_denoise_out.qzv \
   --m-sample-metadata-file sample-metadata.tsv
 
 qiime feature-table tabulate-seqs \
-  --i-data run_2_rep_seq.qza \
+  --i-data run_2_rep_seqs.qza \
   --o-visualization run_2_rep_seq.qzv
 ```
 
