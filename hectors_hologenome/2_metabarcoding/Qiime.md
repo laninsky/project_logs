@@ -80,6 +80,26 @@ qiime feature-table tabulate-seqs \
   --o-visualization run_2_rep_seq.qzv
 ```
 
+Using Naive Bayes (machine learning) to classify
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
+
+module load QIIME2/2019.7 
+
+qiime feature-classifier classify-sklearn \
+  --i-classifier references/gg-13-8-99-515-806-nb-classifier.qza \
+  --i-reads run_2_rep_seqs.qza \
+  --o-classification run_2_taxonomy.qza
+```
+
 
 
 For visualization of Qiime2 results, can drag and drop \*.vz files to:  
