@@ -580,7 +580,7 @@ NZCETA_archive$Other_info[which(NZCETA_archive$scrubbed_uoa_code=="CHEBP53")] <-
 NZCETA_archive <- NZCETA_archive %>% mutate(reconciliation_notes=ifelse(scrubbed_uoa_code=="CHEBP53","Other_info originally associated with CheBP12, changed based on DOC_Massey",reconciliation_notes))
 NZCETA_archive$Other_info[which(NZCETA_archive$scrubbed_uoa_code=="CHEBP12")] <- NZCETA_archive$Other_info[which(NZCETA_archive$scrubbed_uoa_code=="CHE99NZ01")] 
 NZCETA_archive <- NZCETA_archive %>% mutate(reconciliation_notes=ifelse(scrubbed_uoa_code=="CHEBP12","Other_info originally associated with CHE99NZ01, changed based on DOC_Massey",reconciliation_notes))
-NZCETA_archive <- NZCETA_archive %>% mutate(reconciliation_notes=ifelse(scrubbed_uoa_code=="CHE99NZ01","CETOS 8737, monz2002 also associated with CHEBP12",reconciliation_notes))
+NZCETA_archive <- NZCETA_archive %>% mutate(reconciliation_notes=ifelse(scrubbed_uoa_code=="CHE99NZ01","Other_info: CETOS 8737, monz2002 also associated with CHEBP12",reconciliation_notes))
 
 # Phew. OK. Only 20 more to go (because there are eight in the DOC_Massey database not 
 # present in the NZCETA, and 28 total rows extra) 
@@ -1102,7 +1102,7 @@ NZCETA_DOC_joined %>% filter(Common_name!=Common_Name) %>% select(Code,UoA_Code,
 # Looks like the NZCETA sheet is in error for this, so we'll take "Common_Name" from the DOC_Massey file as the correct version
 # and add a note to reconciliation_notes about this. At the same time we might as well change the common names too.
 NZCETA_DOC_joined <- NZCETA_DOC_joined %>% 
-  mutate(reconciliation_notes=ifelse(Common_name!=Common_Name,ifelse(reconciliation_notes=="NA","common and species names modfied based on DOC_Massey",paste(reconciliation_notes,"common and species names modfied based on DOC_Massey",sep=";")),reconciliation_notes)) %>% 
+  mutate(reconciliation_notes=ifelse(Common_name!=Common_Name,ifelse(reconciliation_notes=="NA","common and species names modified based on DOC_Massey",paste(reconciliation_notes,"common and species names modified based on DOC_Massey",sep=";")),reconciliation_notes)) %>% 
   mutate(Species_name=ifelse(Common_name!=Common_Name,Species_subspecies,Species_name)) %>% mutate(Common_name=ifelse(Common_name!=Common_Name,Common_Name,Common_name))
 
 # OK, so let's redo some of the calls we did before:
@@ -2069,7 +2069,7 @@ NZCETA_DOC_joined$Location.x[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC00
 as.matrix(NZCETA_DOC_joined[(which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC012")),])
 # Based on Code of "CheWC12/ CheOk01", think Location.x is the correct location.
 NZCETA_DOC_joined$Location.y[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC012")] <- NZCETA_DOC_joined$Location.x[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC012")]
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC012")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC012")],"DOC_Massey had Location as 'Jackson Bay'. Based on Code, Location taken from NZCETA",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC012")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC012")],"DOC_Massey had Location as 'Jackson Bay'. Based on reconciled_alternate_code, Location taken from NZCETA",sep=";")
 
 # Location.y has more information than Location.x/correct capitalization
 NZCETA_DOC_joined$Location.x[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC016")] <- NZCETA_DOC_joined$Location.y[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC016")]
@@ -2441,12 +2441,12 @@ NZCETA_DOC_joined %>% group_by(Location.x) %>% count() %>% filter(n>1) %>% print
 # Fix capitalizaiton on Pegasus Bay (just in case)
 NZCETA_DOC_joined %>% filter(Location.x=="1.3km north of Waimairi Surf club, Pegasus bay") %>% as.matrix()
 NZCETA_DOC_joined$Location.x[which(NZCETA_DOC_joined$Location.x=="1.3km north of Waimairi Surf club, Pegasus bay")] <- "1.3km north of Waimairi Surf club, Pegasus Bay"
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP63")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP63")],"Potentialy same individual as 'CHESIFP_CETOS8846' based on identical Location.x and consistent collection_date_mod",sep=";")
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS8846")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS8846")],"Potential duplicate of 'CHEBP63' based on identical Location.x and consistent collection_date_mod",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP63")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP63")],"Likely duplicate of 'CHESIFP_CETOS8846' based on identical Location.x and consistent collection_date_mod. This (CHEBP63) should be considered the 'sample of reference' because it has a unique sample code",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS8846")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS8846")],"Likely duplicate of 'CHEBP63' based on identical Location.x and consistent collection_date_mod. Only use if additional/duplicate tissue needed",sep=";")
 
 # Another potential set of duplicate samples
 NZCETA_DOC_joined %>% filter(Location.x=="100m Sth of Brighton Surf Club, Pegasus Bay") %>% as.matrix()
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP64")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP64")],"Likely same individual as 'CHESIFP_CETOS96103' based on identical Location.x and identical collection_date_mod. This (CHEBP64) should be considered 'sample of reference' as more information available",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP64")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEBP64")],"Likely duplicate of 'CHESIFP_CETOS96103' based on identical Location.x and identical collection_date_mod. This (CHEBP64) should be considered 'sample of reference' as more information available",sep=";")
 NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS96103")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS96103")],"Likely duplicate of 'CHEBP64' based on identical Location.x and identical collection_date_mod. Only use if additional/duplicate tissue needed",sep=";")
 
 # No obvious issues with the following pairs/groups of samples to suggest they are likely duplicates
@@ -2482,7 +2482,7 @@ NZCETA_DOC_joined %>% filter(Location.x=="New Brighton Beach, Pegasus Bay") %>% 
 
 # Potential duplicate based on same collection date and Location.x
 NZCETA_DOC_joined %>% filter(Location.x=="Nikan Beach 35km Sth Westport") %>% as.matrix()
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIXX")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIXX")],"Likely same individual as 'CHEWC02-06' based on identical Location.x and identical collection_date_mod. Only use if additional/duplicate tissue needed",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIXX")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIXX")],"Likely duplicate of 'CHEWC02-06' based on identical Location.x and identical collection_date_mod. Only use if additional/duplicate tissue needed",sep=";")
 NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC02-06")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC02-06")],"Likely duplicate of 'CHESIXX' based on identical Location.x and identical collection_date_mod This (CHEWC02-06) should be considered the 'sample of reference', because more information available for it",sep=";")
 
 # No obvious issues with the following pairs/groups of samples to suggest they are likely duplicates
@@ -2490,7 +2490,7 @@ NZCETA_DOC_joined %>% filter(Location.x=="North Side of Rangitata Huts, north of
 
 # Potential duplicate based on same collection date and Location.x
 NZCETA_DOC_joined %>% filter(Location.x=="Opihi River mouth north of Timaru") %>% as.matrix()
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS9699")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS9699")],"Likely same individual as 'CHETI13' based on identical Location.x and identical collection_date_mod. This sample should only be used if additional tissue needed, as other sample has more information.",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS9699")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHESIFP_CETOS9699")],"Likely duplicate of 'CHETI13' based on identical Location.x and identical collection_date_mod. This sample should only be used if additional/duplicate tissue needed, as other sample has more information.",sep=";")
 NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHETI13")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHETI13")],"Likely duplicate of 'CHESIFP_CETOS9699' based on identical Location.x and identical collection_date_mod. This sample (CHETI13) should be considered 'sample of reference' as it has more information available",sep=";")
 
 # Location.x (just because we now have some guff on the standard out so we can be reminded on where we are up to)
@@ -2501,8 +2501,8 @@ NZCETA_DOC_joined %>% group_by(Location.x) %>% count() %>% filter(n>1) %>% print
 # So the U-code attributed to this sample doesn't seem to be correct. Instead it should probably be "U12-006"
 # which is the other sample with the same stranding location/date.
 NZCETA_DOC_joined %>% filter(Location.x=="Opunake, Taranaki") %>% as.matrix()
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="U12-006")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="U12-006")],"Likely same individual as 'CHE12NZ02' based on identical Location.x and identical collection_date_mod",sep=";")
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHE12NZ02")] <- "Likely duplicate of 'U12-006' based on identical Location.x and identical collection_date_mod. Based on this that the U-code given in 'Code' is incorrect, however this sample has more information available than U12-006, so should be taken as the 'sample of reference. Note this is an apparent Hector's sample within Maui rohe"
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="U12-006")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="U12-006")],"Likely duplicate of 'CHE12NZ02' based on identical Location.x and identical collection_date_mod. Only use of additional/duplicate tissue needed",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHE12NZ02")] <- "Likely duplicate of 'U12-006' based on identical Location.x and identical collection_date_mod. Based on this, the U-code given in 'Code' is incorrect, however this sample has more information available than U12-006, so should be taken as the 'sample of reference. Note this is an apparent Hector's sample within Maui rohe"
 
 # No obvious issues with the following pairs/groups of samples to suggest they are likely duplicates
 NZCETA_DOC_joined %>% filter(Location.x=="Quail Island, Lyttelton Harbour") %>% as.matrix()
@@ -2887,8 +2887,8 @@ NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="C" & Genetic_Sex=="M" & broad_loc
 NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="C" & Genetic_Sex=="M" & (collection_date_mod=="1994"|collection_date_mod=="1995")) %>% as.matrix()
 # Potentially the same sample based on matching location and collection-date_mod (and no conflicting information)
 NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="Ca" & Genetic_Sex=="M" & broad_location=="Haast/Jackson Bay") %>% as.matrix()
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHE03NZ07")] <- "Potential duplicate of 'CHEWC03-03' based on sampling location and identical collection_date_mod"
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-03")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-03")],"Potential duplicate of 'CHE03NZ07' based on sampling location and identical collection_date_mod",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHE03NZ07")] <- "Likely duplicate of 'CHEWC03-03' based on sampling location and identical collection_date_mod. This sample (CHE03NZ07) should be considered 'sample of reference' as more information available for it. "
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-03")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-03")],"Potential duplicate of 'CHE03NZ07' based on sampling location and identical collection_date_mod. Use only if additional/duplicate tissue needed",sep=";")
 # Not enough detail to match up to other samples definitively. Sample code is "WB"
 NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="Ca" & is.na(Genetic_Sex) & is.na(broad_location)) %>% as.matrix()
 # Not enough detail to match up to other samples definitively
@@ -2908,7 +2908,7 @@ NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="I" & grepl("1992",collection_date
 NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="J" & Genetic_Sex=="M" & broad_location=="Westport" & grepl("1992",collection_date_mod)) %>% as.matrix()
 # Potentially the same sample based on matching location and collection_date_mod (and no conflicting information)
 NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="Jb" & Genetic_Sex=="F" & broad_location=="Hokitika" & collection_date_mod=="24-Oct-2003") %>% as.matrix()
-NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-02")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-02")] ,"Likely duplicate of 'CHE03NZ06' based on sampling location and identical collection_date_mod. Only use if additional tissue required, as CHE03NZ06 has more information available",sep=";")
+NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-02")] <- paste(NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHEWC03-02")] ,"Likely duplicate of 'CHE03NZ06' based on sampling location and identical collection_date_mod. Only use if additional/duplicate tissue required, as CHE03NZ06 has more information available",sep=";")
 NZCETA_DOC_joined$reconciliation_notes[which(NZCETA_DOC_joined$scrubbed_uoa_code=="CHE03NZ06")] <- "Likely duplicate of 'CHEWC03-02' based on sampling location and identical collection_date_mod. This (CHE03NZ06) should be considered sample of reference as more information available for it."
 # Collected on the same date, but no location information sample for each individual so not going to add anything to the reconciliation notes
 NZCETA_DOC_joined %>% filter(mtDNA_haplotype=="Jb" & Genetic_Sex=="M" & collection_date_mod=="25-Feb-2001") %>% as.matrix()
@@ -2924,9 +2924,10 @@ NZCETA_DOC_joined %>% group_by(MHC_DQA) %>% count() %>% print(n=27)
 # MHC_DQB - as for no_microsatellites
 NZCETA_DOC_joined %>% group_by(MHC_DQB) %>% count() %>% print(n=27)
 
-########################################################################################################################
-#### 6i. QC'ing and correcting the values in the remaining columns (pathology_code                                      ####
-########################################################################################################################
+#############################################################################################################################
+#### 6i. QC'ing and correcting the values in the remaining columns (pathology_code,hologenome_region,collection_date_mod ####
+#### broad_location)                                                                                                     ####
+#############################################################################################################################
 names(NZCETA_DOC_joined)
 
 # pathology_code
@@ -3071,56 +3072,67 @@ NZCETA_DOC_joined %>% filter(collection_date_mod=="Unknown") %>% as.matrix()
 NZCETA_DOC_joined %>% group_by(Location.x,Region,Ocean,broad_location,hologenome_region) %>% count() %>% print(n=230)
 # All look consistent.
 
+######################################################################################################
+#### 7. Adding column to determine whether sample will be kept/jettisoned/needs additional review ####
+#### and then writing out NZCETA_DOC_joined                                                       ####
+######################################################################################################
 
+NZCETA_DOC_joined %>% group_by(reconciliation_notes) %>% count() %>% filter(n==64) %>% as.matrix()
 
-# Leaving reconciliation_notes for the end because these are contextual
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(reconciliation_notes=="Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead","OK",NA))
 
+NZCETA_DOC_joined %>% filter(is.na(review)) %>% group_by(reconciliation_notes) %>% count() %>% arrange(desc(n))
 
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="NA","OK",review),review))
 
-# Population broad_location based on sample code where this is known e.g. BP = Banks Peninsula, KK = Kaikoura, TI = Timaru
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="Not enough information to determine subspecies","OK",review),review))
 
-# Ditch duplicates before combining with Pathology data
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="collection_date_mod taken from DOC_Massey database because no date information available in NZCETA","OK",review),review))
 
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="common and species names modified based on DOC_Massey","OK",review),review))
 
-# EXCLUDE "Cephalorhynchus hectori ?"
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="NZCETA made this observation of Sex 'Unknown'","OK",review),review))
 
-# PRIORITIZE BECTORS (GIVES US AN IDEA OF ENVIRONMENTAL VS INHERITED) (AND HECTORS IN RANGE OF MAUI E.G. CHE12NZ02)
-# PRIORITIZE SAMPLED BY BIOPSY AND STRANDING (COMPARATIVE)
-# PRIORITIZE KNOWN DEATHS
-# INCLUDE BIOPSIES OF SIMILAR AGES TO STRANDED SAMPLES FOR LIVE VS DEATH COMPARISON
-# BALANCED SAMPLING NORTH ISLAND, NORTH COAST SOUTH ISLAND, WEST COAST SOUTH ISLAND, EAST COAST SOUTH ISLAND, SOUTH COAST SOUTH ISLAND
-# MTDNA/MICROSATELLITES AVAILABLE (MAKES IT MORE LIKELY IT IS A VIABLE SAMPLE/DOUBLE CHECK FOR SAMPLE MIX UPS)
-# MHC available
-# LARGE NUMBER OF MICROSATELLITES LOCI BETTER THAN LESS?
-# AGE CLASS?
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="common and species names modified based on DOC_Massey;NZCETA had '01/11/1997' for Date_stranded","OK",review),review))
 
-# Potentially don't want the Checked=="No" sample. Don't want Common_name=="Uncertain"
-# Date_received=="Nov-05" might be interesting - all caught in same net
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="DOC_Massey made this observation of Observed_sex 'TBC'. NZCETA had no information for this individual","OK",review),review))
 
-# Double check no problems in the reconciliation_notes after high-grading for samples.
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="sample name changed based on DOC_Massey","NZCETA/DOC_Massey discrepancy",review),review))
 
-# "CHE05NZ18" has more info in it from Massey, so suggest taking it as the "sample of reference", but also referring to 'Che05NZ08' for additional/duplicate tissue if needed. 
-# Question: how independent are these likely to be if given a different code?
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;collection_date_mod taken from DOC_Massey database because no date information available in NZCETA","OK",review),review))
 
-# "CHE10NZ04" has more info in it from Massey, so suggest taking it as the "sample of reference", but also referring to 'CHE10NZ10' for additional/duplicate tissue if needed. Will also update the NAs for
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="Although NZCETA had some information for this sample, it did not have info for 'Sex'. This was taken from DOC_Massey","OK",review),review))
 
-# bectors 1 =  NI10-03, Bectors2 = Chem15NZ08 and Chem16NZ31, Bectors 3 = NI10-24, NI11-11 and Chem15NZ04
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="common and species names modified based on DOC_Massey;Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead","OK",review),review))
 
-Hector's within the rohe of Māui
-# A tibble: 2 x 1
-scrubbed_uoa_code
-<chr>            
-  1 CHE11NZ06        
-2 CHE12NZ02        
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;DOC_Massey had 'D. Neale' for 'Collected_By' and 'West Coast' for 'DoC_Agency'","OK",review),review))
 
-# Neils Beach Jackson Bay, South Westland could be interesting samples ( four co-caught dolphins)
+NZCETA_DOC_joined <-  NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(grepl("additional/duplicate",reconciliation_notes),"Duplicate (secondary sample)",review),review))
 
-# Would the parent/fetus pairs be of any interest?
+NZCETA_DOC_joined <-  NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(grepl("Suspect this may be a duplicate of",reconciliation_notes),"Suspected duplicate",review),review))
 
-# Museum samples to look at genomic loss of diversity?
+NZCETA_DOC_joined <-  NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(grepl("duplicate",reconciliation_notes),"Duplicate (primary sample)",review),review))
 
-#DOC_Massey_database ($DOC_incident_no) should be able to be massaged to match up to Pathology_data ($H_no.)
+NZCETA_DOC_joined <-  NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes=="Subspecies designation based on location","OK",review),review))
 
-#Maui_recapture should be able to be matched up to DOC_Massey_database ($UoA_Code) and NZCETA_archive ($Code) based on $Indiv_ID
+other_review <- c("NZCETA had '?' for Date_stranded. This uncertainty seems to be captured in collection_date_mod;Given this individual is a Hector's, have put down SI North Coast for hologenome_region, but this is not certain","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;Fairly sure this sample is SI East Coast, but 'South Malborough' is a little vague")
 
+discrepancy_fields <- c("sample name changed based on NZCETA, but not 100% confident;Location in NZCETA was given as 'Sumner Beach'. Location in DOC_Massey given as 'Canterbury'","sample name changed based on DOC_Massey;Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead","sample name changed based on DOC_Massey;Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had 'Port Craig, Kaiapoi' as the Location, and 'Canterbury' as the region. DOC_Massey had 'Te Wae Wae Bay, Port Craig, Kaiapoi' as the Location, and 'Hurihiku' as the DoC_Agency. This likely should have been 'Murihiku' i.e. Southland, so the Kaiapoi/Canterbury part is not correct (Port Craig is in Te Waewae Bay)",
+                        "Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA has Motuhinau for Location, DOC_Massey has Mokihinau, but I think location should likely refer to the Mokihinui River","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;DOC_Massey had a Collection_Date of '7-Dec-07', but based on the mix of 06 and 07 codes, likely to have stranded at the end of 2006","NZCETA had a Date_stranded of '09/08/2018'. This would seem to be incorrrect based on the various codes with '2009' in them","Other_info: CETOS 8737, monz2002 also associated with CHEBP12;sample renamed based on NZCETA;Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;DOC_Massey had the following for Collection_Date '9 Jul 1999 (23 Jul 99-WendiRoe)'",
+                        "Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead, but not 100% confident due to differences in stranding date;DOC_Massey had '1996' as Collection_Date, NZCETA had '18/06/2005'. In absence of additional information, going to put date as 1996-2005","Location/species is uncertain, taken from sample code","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead, but not 100% confident due to differences in stranding date and small difference in location;DOC_Massey had '11/08/1995' as Collection_Date, NZCETA had '1993'. In absence of additional information, going to put date as 1993-1995;DOC_Massey had Location as 'Jackson Bay'. Based on reconciled_alternate_code, Location taken from NZCETA","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had no Date_stranded, but had a Date_received of 'Oct-98', while DOC_Massey had '9/12/2000 (FP-1996)'. Because of this confusion, put down 1998-2000 as the collection_date_mod",
+                        "Subspecies designation based on location;'MLD 1 Dec 94\vNo' was originally entered under 'Extracted', but this would seem to be an error based on collection_date_mod of this sample, and also every other entry being Yes/No for this column","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had a Date_stranded of 01/03/1996, DOC_Massey had a Collection_Date of '1/8/1997 (Mar96 strand databse & FP)'. Given DOC_Massey had noted difference in dates, going with its date","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had a Date_stranded of 11/03/1996, DOC_Massey had a Collection_Date of '6/7/1991 (11Mar96-strand database & FP)'. Given DOC_Massey had noted difference in dates, going with its date","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had a Date_stranded of 11/03/1996, DOC_Massey had a Collection_Date of '6/7/1996 (11Mar96-strand database & FP)'. Given DOC_Massey had noted difference in dates, going with its date")
 
+OK_fields <- c("Although NZCETA had some information for this sample, it did not have info for 'Sex'. This was taken from DOC_Massey;collection_date_mod taken from DOC_Massey database because no date information available in NZCETA","NZCETA had '?' for Date_stranded, likely because it was found floating in surf, so exact time of stranding unknown","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;DOC_Massey had '15 Jan 2005 or 28 June 2005' for Collection_Date","Based on information in DOC_Massey Collection_Date, stranded after 31-Dec-2004, but wasn't sampled until 5-Jan-2005","NZCETA made this observation of Sex 'Unknown\vMale'. DOC_Massey had no information for this individual","DOC_Massey made this observation of Sex_observed 'Unknown'","DOC_Massey made this observation of Observed_sex 'M?'. NZCETA had no information for this individual;Modified the location from 'Central Otago' to 'Central Coastal Otago'",
+               "Subspecies designation based on location;NZCETA made this observation of Sex 'Unknown\vMale'. DOC_Massey had no information for this individual","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had '?' for Date_stranded. This uncertainty seems to be captured in collection_date_mod","DOC_Massey made this observation of Sex_observed 'Male';DOC_Massey had '2008' for Collection_Date","NZCETA made this observation of Sex 'Unknown\vMale'","DOC_Massey made this observation of Sex_observed 'Male'","Region was originally 'Western Marlborough Sounds'. Modified to 'Marlborough' for consistency with other samples","Although NZCETA had some information for this sample, it did not have info for 'Sex'. This was taken from DOC_Massey;NZCETA had a Date_stranded of '24/01/2011', one day later than Collection_Date of DOC_Massey","Down as Hector's dolphin, but apparently sampled within range of Maui dolphin",
+               "Other_info originally associated with CHE99NZ01, changed based on DOC_Massey;Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had 'Jan-86' for Date_stranded","Other_info originally associated with CheBP12, changed based on DOC_Massey","NZCETA had '18/02/1998' for Date_stranded","NZCETA made this observation of Sex 'Male'","DOC_Massey made this observation of Sex_observed 'unknown (scavenged)';collection_date_mod taken from DOC_Massey database because no date information available in NZCETA",
+               "Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead;NZCETA had a Date_stranded of '11/04/1996', DOC_Massey had a Collection_Date of '6/8/1996 or 4/11/96' (assume 4/11 is actually meant to be 11/4). Going with 11-Apr-1996 seeing as both fields had that date","Although DOC_Massey had some information for this sample, it did not have info for 'Observed_Sex'. This was taken from NZCETA's Sex field instead. Differences in date seem to be driven by this being a museum sample;NZCETA had Date_stranded of '24/04/2005', DOC_Massey had Collection_Date of '1937'",
+               "collection_date_mod taken from NZCETA because Collection_Date not given for DOC_Massey","NZCETA had a Date_stranded of '03/12/2006', one day before Collection_Date of DOC_Massey","DOC_Massey made this observation of Sex_observed 'unknown - probably female (genitals scavenged)'","Subspecies designation based on location;Believe this is Māui sample from Pichler and Baker (2000) identified as having 'N' haplotype, but exact collection location unknown", "common and species names modified based on DOC_Massey;NZCETA had '03/12/2006' for Date_stranded. This might reflect a single day delay between stranding and collection")
+
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes %in% OK_fields,"OK",review),review))
+
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes %in% discrepancy_fields,"NZCETA/DOC_Massey discrepancy",review),review))
+
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% mutate(review=ifelse(is.na(review),ifelse(reconciliation_notes %in% other_review,"Review during sample selection",review),review))
+
+NZCETA_DOC_joined <- NZCETA_DOC_joined %>% arrange(review,scrubbed_uoa_code)
+write_delim(NZCETA_DOC_joined,"NZCETA_DOC_joined.txt",col_names = TRUE,quote_escape = FALSE,delim = "\t")
