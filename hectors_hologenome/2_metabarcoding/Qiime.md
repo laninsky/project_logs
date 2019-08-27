@@ -80,7 +80,7 @@ qiime feature-table tabulate-seqs \
   --o-visualization run_2_rep_seq.qzv
 ```
 
-Using Naive Bayes (machine learning) to classify
+Using Naive Bayes (machine learning) to classify taxonomy
 ```
 #!/bin/bash -e 
 #SBATCH -A uoo02423
@@ -99,6 +99,72 @@ qiime feature-classifier classify-sklearn \
   --i-reads run_2_rep_seqs.qza \
   --o-classification run_2_taxonomy.qza
 ```
+Visualizing the taxonomic results - first tabulating
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
+
+module load QIIME2/2019.7 
+
+qiime metadata tabulate \
+  --m-input-file run_2_taxonomy.qza \
+  --o-visualization run_2_taxonomy_viz.qzv
+```
+
+Then creating barplots
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
+
+module load QIIME2/2019.7 
+
+qiime taxa barplot \
+  --i-table run_2_denoise_out.qza \
+  --i-taxonomy run_2_taxonomy.qza \
+  --m-metadata-file sample-metadata.tsv \
+  --o-visualization run_2_taxonomy_barplots.qzv
+```
+After this, redid all the steps for run_1 up to just before "Using Naive Bayes (machine learning) to classify taxonomy". Then merged run_1 and run_2 results
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
+
+qiime feature-table merge \
+  --i-tables run_1_denoise_out.qza \
+  --i-tables run_2_denoise_out.qza\
+  --o-merged-table combined_denoise_out_table.qza
+
+qiime feature-table merge-seqs \
+  --i-data run_1_rep_seqs.qza \
+  --i-data run_2_rep_seqs.qza \
+  --o-merged-data combined_rep_seqs.qza
+```
+
+qiime feature-table summarize \
+  --i-table combined_denoise_out_table.qza \
+  --o-visualization {COMBINED-TABLE_VIZ}.qzv \
+  --m-sample-metadata-file sample-metadata.tsv
 
 
 
