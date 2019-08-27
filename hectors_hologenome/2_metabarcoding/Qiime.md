@@ -161,10 +161,56 @@ qiime feature-table merge-seqs \
   --o-merged-data combined_rep_seqs.qza
 ```
 
+Have to run this as interactive
+```
 qiime feature-table summarize \
   --i-table combined_denoise_out_table.qza \
-  --o-visualization {COMBINED-TABLE_VIZ}.qzv \
+  --o-visualization combined_denoise_out_table_viz.qzv \
   --m-sample-metadata-file sample-metadata.tsv
+```
+Following this, rerun the taxonomic steps 
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
+
+module load QIIME2/2019.7 
+
+qiime feature-classifier classify-sklearn \
+  --i-classifier references/gg-13-8-99-515-806-nb-classifier.qza \
+  --i-reads combined_rep_seqs.qza \
+  --o-classification combined_taxonomy.qza
+```
+And then visualized the combined taxonomic results:
+```
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J qiime 
+#SBATCH -n 1
+#SBATCH -c 1 
+#SBATCH -t 1:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo02423/hectors/pilot_water_eDNA/qiime_workshop 
+#SBATCH -N 1
+
+module load QIIME2/2019.7 
+
+qiime metadata tabulate \
+  --m-input-file combined_taxonomy.qza \
+  --o-visualization combined_taxonomy_viz.qzv
+
+qiime taxa barplot \
+  --i-table combined_denoise_out_table.qza \
+  --i-taxonomy combined_taxonomy.qza \
+  --m-metadata-file sample-metadata.tsv \
+  --o-visualization combined_barplots.qzv
+```
 
 
 
