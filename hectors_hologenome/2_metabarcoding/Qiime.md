@@ -212,6 +212,16 @@ qiime taxa barplot \
   --o-visualization combined_barplots.qzv
 ```
 
+Phylogeny estimation
+```
+qiime phylogeny align-to-tree-mafft-fasttree \
+  --i-sequences combined_rep_seqs.qza \
+  --o-alignment combined_rep_seqs_aligned.qza \
+  --o-masked-alignment combined_rep_seqs_aligned_masked.qza \
+  --o-tree combined_rep_unrooted_tree.qza \
+  --o-rooted-tree combined_rep_rooted_tree.qza
+```
+
 
 
 For visualization of Qiime2 results, can drag and drop \*.vz files to:  
