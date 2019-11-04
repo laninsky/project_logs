@@ -29,30 +29,26 @@ md5sum * >> md5sum.log
 ```
 
 ### Indexed reference and made 'trimmed' directory
-In the working directory, made a trimmed directory for the raw reads to be moved into once trimmed, and indexed the reference genome (northern fur seal)
+In the working directory indexed the reference genome (harbour seal)
 ```
 #!/bin/bash -e
 
-#SBATCH --account=uoo00106
-#SBATCH --job-name=sample1
+#SBATCH --account=uoo02423
+#SBATCH --job-name=indexing_ref
 #SBATCH -n 1
 #SBATCH --cpus-per-task=16
 #SBATCH --time=2:00:00
-#SBATCH --mem-per-cpu=1G
+#SBATCH --mem=105G
 #SBATCH --hint=nomultithread
 #SBATCH --partition=large
-#SBATCH -D /nesi/nobackup/uoo02423/uploaded 
+#SBATCH -D /nesi/nobackup/uoo02423/harbour_seal
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=alana.alexander@otago.ac.nz
 #SBATCH -N 1
 
-module load Bowtie2/2.3.2-gimkl-2017a
+module load Bowtie2/2.3.5-GCC-7.4.0
 
-working_dir=/nesi/nobackup/uoo02423/uploaded/done/redo
-mkdir $working_dir
-mkdir $working_dir/trimmed
-
-bowtie2-build --threads 16 GCA_003265705.1_ASM326570v1_genomic.fna northern_fur_seal
+bowtie2-build --threads 16 GSC_HSeal_1.0_HiC.fasta.gz harbour_seal
 ```
 
 ### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)
