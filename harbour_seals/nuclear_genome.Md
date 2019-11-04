@@ -12,15 +12,15 @@
 ```
 #!/bin/bash -e
 
-#SBATCH --account=uoo00106
+#SBATCH --account=uoo02423
 #SBATCH --job-name=md5
 #SBATCH -n 1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=2:00:00
-#SBATCH --mem-per-cpu=1G
+#SBATCH --mem=3G
 #SBATCH --hint=nomultithread
 #SBATCH --partition=large
-#SBATCH -D /nesi/nobackup/uoo02423/uploaded 
+#SBATCH -D /nesi/nobackup/uoo02423/harbour_seal/zips 
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=alana.alexander@otago.ac.nz
 #SBATCH -N 1
