@@ -1,7 +1,7 @@
 ## Steps
 [Confirmed md5sums matched between transferred files/folders](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#confirmed-md5sums-matched-between-transferred-filesfolders)  
 [Indexed reference](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#indexed-reference)  
-[Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-northern-fur-seal-reference-example-for-sample_1-d079)  
+[Trimming raw reads and assembling them against the harbour seal reference (example for Sample_1-D079)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-harbour-seal-reference-example-for-sample_1-d079)  
 [Pulled out cutadapt stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-cutadapt-stats-to-record-them-in-r)  
 [Pulled out reference mapping stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-reference-mapping-stats-to-record-them-in-r)  
 [Estimated individual heterozygosity using genomescope and jellyfish](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#estimated-individual-heterozygosity-using-genomescope-and-jellyfish-example-for-sample_1-d079)
@@ -36,7 +36,7 @@ In the working directory indexed the reference genome (harbour seal)
 #SBATCH --account=uoo02423
 #SBATCH --job-name=indexing_ref
 #SBATCH -n 1
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=36
 #SBATCH --time=2:00:00
 #SBATCH --mem=105G
 #SBATCH --hint=nomultithread
@@ -48,60 +48,15 @@ In the working directory indexed the reference genome (harbour seal)
 
 module load Bowtie2/2.3.5-GCC-7.4.0
 
-bowtie2-build --threads 16 GSC_HSeal_1.0_HiC.fasta.gz harbour_seal
+bowtie2-build --threads 36 GSC_HSeal_1.0_HiC.fasta.gz harbour_seal
 ```
 
-### Trimming raw reads and assembling them against the northern fur seal reference (example for Sample_1-D079)
-Ran cutadapt on raw reads, used bowtie2 to assemble them to the harbour seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam. This script is modified from original cutadapt [loop](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md) because of the presence of adaptor dimer. The bioinformatics troubleshooting for this is explained [here](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md)
+### Trimming raw reads and assembling them against the harbour seal reference (example for Sample_1-D079)
+Before running this script I created a `trimmed` and `sam` directory in the working directory (`/nesi/nobackup/uoo02423/harbour_seal`).
 
-Note: not long after I processed all of the samples, I saw the following on cutadapt's documentation: "Previous versions of this document also recommended using AGATCGGAAGAGC as adapter sequence for both read 1 and read 2, but you should avoid doing so as that sequence occurs multiple times in the human genome." (https://cutadapt.readthedocs.io/en/stable/guide.html). For future projects it would be best to use AGATCGGAAGAGCACACGTCTGAACTCCAGTCA as adapter sequence for read 1 and AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT for read 2, as per cutadapt's recommendations. Given the pop genomics focus of this project, I think we'll be alright to stick with the current version of the trimmed files, although we should make sure to upload the raw reads to the SRA when done.
-```
-#!/bin/bash -e
+Ran cutadapt on raw reads, used bowtie2 to assemble them to the harbour seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam. This script is modified from original cutadapt [loop](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md) because of the presence of adapter dimer. The bioinformatics troubleshooting for this is explained [here](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md)
 
-#SBATCH --account=uoo02423
-#SBATCH --job-name=Sample_1-D079
-#SBATCH -n 1
-#SBATCH --cpus-per-task=18
-#SBATCH --time=24:00:00
-#SBATCH --mem=52G
-#SBATCH --hint=nomultithread
-#SBATCH --partition=large
-#SBATCH -D /nesi/nobackup/uoo02423/uploaded/done 
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=alana.alexander@otago.ac.nz
-#SBATCH -N 1
-
-module load SAMtools/1.8-gimkl-2017a
-module load cutadapt/1.16-gimkl-2017a-Python-3.6.3
-module load Bowtie2/2.3.2-gimkl-2017a
-module load FastQC/0.11.7
-
-working_dir=/nesi/nobackup/uoo02423/uploaded/done/redo
-zipped_folder_location=/nesi/nobackup/uoo02423/uploaded/done
-
-i=Sample_1-D079.zip;
-basename=`echo $i | sed 's/.zip//g'`;
-echo $basename >> $working_dir/$i.ref_log.txt
-echo $basename >> $working_dir/$i.bam_log.txt
-unzip $i;
-cd $basename;
-for j in *R1*.fastq.gz;
-  do trimname1=`echo $j | sed 's/.fastq/.trimmed.fastq/g'`;
-  trimname2=`echo $trimname1 | sed 's/R1/R2/g'`;
-  reverse=`echo $j | sed 's/R1/R2/g'`;
-  cutadapt -j 18 -a AGATCGGAAGAGC -a ATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGC -A ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -o $trimname1 -p $trimname2 $j $reverse -q 5,15 -m 25 >> $working_dir/$i.cutadapt.log;
-done;
-R1=`echo *R1*trimmed.fastq.gz | sed 's/ /,/g'`;
-R2=`echo *R2*trimmed.fastq.gz | sed 's/ /,/g'`;
-bowtie2 --fr -p 18 -x /nesi/nobackup/uoo02423/uploaded/northern_fur_seal -1 $R1 -2 $R2 -S $working_dir/$basename.sam &>> $working_dir/$i.ref_log.txt
-cd $zipped_folder_location
-fastqc $basename/*fastq.gz -o $working_dir/trimmed -t 18;
-mv $basename/*trimmed* $working_dir/trimmed;
-samtools view --threads 18 -bS -o $working_dir/$basename.bam $working_dir/$basename.sam &>> $working_dir/$i.bam_log.txt;
-rm -rf $working_dir/$basename.sam;
-rm -rf $basename;
-```
-To create a sample-specific \*.sh file for each \*zip based on Sample_19-D135.sh and then start these jobs off:
+The first `-a` and `-A` option for forward and reverse reads respectively corresponds to the actual expected adapter sequence, the second corresponds to the adaptor dimer sequence. After confirming that this script worked for the first sample, I then used a for loop and sed to rename the script and replace Sample_1-D079.zip with the remaining samples:
 ```
 for i in *.zip; 
   do basename=`echo $i | sed 's/.zip//g'`;
@@ -110,8 +65,59 @@ for i in *.zip;
   sbatch $basename.sh;
 done  
 ```
-Stored results in mutiple folders: scripts (the \*.sh and slurm output scripts), zips (the original zip files), med (the trimmed fastq.gz reads), logs (logs of various programs), and bams. For the slurm-output, I prepended them with sample name using the code below.
+Example script for Sample_1-D079
+```
+#!/bin/bash -e
 
+#SBATCH --account=uoo02423
+#SBATCH --job-name=Sample_1-D079.zip
+#SBATCH -n 1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=24:00:00
+#SBATCH --mem=52G
+#SBATCH --hint=nomultithread
+#SBATCH --partition=large
+#SBATCH -D /nesi/nobackup/uoo02423/harbour_seal
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=alana.alexander@otago.ac.nz
+#SBATCH -N 1
+
+module load SAMtools/1.9-GCC-7.4.0
+module load cutadapt/2.3-gimkl-2018b-Python-3.7.3
+module load Bowtie2/2.3.5-GCC-7.4.0
+module load FastQC/0.11.7
+
+working_dir=/nesi/nobackup/uoo02423/harbour_seal
+zipped_folder_location=/nesi/nobackup/uoo02423/harbour_seal/zips
+scripts_folder=/nesi/nobackup/uoo02423/harbour_seal/scripts_logs
+trimmed_folder=/nesi/nobackup/uoo02423/harbour_seal/trimmed
+sam_folder=/nesi/nobackup/uoo02423/harbour_seal/sam
+fastqc_folder=/nesi/nobackup/uoo02423/harbour_seal/fastqc
+
+i=Sample_1-D079.zip;
+basename=`echo $i | sed 's/.zip//g'`;
+echo $basename >> $scripts_folder/$i.ref_log.txt
+echo $basename >> $scripts_folder/$i.bam_log.txt
+unzip $zipped_folder_location/$i;
+cd $zipped_folder_location/$basename;
+for j in *R1*.fastq.gz;
+  do trimname1=`echo $j | sed 's/.fastq/.trimmed.fastq/g'`;
+  trimname2=`echo $trimname1 | sed 's/R1/R2/g'`;
+  reverse=`echo $j | sed 's/R1/R2/g'`;
+  cutadapt -j 18 -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -a ATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -A ATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -o $trimname1 -p $trimname2 $j $reverse -q 5,15 -m 25 >> $scripts_folder/$i.cutadapt.log;
+done;
+R1=`echo *R1*trimmed.fastq.gz | sed 's/ /,/g'`;
+R2=`echo *R2*trimmed.fastq.gz | sed 's/ /,/g'`;
+bowtie2 --fr -p 18 -x /nesi/nobackup/uoo02423/harbour_seal/harbour_seal -1 $R1 -2 $R2 -S $sam_folder/$basename.sam &>> $scripts_folder/$i.ref_log.txt
+fastqc *fastq.gz -o $fastqc_folder -t 18;
+mv *trimmed* $trimmed_folder;
+samtools view --threads 18 -bS -o $sam_folder/$basename.bam $sam_folder/$basename.sam &>> $scripts_folder/$i.bam_log.txt;
+rm -rf $sam_folder/$basename.sam;
+cd $working_dir;
+rm -rf $zipped_folder_location/$basename;
+```
+
+For the slurm-output, I prepended them with sample name using the code below.
 ```
 mkdir scripts
 ls *.zip > zip.txt
