@@ -29,16 +29,16 @@ md5sum * >> md5sum.log
 ```
 
 ### Indexed reference
-In the working directory indexed the reference genome (harbour seal)
+Grabbed the harbour seal reference from DNA Zoo via `wget https://www.dropbox.com/s/dqtlf4qcu0k7453/GSC_HSeal_1.0_HiC.fasta.gz?dl=0` and then renamed it by `mv GSC_HSeal_1.0_HiC.fasta.gz\?dl\=0 GSC_HSeal_1.0_HiC.fasta.gz`. In the working directory then indexed the reference genome (harbour seal)
 ```
 #!/bin/bash -e
 
 #SBATCH --account=uoo02423
 #SBATCH --job-name=indexing_ref
 #SBATCH -n 1
-#SBATCH --cpus-per-task=36
+#SBATCH --cpus-per-task=18
 #SBATCH --time=2:00:00
-#SBATCH --mem=105G
+#SBATCH --mem=52G
 #SBATCH --hint=nomultithread
 #SBATCH --partition=large
 #SBATCH -D /nesi/nobackup/uoo02423/harbour_seal
@@ -48,7 +48,7 @@ In the working directory indexed the reference genome (harbour seal)
 
 module load Bowtie2/2.3.5-GCC-7.4.0
 
-bowtie2-build --threads 36 GSC_HSeal_1.0_HiC.fasta.gz harbour_seal
+bowtie2-build --threads 18 GSC_HSeal_1.0_HiC.fasta.gz harbour_seal
 ```
 
 ### Trimming raw reads and assembling them against the harbour seal reference (example for Sample_1-D079)
