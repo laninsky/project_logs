@@ -56,7 +56,7 @@ Before running this script I created a `trimmed` and `sam` directory in the work
 
 Ran cutadapt on raw reads, used bowtie2 to assemble them to the harbour seal reference, ran fastqc to compare the trimmed reads to the raw reads, converted \*.sam to \*.bam. This script is modified from original cutadapt [loop](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md) because of the presence of adapter dimer. The bioinformatics troubleshooting for this is explained [here](https://github.com/laninsky/project_logs/blob/master/harbour_seals/unused_code/README.Md)
 
-The first `-a` and `-A` option for forward and reverse reads respectively corresponds to the actual expected adapter sequence, the second corresponds to the adaptor dimer sequence. After confirming that this script worked for the first sample, I then used a for loop and sed to rename the script and replace Sample_1-D079.zip with the remaining samples:
+The first `-a` and `-A` option for forward and reverse reads respectively corresponds to the actual expected adapter sequence, the second corresponds to the adaptor dimer sequence. After confirming that this script worked for the first sample, I then used a for loop and sed to rename the script and replace Sample_1-D079.zip with the remaining samples (copying the script into zip file for the rename step and then copying the job submission scripts out again):
 ```
 for i in *.zip; 
   do basename=`echo $i | sed 's/.zip//g'`;
@@ -124,6 +124,18 @@ ls *.zip > zip.txt
 ls *.out > slurm.txt
 for i in `seq $ziplines`; do samplename=` tail -n $i zip.txt | head -n 1 | sed 's/.zip//g'`; oldslurm=`tail -n $i slurm.txt | head -n 1`; newslurm=`echo $samplename.$oldslurm`; mv $oldslurm scripts/$newslurm; done
 ```
+
+### Double checking fastqc
+In the fastqc folder, I ran the following bash code to extract the summary.txt file from each fastq file, and then the R code to compare before and after trimming fastqc results:
+```
+for i in *.zip;
+do foldername=`echo $i | sed 's/.zip//g'`;
+unzip $i;
+cat $foldername/summary.txt >> fastqc_summary.txt;
+rm -rf $foldername;
+done;
+```
+
 
 ### Pulled out cutadapt stats to record them (in R)
 First had to load the R module
