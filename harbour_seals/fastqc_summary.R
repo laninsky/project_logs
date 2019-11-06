@@ -21,5 +21,6 @@ fastqc <- fastqc %>% pivot_wider(names_from=Trimmed,values_from=X1)
 # Ignoring sequence length distribution warning (due to trimming)
 fastqc %>% filter(N!=Y) %>%
   filter(((X2=="Per tile sequence quality"| X2=="Per sequence GC quality") & N!=Y) | (X2!="Per tile sequence quality"| X2!="Per sequence GC quality")) %>%
-    filter(X2!="Sequence Length Distribution" | (X2=="Sequence Length Distribution" & !(N=="PASS" & Y=="WARN")))
+    filter(X2!="Sequence Length Distribution" | (X2=="Sequence Length Distribution" & !(N=="PASS" & Y=="WARN"))) %>%
+      filter(Y!="PASS")
     
