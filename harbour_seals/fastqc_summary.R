@@ -16,3 +16,9 @@ fastqc <- fastqc %>% select(Sample, Read_file, Trimmed, X2, X1)
 fastqc <- fastqc %>% pivot_wider(names_from=Trimmed,values_from=X1)
 
 # Filtering just for the values where post-trimming warn/fails are still present
+# Ignoring 'Per tile sequence quality' where quality hasn't changed between before and after trimming
+# Ignoring 'Per sequence GC quality' where quality hasn't changed between before and after trimming
+fastqc %>% filter(X2!="Per tile sequence quality" | (X2=="Per tile sequence quality" & N!=Y)) %>% 
+  filter(X2!="Per sequence GC quality" | (X2=="Per sequence GC quality" & N!=Y))
+
+
