@@ -18,7 +18,8 @@ fastqc <- fastqc %>% pivot_wider(names_from=Trimmed,values_from=X1)
 # Filtering just for the values where post-trimming warn/fails are still present
 # Ignoring 'Per tile sequence quality' where quality hasn't changed between before and after trimming
 # Ignoring 'Per sequence GC quality' where quality hasn't changed between before and after trimming
-fastqc %>% filter(X2!="Per tile sequence quality" | (X2=="Per tile sequence quality" & N!=Y)) %>% 
-  filter(X2!="Per sequence GC quality" | (X2=="Per sequence GC quality" & N!=Y))
-
-
+# Ignoring sequence length distribution warning (due to trimming)
+fastqc %>% filter(N!=Y) %>%
+  filter(((X2=="Per tile sequence quality"| X2=="Per sequence GC quality") & N!=Y) | (X2!="Per tile sequence quality"| X2!="Per sequence GC quality")) %>%
+    filter(X2!="Sequence Length Distribution" | (X2=="Sequence Length Distribution" & !(N=="PASS" & Y=="WARN")))
+    
