@@ -117,10 +117,9 @@ rm -rf $basename;
 
 For the slurm-output, I prepended them with sample name using the code below.
 ```
-mkdir scripts
-ls *.zip > zip.txt
-ls *.out > slurm.txt
-for i in `seq $ziplines`; do samplename=` tail -n $i zip.txt | head -n 1 | sed 's/.zip//g'`; oldslurm=`tail -n $i slurm.txt | head -n 1`; newslurm=`echo $samplename.$oldslurm`; mv $oldslurm scripts/$newslurm; done
+for i in slurm*.out; do samplename=`tail -n 1 $i | sed 's/Analysis complete for //g' | sed 's/_L00.*//g'`; mv $i $samplename.$i; done
+mkdir scripts_logs/unzip_fastqc
+mv *.out scripts_logs/unzip_fastqc 
 ```
 
 ### Double checking fastqc (in R)
