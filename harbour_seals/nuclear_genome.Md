@@ -118,9 +118,24 @@ rm -rf $basename;
 For the slurm-output, I prepended them with sample name using the code below.
 ```
 for i in slurm*.out; do samplename=`tail -n 1 $i | sed 's/Analysis complete for //g' | sed 's/_L00.*//g'`; mv $i $samplename.$i; done
-mkdir scripts_logs/unzip_fastqc
-mv *.out scripts_logs/unzip_fastqc 
+mkdir scripts_logs/unzip_fastqc_slurm_out
+mv *.out scripts_logs/unzip_fastqc_slurm_out 
 ```
+Moved the submission scripts into the scripts_logs folder too, just to keep everything nicely organized
+```
+mkdir scripts_logs/unzip_trim_fastqc_asssemble_submission
+mv *.sh scripts_logs/unzip_trim_fastqc_asssemble_submission
+```
+Inside scripts_logs, created a cutadapt folder for the cutadapt output
+```
+mkdir cutadapt_logs
+mv *cutadapt.log cutadapt_logs
+```
+Inside scripts_logs, double checked that the \*.bam_log.txt files didn't contain any errors (via `less`) and then deleted them
+```
+
+```
+
 
 ### Double checking fastqc (in R)
 In the fastqc folder (important to run it in here because otherwise it deletes all your files!), I ran the following bash code to extract the summary.txt file from each fastq file, and then [fastqc_summary.R](https://github.com/laninsky/project_logs/blob/master/harbour_seals/fastqc_summary.R) (in this repository) to compare before and after trimming fastqc results:
