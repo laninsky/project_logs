@@ -99,7 +99,7 @@ basename=`echo $i | sed 's/.zip//g'`;
 echo $basename >> $scripts_folder/$i.ref_log.txt
 echo $basename >> $scripts_folder/$i.bam_log.txt
 unzip $zipped_folder_location/$i;
-cd $zipped_folder_location/$basename;
+cd $basename;
 for j in *R1*.fastq.gz;
   do trimname1=`echo $j | sed 's/.fastq/.trimmed.fastq/g'`;
   trimname2=`echo $trimname1 | sed 's/R1/R2/g'`;
@@ -114,7 +114,7 @@ mv *trimmed* $trimmed_folder;
 samtools view --threads 18 -bS -o $sam_folder/$basename.bam $sam_folder/$basename.sam &>> $scripts_folder/$i.bam_log.txt;
 rm -rf $sam_folder/$basename.sam;
 cd $working_dir;
-rm -rf $zipped_folder_location/$basename;
+rm -rf $basename;
 ```
 
 For the slurm-output, I prepended them with sample name using the code below.
@@ -126,7 +126,7 @@ for i in `seq $ziplines`; do samplename=` tail -n $i zip.txt | head -n 1 | sed '
 ```
 
 ### Double checking fastqc
-In the fastqc folder, I ran the following bash code to extract the summary.txt file from each fastq file, and then the R code to compare before and after trimming fastqc results:
+In the fastqc folder (important to run it in here because otherwise it deletes all your files!), I ran the following bash code to extract the summary.txt file from each fastq file, and then the R code to compare before and after trimming fastqc results:
 ```
 for i in *.zip;
 do foldername=`echo $i | sed 's/.zip//g'`;
