@@ -2,11 +2,9 @@
 [Confirmed md5sums matched between transferred files/folders](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#confirmed-md5sums-matched-between-transferred-filesfolders)  
 [Indexed reference](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#indexed-reference)  
 [Trimming raw reads and assembling them against the harbour seal reference (example for Sample_1-D079)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#trimming-raw-reads-and-assembling-them-against-the-harbour-seal-reference-example-for-sample_1-d079)  
-[Pulled out cutadapt stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-cutadapt-stats-to-record-them-in-r)  
+[Double checking fastqc (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#double-checking-fastqc-in-r)  
 [Pulled out reference mapping stats to record them (in R)](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#pulled-out-reference-mapping-stats-to-record-them-in-r)  
 [Estimated individual heterozygosity using genomescope and jellyfish](https://github.com/laninsky/project_logs/blob/master/harbour_seals/nuclear_genome.Md#estimated-individual-heterozygosity-using-genomescope-and-jellyfish-example-for-sample_1-d079)
-
-
 
 ### Confirmed md5sums matched between transferred files/folders
 ```
@@ -125,7 +123,7 @@ ls *.out > slurm.txt
 for i in `seq $ziplines`; do samplename=` tail -n $i zip.txt | head -n 1 | sed 's/.zip//g'`; oldslurm=`tail -n $i slurm.txt | head -n 1`; newslurm=`echo $samplename.$oldslurm`; mv $oldslurm scripts/$newslurm; done
 ```
 
-### Double checking fastqc
+### Double checking fastqc (in R)
 In the fastqc folder (important to run it in here because otherwise it deletes all your files!), I ran the following bash code to extract the summary.txt file from each fastq file, and then [fastqc_summary.R](https://github.com/laninsky/project_logs/blob/master/harbour_seals/fastqc_summary.R) (in this repository) to compare before and after trimming fastqc results:
 ```
 for i in *.zip;
@@ -136,9 +134,6 @@ rm -rf $foldername;
 done;
 ```
 Note: have to `module load R/3.6.1-gimkl-2018b` before running the R code
-
-
-
 
 ### Pulled out reference mapping stats to record them (in R)
 First had to load the R module
