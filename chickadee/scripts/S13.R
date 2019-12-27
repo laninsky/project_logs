@@ -1,3 +1,8 @@
+# This code corresponds to Fig S13 in Alexander et al.
+# It creates Fig. S3 (grouping, displaying, and contrasting STRUCTURE 
+# assignments between birds of different song types) in the main manuscript 
+# of Alexander et al.
+
 # 1. Loading required library
 library(tidyverse)
 
