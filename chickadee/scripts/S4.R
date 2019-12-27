@@ -1,3 +1,8 @@
+# This code corresponds to Fig S4 in Alexander et al.
+# It creates Fig 1 (plotting total proportion of genomes across all birds 
+# sampled at each site assigned to black-capped (red) or Carolina chickadee
+# (blue) genetic clusters) in the main manuscript of Alexander et al.
+
 # 1. Loading necessary libraries
 library(readr)
 library(dplyr)
