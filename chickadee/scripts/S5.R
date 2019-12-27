@@ -13,7 +13,6 @@
 #devtools::install_github("bcm-uga/TESS3_encho_sen")
 library(tidyverse)
 library(tess3r)
-library(ggplot2)
 library(ggrepel)
 source("http://membres-timc.imag.fr/Olivier.Francois/POPSutilities.R")
 
