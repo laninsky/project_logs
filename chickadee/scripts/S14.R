@@ -1,3 +1,8 @@
+# This code corresponds to Fig S14 in Alexander et al.
+# It creates Fig. S8 (average number of loci recovered across 
+# the 13,530 pairwise comparisons) in the main manuscript of 
+# Alexander et al.
+
 # 1. Loading required library
 library(tidyverse)
 
