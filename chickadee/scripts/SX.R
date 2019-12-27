@@ -1,3 +1,6 @@
+# This code corresponds to Fig SX in Alexander et al.
+# It creates Fig X (geographic cline) in the main manuscript of Alexander et al.
+
 # 1. Loading required libraries and scripts
 library(tidyverse)
 library(geosphere)
@@ -24,7 +27,7 @@ mod_q.matrix <- as.matrix(temp %>% filter(Sampling_period=="MODERN") %>% filter(
 hist_q.matrix <-  as.matrix(temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filter(Included_in_tess3r=="YES") %>% dplyr::select(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment))
 
 # 5. Calculating distance across the transect
-# Obtaining the coordinates to create the approximate SW-NE center of transect line
+# Obtaining the coordinates to create the approximate SW-NE beginning of transect line
 min_long <- min(mod_coords[,1],hist_coords[,1])
 max_long <- max(mod_coords[,1], hist_coords[,1])
 min_lat <- min(mod_coords[,2], hist_coords[,2])
@@ -116,10 +119,15 @@ mod_pMax <- hzar.get.ML.cline(mod_fit)$param.all$pMax
 
 # Generating the 95% CIs for the cline
 est_freq <- function (x) {
-  mod_pMin + (mod_pMax - mod_pMin) * (1/(1 + exp(-((x - center) * 4/width))))
+  pMin + (pMax - pMin) * (1/(1 + exp(-((x - center) * 4/width))))
 }
 
 cline_conf <- matrix(NA,ncol=length(mod_conf$clines),nrow=ceiling(max(mod_dist,hist_dist)))
+
+center <- mod_center
+width <- mod_width
+pMin <- mod_pMin
+pMax <- mod_pMax
 
 for (i in 1:length(mod_conf$clines)) {
   center <- mod_conf_95[i,1]
@@ -214,6 +222,11 @@ hist_pMax <- hzar.get.ML.cline(hist_fit)$param.all$pMax
 
 cline_conf <- matrix(NA,ncol=length(hist_conf$clines),nrow=ceiling(max(mod_dist,hist_dist)))
 
+center <- hist_center
+width <- hist_width
+pMin <- hist_pMin
+pMax <- hist_pMax
+
 for (i in 1:length(hist_conf$clines)) {
   center <- hist_conf_95[i,1]
   width <- hist_conf_95[i,2]
@@ -236,7 +249,6 @@ for (j in 1:ceiling(max(mod_dist,hist_dist))) {
   hist_conf_min_max_mean[j,3] <- max(cline_conf[j,])
   hist_conf_min_max_mean[j,4] <- est_freq(j)
 }  
-
 
 # 8. Plotting
 # Getting the data frames together
@@ -268,3 +280,55 @@ ggplot() +
   scale_x_continuous(name="Distance along transect (km)") 
 
 # Saved manually as a plot 1000 pixels wide, Fig_SX_transect.png
+
+# 9. Printing to screen some parameters of interest to report in manuscript
+results <- as_tibble(rbind(c("Center",hist_center/1000,mod_center/1000),
+c("min 95% CI Center",hist_center_min/1000,mod_center_min/1000),
+c("max 95% CI Center",hist_center_max/1000,mod_center_max/1000),
+c("Width",hist_width/1000,mod_width/1000),
+c("min 95% CI Width",hist_width_min/1000,mod_width_min/1000),
+c("max 95% CI Width",hist_width_max/1000,mod_width_max/1000),
+c("pMin",hist_pMin,mod_pMin),
+c("pMax",hist_pMax,mod_pMax)))
+
+names(results) <- c("Parameters","Historical","Modern")
+
+results
+print("All distances in km")
+
+sessionInfo()
+#R version 3.6.2 (2019-12-12)
+#Platform: x86_64-apple-darwin15.6.0 (64-bit)
+#Running under: macOS Sierra 10.12.6
+
+#Matrix products: default
+#BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+#LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+#locale:
+#  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+#attached base packages:
+#  [1] stats     graphics  grDevices utils     datasets  methods   base     
+
+#other attached packages:
+#  [1] hzar_0.2-5       foreach_1.4.7    MCMCpack_1.4-5   MASS_7.3-51.5   
+#[5] coda_0.19-3      geosphere_1.5-10 forcats_0.4.0    stringr_1.4.0   
+#[9] dplyr_0.8.3      purrr_0.3.3      readr_1.3.1      tidyr_1.0.0     
+#[13] tibble_2.1.3     ggplot2_3.2.1    tidyverse_1.3.0 
+
+#loaded via a namespace (and not attached):
+#  [1] Rcpp_1.0.3         lubridate_1.7.4    lattice_0.20-38    assertthat_0.2.1  
+#[5] zeallot_0.1.0      utf8_1.1.4         R6_2.4.1           cellranger_1.1.0  
+#[9] backports_1.1.5    MatrixModels_0.4-1 reprex_0.3.0       httr_1.4.1        
+#[13] pillar_1.4.3       rlang_0.4.2        lazyeval_0.2.2     readxl_1.3.1      
+#[17] rstudioapi_0.10    SparseM_1.78       Matrix_1.2-18      labeling_0.3      
+#[21] munsell_0.5.0      broom_0.5.3        compiler_3.6.2     modelr_0.1.5      
+#[25] pkgconfig_2.0.3    mcmc_0.9-6         tidyselect_0.2.5   codetools_0.2-16  
+#[29] fansi_0.4.0        crayon_1.3.4       dbplyr_1.4.2       withr_2.1.2       
+#[33] grid_3.6.2         nlme_3.1-143       jsonlite_1.6       gtable_0.3.0      
+#[37] lifecycle_0.1.0    DBI_1.1.0          magrittr_1.5       scales_1.1.0      
+#[41] cli_2.0.0          stringi_1.4.3      farver_2.0.1       fs_1.3.1          
+#[45] sp_1.3-2           xml2_1.2.2         generics_0.0.2     vctrs_0.2.1       
+#[49] iterators_1.0.12   tools_3.6.2        glue_1.3.1         hms_0.5.2         
+#[53] colorspace_1.4-1   rvest_0.3.5        haven_2.2.0        quantreg_5.54   
