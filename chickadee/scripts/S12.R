@@ -1,3 +1,8 @@
+# This code corresponds to Fig S12 in Alexander et al.
+# It creates Fig. S2 (plotting and calculating correlations of average 
+# assignment to black-capped chickadee genetic cluster, weight (g) and 
+# wing/tail ratio) in the main manuscript of Alexander et al.
+
 # 1. Loading required library
 library(tidyverse)
 
