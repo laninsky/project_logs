@@ -1,6 +1,6 @@
 # This code corresponds to Fig SAA in Alexander et al.
-# It creates Fig. SZ (summarizing genic and chromosomal regions) in the 
-# supplementary materials of Alexander et al.
+# It summarizes genic and chromosomal regions that are graphed in
+# using Fig SBB.R in the supplementary materials of Alexander et al.
 
 # R code to summarize RADseq markers based on ref_guided.snps.map
 # (in order to find which SNP positions correspond to each locus),
