@@ -87,8 +87,7 @@ export PATH=/nesi/nobackup/uoo00105/bin/bgcdist:$PATH
 # -e MCMC tuning paramteer, standard deviation for Gaussian proposal of cline parameters eta and kappa [default = 0.02]
 
 # Code would only work when tab auto-completing file names (rather than copying and pasting)
-bgc –a black_capped.txt –b Carolina.txt –h admixed.txt –M genetic_map.txt -O 2 –x 50000 –n 25000 -t 5 -p 1 -q 1 -i 0 -N 0 -E 0 -m 1 -d 1 -s 1 -o 0 -I 1 -D 522.727 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2
- 
+bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 –x 50000 –n 25000 -t 5 -p 1 -q 1 -i 0 -N 0 -E 0 -m 1 -d 1 -s 1 -o 0 -I 1 -D 522.727 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2 
 # After copying out outputfiles, using same code as above, ran a second chain to check convergence
  
 # 4. Summarizing bgc output
