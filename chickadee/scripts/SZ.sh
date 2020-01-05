@@ -36,7 +36,7 @@ h5c++ -Wall -O3  -o estpost estpost_h5.c -lgsl -lgslcblas
 # S2.txt (https://github.com/laninsky/project_logs/blob/master/chickadee/data/S2.txt): will use 
 # this file to divide up birds into "parental" and "admixed"
 # snp_locus_gene_function.txt (created in Step 1 above): gives genomic coordinates of SNPs to account for LD
-# ref_guided.ustr: genotypes per locus and per individual used to create data files
+# ref_guided.str: genotypes per locus and per individual used to create data files
 Rscript SCC.R
 
 # 4. Running bgc
