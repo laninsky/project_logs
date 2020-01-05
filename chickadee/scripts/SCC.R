@@ -4,8 +4,8 @@
 # Necessary files: 
 # S2.txt (https://github.com/laninsky/project_logs/blob/master/chickadee/data/S2.txt): will use 
 # this file to divide up birds into "parental" and "admixed"
-# snp_locus_gene_function.txt (created in Step 1 above): gives genomic coordinates of SNPs to account for LD
-# ref_guided.ustr: genotypes per locus and per individual used to create data files
+# snp_locus_gene_function.txt (created in SAA.R): gives genomic coordinates of SNPs to account for LD
+# ref_guided.str: genotypes per locus and per individual used to create data files
 
 # 1. Loading required library
 library(tidyverse)
