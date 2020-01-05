@@ -109,9 +109,9 @@ gene_info$filepos <- as.numeric(gene_info$filepos)
 snp_locus_map <- full_join(snp_locus_map,gene_info,by="filepos")
 
 # 4. Extracting eulerr-compatible columns to summarize data
-snp_locus_map <- snp_locus_map %>% mutate(gene_mRNA_exon_CDS=paste(ifelse(!is.na(gene),"gene&",""),ifelse(!is.na(mRNA),"mRNA&",""),ifelse(!is.na(exon),"exon&",""),ifelse(!is.na(CDS),"CDS&",""),sep="")) %>% mutate(gene_mRNA_exon_CDS=gsub("&$","",gene_mRNA_exon_CDS))
+snp_locus_map <- snp_locus_map %>% mutate(gene_mRNA_exon_CDS=paste(ifelse(!is.na(gene),"gene&",""),ifelse(!is.na(mRNA),"mRNA&",""),ifelse(!is.na(exon),"exon&",""),ifelse(!is.na(CDS),"CDS&",""),sep="")) %>% mutate(gene_mRNA_exon_CDS=gsub("&$","",gene_mRNA_exon_CDS)) %>% mutate(gene_mRNA_exon_CDS=ifelse(gene_mRNA_exon_CDS=="",NA,gene_mRNA_exon_CDS))
 
-snp_locus_map <- snp_locus_map %>% mutate(add_break_down=paste(ifelse(!is.na(lnc_RNA),"lnc_RNA&",""),ifelse(!is.na(transcript),"transcript&",""),ifelse(!is.na(tRNA),"tRNA&",""),ifelse(!is.na(C_gene_segment),"C_gene_segment&",""),ifelse(!is.na(pseudogene),"pseudogene&",""),sep="")) %>% mutate(add_break_down=gsub("&$","",add_break_down))
+snp_locus_map <- snp_locus_map %>% mutate(add_break_down=paste(ifelse(!is.na(lnc_RNA),"lnc_RNA&",""),ifelse(!is.na(transcript),"transcript&",""),ifelse(!is.na(tRNA),"tRNA&",""),ifelse(!is.na(C_gene_segment),"C_gene_segment&",""),ifelse(!is.na(pseudogene),"pseudogene&",""),sep="")) %>% mutate(add_break_down=gsub("&$","",add_break_down)) %>% mutate(add_break_down=ifelse(add_break_down=="",NA,add_break_down))
 
 write_delim(snp_locus_map,"snp_locus_gene_function.txt")
 
