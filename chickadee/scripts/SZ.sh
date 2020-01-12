@@ -4,23 +4,19 @@
 # Alexander et al.
 
 # 1. Summazing genic content and chromosome position of RADseq loci
-# Copy gff file to directory to where ipyrad outfiles are located
-cp GCF_001522545.3_Parus_major1.1_genomic.gff.gz ref_guided_outfiles/
-cd ref_guided_outfiles/ 
-
 # Obtain chromosome labels for scaffolds
 zgrep -E "RefSeq" GCF_001522545.3_Parus_major1.1_genomic.gff.gz | grep "region" | grep "chromosome" | sed 's/RefSeq.*Name=//g' | sed 's/;chromosome.*//g' > chromosome_scaffolds.txt
 
 # Strip comment rows off the output vcf file and GFF file
-grep -v "#" ref_guided.vcf > headerless.vcf
-zgrep -v "#" GCF_001522545.3_Parus_major1.1_genomic.gff.gz > headerless.gff
+grep -v "##" ref_guided.vcf > headerless.vcf
+grep -F -e "##" ref_guided.vcf > header_rows.txt
 
-# Run R code to summarize RADseq markers based on ref_guided.snps.map
+# Using R code to summarize RADseq markers based on ref_guided.snps.map
 # (in order to find which SNP positions correspond to each locus),
 # headerless.vcf (to obtain chromosome, and position along chromosome),
-# chromosome_scaffolds.txt (to find which scaffold corresponds to what
-# chromosome), and headerless.gff (to see whether SNPs fell in genic regions)
-Rscript SAA.R
+# chromosome_scaffolds.txt (to find which scaffold corresponds to what chromosome)
+# popmap_final.txt (to divide up birds into "Carolina", "blackcapped", "hybrid"
+Rscript SCC.R
 
 # 2. Compiling the bgc software in bin directory
 # Loading required modules
@@ -31,15 +27,7 @@ h5c++ -Wall -O2 -L/usr/include/gsl -I/usr/include/gsl -o bgc bgc_main.C bgc_func
 # Compiling estpost
 h5c++ -Wall -O3  -o estpost estpost_h5.c -lgsl -lgslcblas
 
-# 3. Setting up input files
-# Necessary files in the same folder as the Rscript: 
-# S2.txt (https://github.com/laninsky/project_logs/blob/master/chickadee/data/S2.txt): will use 
-# this file to divide up birds into "parental" and "admixed"
-# snp_locus_gene_function.txt (created in Step 1 above): gives genomic coordinates of SNPs to account for LD
-# ref_guided.str: genotypes per locus and per individual used to create data files
-Rscript SCC.R
-
-# 4. Running bgc
+# 3. Running bgc
 # Making directory and copying necessary inputs into it
 mkdir bgc
 mv black_capped.txt bgc
@@ -64,8 +52,7 @@ export PATH=/nesi/nobackup/uoo00105/bin/bgcdist:$PATH
 # -p Specifies which parameter samples to print: 1 = also print precision parameters
 # -q Boolean, calculate and print cline parameter quantiles [default = 0]
 # -i Boolean, calculate and print interspecific-heterozygosity [default = 0].
-# -N Boolean, use genotype-uncertainty model [In contrast to the manual and Taylor et al. (2014), chose
-# 0, as our pipeline restricted SNPs to those >=6 reads]
+# -N Boolean, use genotype-uncertainty model
 # -E Boolean, use sequence error model, only valid in conjunction with the genotype-
 # uncertainty model [default = 0].
 # -m Boolean, use ICARrho model for linked loci [default = 0].
@@ -86,30 +73,9 @@ export PATH=/nesi/nobackup/uoo00105/bin/bgcdist:$PATH
 # -z MCMC tuning parameter, standard deviation for Gaussian proposal of cline parameter zeta [default = 0.05]
 # -e MCMC tuning paramteer, standard deviation for Gaussian proposal of cline parameters eta and kappa [default = 0.02]
 
-# Code would only work when tab auto-completing file names (rather than copying and pasting)
-bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 –x 50000 –n 25000 -t 5 -p 1 -q 1 -i 0 -N 0 -E 0 -m 1 -d 1 -s 1 -o 0 -I 1 -D 522.727 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2 
+bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -x 50000 -n 25000 -t 5 -p 1 -q 1 -i 0 -N 1 -E 0.0001 -m 1 -d 1 -s 1 -o 0 -I 0 -D 522.727 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2
 # After copying out outputfiles, using same code as above, ran a second chain to check convergence
  
-# 4. Summarizing bgc output
-# -i Infile, MCMC results from bgc in HDF5 format.
-# -o Outfile [default = postout].
-# -p Name of parameter to summarize, possibilities include: ’LnL’, ’alpha’, ’beta’,
-# ’eta’, ’eta-quantile’, ’gamma-quantile’, ’gamma-quantile-local’, ’hi’, ’interspecific-
-# het’, ’kappa’, ’kappa-quantile’, ’rho’, ’tau-alpha’, ’tau-beta’, ’zeta-quantile’, and
-# ’zeta-quantile-local’.
-# -c Credible interval to calculate [default = 0.95].
-# -b Number of additional (beyond the burn-in passed to bgc) MCMC samples to discard
-# for burn-in [default = 0]. This burn-in is based on the number of thinned samples.
-# -h Number of bins for posterior sample histogram [default = 20].
-# -s Which summary to perform: 0 = posterior estimates and credible intervals, 1 =
-# histogram of posterior samples, 2 = convert to plain text.
-# -w Write parameter identification and headers to file, boolean [default = 1].
-
-# Checking for stationarity
-estpost –i mcmcout.hdf5 –p LnL –o ln1_conv –s 0 –w 1
-estpost –i mcmcout.hdf5 –p alpha –o a_conv –s 0 –w 1
-estpost –i mcmcout.hdf5 –p beta –o b_conv –s 0 –w 1
-
 # LnL output.txt: Each line in this file contains the log likelihood for a single MCMC step.
 # For this and all other files only post-burnin post-thinning MCMC samples are included.
 
@@ -134,6 +100,22 @@ estpost –i mcmcout.hdf5 –p beta –o b_conv –s 0 –w 1
 # zeta output.txt: This file contains the quantile of each ζ cline parameter in the estimated
 # genome-wide distribution and follows the format described for q gamma output.txt.
 
+ 
+# 4. Summarizing bgc output
+# -i Infile, MCMC results from bgc in HDF5 format.
+# -o Outfile [default = postout].
+# -p Name of parameter to summarize, possibilities include: ’LnL’, ’alpha’, ’beta’,
+# ’eta’, ’eta-quantile’, ’gamma-quantile’, ’gamma-quantile-local’, ’hi’, ’interspecific-
+# het’, ’kappa’, ’kappa-quantile’, ’rho’, ’tau-alpha’, ’tau-beta’, ’zeta-quantile’, and
+# ’zeta-quantile-local’.
+# -c Credible interval to calculate [default = 0.95].
+# -b Number of additional (beyond the burn-in passed to bgc) MCMC samples to discard
+# for burn-in [default = 0]. This burn-in is based on the number of thinned samples.
+# -h Number of bins for posterior sample histogram [default = 20].
+# -s Which summary to perform: 0 = posterior estimates and credible intervals, 1 =
+# histogram of posterior samples, 2 = convert to plain text.
+# -w Write parameter identification and headers to file, boolean [default = 1].
+
 # Point estimates and CI (-s 0): This file contains an optional header row and parameter
 # identification column (parameters are ordered and number as they were ordered in the input
 # files but starting with 0). Each line gives the mean, median, and lower and upper bounds of
@@ -145,6 +127,14 @@ Beta: ./estpost -i mcmcout.hdf5 -o betaest.txt -p beta -s 0 -c 0.95 -w 1
 Gamma: ./estpost -i mcmcout.hdf5 -o gammaest.txt -p gamma-quantile -s 0 -c 0.95 -w 1
 Zeta: ./estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.95 -w 1
 Hi: ./estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.95 -w 1
+
+# Checking for stationarity and presenting results
+Rscript
+
+
+# 
+
+
 
 The parameter arguments gamma-quantile and zeta-quantile refer to the locus effects for
 α (γ) and β (ζ; Gompert & Buerkle 2011a). We use the credbile intervals to identify loci with
