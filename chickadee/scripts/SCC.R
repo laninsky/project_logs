@@ -1,257 +1,205 @@
 # This code corresponds to Fig SCC in Alexander et al.
-# It generates the input files for the bgc analysis represented in SZ.sh
+# It generates the input files for the bgc analysis represented in SZ.sh and a vcf
+# file (without the header) that can be used in SnpEff
 
-# Necessary files: 
-# S2.txt (https://github.com/laninsky/project_logs/blob/master/chickadee/data/S2.txt): will use 
-# this file to divide up birds into "parental" and "admixed"
-# snp_locus_gene_function.txt (created in SAA.R): gives genomic coordinates of SNPs to account for LD
-# ref_guided.str: genotypes per locus and per individual used to create data files
+# Necessary files 
+# headerless.vcf: to obtain chromosome, and position along chromosome
+# ref_guided.snps.map: in order to find which SNP positions correspond to each locus
+# chromosome_scaffolds.txt: to find which scaffold corresponds to what chromosome
+# popmap_final.txt: will use this file to divide up birds into "blackcapped, "Carolina", and "admixed"
 
 # 1. Loading required library
 library(tidyverse)
 
 # 2. Loading in data files and retaining columns of interest
-# Reading in "snp_locus_gene_function.txt" and retaining columns of interest
-# have to define the column type or chromosome is read in as numeric
-snp_locus_map <- read_delim("snp_locus_gene_function.txt", delim=" ",
-                   col_types = list(col_double(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_double(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character(),
-                                    col_character()))
+# Reading in headerless.vcf
+vcf <- read_tsv("headerless.vcf",col_names = TRUE)
 
-# Reading in S2.txt to get genomic assignments for each bird
-structure_assignments <- read_tsv("S2.txt")
+# Removing SNPs where all black_capped or all Carolina 
+# or all admixed populations had missing data
+popmap <- read_delim("popmap_final.txt",col_names = FALSE, delim=" ")
+rows_to_delete <- NULL
 
-# Reading in the SNPs for the birds
-SNPs <- read_tsv("ref_guided.str",col_names = FALSE)
-cols_to_delete <- NULL
-for (i in 1:dim(SNPs)[2]) {
-  if (all(is.na(SNPs[,i]))) {
-    cols_to_delete <- c(cols_to_delete,i)
+for (i in 1:dim(vcf)[1]) {
+  print(paste("Up to ",i," out of ",dim(vcf)[1], " SNPs",sep=""))
+  if (all(vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="blackcapped")),1])))]=="./.:0:0,0,0,0") |
+  all(vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="Carolina")),1])))]=="./.:0:0,0,0,0") |
+  all(vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="hybrid")),1])))]=="./.:0:0,0,0,0")) {
+    rows_to_delete <- c(rows_to_delete,i)
   }
 }
-SNPs <- SNPs[,-cols_to_delete]
 
-# Some minor tweaking of sample names based on tissue number in SNPs vs catalog number in S2
-SNPs[which(grepl("3474",as.matrix(SNPs[,1]))),1] <- "90612"
-SNPs[which(grepl("6281",as.matrix(SNPs[,1]))),1] <- "95776"
-SNPs[which(grepl("9898",as.matrix(SNPs[,1]))),1] <- "131638"
-SNPs[which(grepl("7420",as.matrix(SNPs[,1]))),1] <- "92269"
-SNPs[which(grepl("7421",as.matrix(SNPs[,1]))),1] <- "92270"
+vcf <- vcf[-rows_to_delete,]
 
-SNPs <- SNPs %>% mutate(X1=gsub("_.*","",X1))
+# Removing non-biallelic SNPs
+rows_to_delete <- grep(",",vcf$ALT)
+vcf <- vcf[-rows_to_delete,]
 
-# 3. Splitting the SNPs file into black-capped, Carolina, and admixed birds
-black_capped_names <- structure_assignments %>% filter(BC_genetic_cluster_assignment>=0.95) %>% 
-  select(Catalog_number) %>% as.matrix()
-black_capped_names <- rbind(black_capped_names,(structure_assignments %>% filter(BC_genetic_cluster_assignment>=0.95) %>% 
-  select(Tissue_number) %>% as.matrix()))
+# Only including SNPs that have the minimum amount of missing data per locus
+missingdata <- rep(NA,dim(vcf)[1])
+for (i in 1:dim(vcf)[1]) {
+  print(paste("Up to ",i," out of ",dim(vcf)[1], " SNPs",sep=""))
+  missingdata[i] <- length(grep("./.:0:0,0,0,0",vcf[i,10:dim(vcf)[2]]))
+}
 
-Carolina_names <- structure_assignments %>% filter(BC_genetic_cluster_assignment<=0.05) %>% 
-  select(Catalog_number) %>% as.matrix()
-Carolina_names <- rbind(Carolina_names,(structure_assignments %>% 
-                                          filter(BC_genetic_cluster_assignment<=0.05) %>% 
-                                                  select(Tissue_number) %>% as.matrix()))
+missingdata <- as_tibble(missingdata)
+names(missingdata) <- "missing_data"
 
-admixed_names <- structure_assignments %>% 
-  filter(BC_genetic_cluster_assignment>0.05 & BC_genetic_cluster_assignment<0.95) %>% 
-  select(Catalog_number) %>% as.matrix()
-admixed_names <- rbind(admixed_names,(structure_assignments %>% 
-                                          filter(BC_genetic_cluster_assignment>0.05 & BC_genetic_cluster_assignment<0.95) %>% select(Tissue_number) %>% as.matrix()))
+locus <- vcf %>% select(ID) %>% mutate(locus=gsub("_.*","",ID)) %>% select(locus)
 
-black_capped_SNPs <- SNPs %>% filter(X1 %in% black_capped_names)
-Carolina_SNPs <- SNPs %>% filter(X1 %in% Carolina_names)
-admixed_SNPs <- SNPs %>% filter(X1 %in% admixed_names)
+vcf <- bind_cols(missingdata,locus,vcf)
 
-# 4. Setting up each of the SNP input files
-black_capped <- matrix(NA,ncol=1,nrow=((dim(SNPs)[2]-1)*2))
+vcf <- vcf %>% group_by(locus) %>% filter(missing_data==min(missing_data))
 
-black_capped[seq(1,dim(black_capped)[1],2),1] <- paste("locus_",(seq(0,(dim(SNPs)[2]-2),1)),sep="")
+# Only including SNPs that have data for more than 50% of the total individuals
+# due to computational constraints running bgc
+no_indivs <- dim(vcf)[2]-10+1
+vcf <- vcf %>% filter(missing_data<=(no_indivs/2))
 
-Carolina <- black_capped
+# Taking the SNP with the largest MAF
+maf <- rep(NA,dim(vcf)[1])
+for (i in 1:dim(vcf)[1]) {
+  print(paste("Up to ",i," out of ",dim(vcf)[1], " SNPs",sep=""))
+  temp <- gsub(":.*","",vcf[i,12:dim(vcf)[2]])
+  temp <- temp[which(temp!="./.")]
+  count0 <- length(which(temp=="0/0"))*2 + length(which(temp=="0/1"))
+  count1 <- length(which(temp=="1/1"))*2 + length(which(temp=="0/1")) 
+  maf[i] <- min(count0,count1)/(count0+count1)
+}
 
-# admixed
-# Different format to above parental populations e.g. individual level
-# information, and 'pop 0' header
-admixed <- matrix(NA,ncol=1,nrow=((dim(admixed_SNPs)[2]-1)*((dim(admixed_SNPs)[1]/2)+2)))
-admixed[seq(1,dim(admixed)[1],((dim(admixed_SNPs)[1]/2)+2)),1] <- paste("locus_",(seq(0,(dim(admixed_SNPs)[2]-2),1)),sep="")
-admixed[seq(2,dim(admixed)[1],((dim(admixed_SNPs)[1]/2)+2)),1] <- "pop_0"
+maf <- as_tibble(maf)
+names(maf) <- "maf"
+vcf <- bind_cols(maf,vcf)
 
-for (i in 2:dim(SNPs)[2]) {
-  print(paste("Up to ",i-1," SNPs out of ",dim(SNPs)[2]-1,sep=""))
-  biallelic <- c(NA,NA)
+vcf <- vcf %>% group_by(locus) %>% filter(maf==max(maf))
+
+# Taking the first of the remaining SNPs per locus
+vcf <- vcf %>% group_by(locus) %>% slice(.,1)
+
+# Reading in chromosome_scaffolds.txt and creating a variable, chromosome,
+# which gives a numerical number for each scaffold (required for bgc)
+chrom_scaff <- read_tsv("chromosome_scaffolds.txt",col_names = FALSE)
+
+# The grep pattern on the gff file failed to pull out the mtDNA scaffold.
+# Here we are finding the "missing" scaffold number from the vcf file that
+# corresponds to the mtDNA, so we can add it to chrom_scaff
+temprow <- c(as.matrix(unique(vcf$`#CHROM`))[which(!(as.matrix(unique(vcf$`#CHROM`)) %in% as.matrix(chrom_scaff$X1)))],"mtDNA")
+names(temprow) <- names(chrom_scaff)
+chrom_scaff <- bind_rows(chrom_scaff,temprow)
+
+bgc_chrom <- seq(1,(dim(chrom_scaff)[1]))
+bgc_chrom <- as_tibble(bgc_chrom)
+names(bgc_chrom) <- "bgc_chrom"
+chrom_scaff <- bind_cols(chrom_scaff,bgc_chrom)
+names(chrom_scaff) <- c("scaffold","chrom","bgc_chrom")
+
+write_tsv(chrom_scaff,"bgc_chrom_key.txt")
+
+chromosome <- as.matrix(vcf$`#CHROM`)
+for (i in 1:dim(chrom_scaff)[1]) {
+  replace_items <- which(chromosome %in% as.matrix(chrom_scaff[i,1]))
+  chromosome[replace_items] <- as.matrix(chrom_scaff[i,3])
+}
+
+chromosome <- as_tibble(chromosome)
+names(chromosome) <- "bgc_chrom"
+chromosome$bgc_chrom <- as.numeric(chromosome$bgc_chrom)
+
+vcf <- bind_cols(chromosome,vcf)
+
+# 4. Setting up each of the SNP input files for bgc
+vcf <- vcf %>% arrange(bgc_chrom,POS)
+
+no_blackcapped <- sum(popmap[,2]=="blackcapped")
+no_Carolina <- sum(popmap[,2]=="Carolina")
+no_hybrid <- sum(popmap[,2]=="hybrid")
+
+bgc_blackcapped <- matrix(NA,ncol=1,nrow=(no_blackcapped+1)*dim(vcf)[1])
+bgc_Carolina <- matrix(NA,ncol=1,nrow=(no_Carolina+1)*dim(vcf)[1])
+bgc_hybrid <- matrix(NA,ncol=1,nrow=(no_hybrid+2)*dim(vcf)[1])
+
+# Header rows says vcf nucleotide order is CATG
+nucleotide_order <- c("C","A","T","G")
+for (i in 1:dim(vcf)[1]) {
+  # read counts for which nucleotides should be extracted
+  bases <- sort(c(which(nucleotide_order %in% as.matrix(vcf$REF[i])),which(nucleotide_order %in% as.matrix(vcf$ALT[i]))))
   
-  # Getting a count of individuals for alleles for the i-1 SNP
-  # For BC
-  BCalleles <- black_capped_SNPs[1:dim(black_capped_SNPs)[1],i]
-  names(BCalleles) <- "allele_names"
-  BCalleles <- BCalleles %>% group_by(allele_names) %>% 
-    summarize(n=n()) %>% filter(allele_names!=-9) %>% 
-    mutate(species="BC")
-
-  # For CC
-  CCalleles <- Carolina_SNPs[1:dim(Carolina_SNPs)[1],i]
-  names(CCalleles) <- "allele_names"
-  CCalleles <- CCalleles %>% group_by(allele_names) %>% 
-    summarize(n=n()) %>% filter(allele_names!=-9) %>% 
-    mutate(species="CC")
-  
-  # Looking across both species to see what alleles are present
-  alleles <- rbind(BCalleles,CCalleles)
-  alleles_across_spp <- alleles %>% group_by(allele_names) %>% 
-    summarise(n2=n())
-  
-  # Creating a variable to hold those alleles in
-  finalBCalleles <- c(0,0)
-  finalCCalleles <- c(0,0)
-
-  # Pulling in the admixed data for this locus
-  first_allele <- as.matrix(admixed_SNPs[seq(1,dim(admixed_SNPs)[1]-1,2),i])
-  second_allele <- as.matrix(admixed_SNPs[seq(2,dim(admixed_SNPs)[1],2),i])
-
-  # If data for this locus is present in the BC and CC
-  if (dim(alleles_across_spp)[1]>0) {
-
-    # If there are more than 2 allelic states, taking the 2 alleles that
-    # are found in both parental species and ignoring the singleton
-    if(dim(alleles_across_spp)[1]>2) {
-      present_in_both <- alleles_across_spp$allele_names[which(alleles_across_spp$n2==max(alleles_across_spp$n2))]
-      biallelic <- present_in_both
-      
-      if (length(biallelic)>2) {
-        # For loci with more than two alleles
-        while(dim(alleles)[1]>2) {
-          minallele <- min(alleles$n)
-          if(minallele==max(alleles$n)) {
-            alleles <- alleles[-(sample(1:dim(alleles)[1],1)),]
-            biallelic <- alleles$allele_names
-          } else {
-            alleles <- alleles %>% filter(n!=minallele)
-            biallelic <- alleles$allele_names
-          }
-        }
-      }
-      
-      # Replacing any admixed bird alleles not present_in_both with -9
-      first_allele[which(!(first_allele %in% biallelic))] <- -9
-      second_allele[which(!(second_allele %in% biallelic))] <- -9
-      
-    } else {
-      present_in_both <- alleles_across_spp$allele_names
-      biallelic <- present_in_both
-    }
-  
-    for (j in 1:length(biallelic)) {
-      finalBCalleles[j] <- sum(black_capped_SNPs[1:dim(black_capped_SNPs)[1],i]==biallelic[j])
-      finalCCalleles[j] <- sum(Carolina_SNPs[1:dim(Carolina_SNPs)[1],i]==biallelic[j])
-    }
-    
-  } else {
-    # Do we need to record this locus to remove it, because if there
-    # is no data for the parentals, it will not be informative?
-    # Will try running bgc as is and see if this causes errors first
+  # Geting bgc_blackcapped together
+  tempblackcapped <- vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="blackcapped")),1])))]
+  tempblackcapped <- gsub(".*:","",tempblackcapped)
+  # read counts positions that should be selected out of the total
+  snps_to_select <- sort(c(seq(bases[1],no_blackcapped*4,4),seq(bases[2],no_blackcapped*4,4)))
+  # read counts across the birds at all SNP positions
+  tempblackcapped <- unlist(strsplit(tempblackcapped,","))[snps_to_select]
+  # getting position in bgc_blackcapped that this locus corresponds to
+  startpos <- (((i-1)*(1+no_blackcapped))+1)
+  # locus name
+  bgc_blackcapped[startpos,1] <- paste("locus_",i,sep="") 
+  # collapsing read counts into individual read counts
+  blackcapped_indivs <- matrix(NA,ncol=1,nrow=no_blackcapped)
+  for (j in 1:dim(blackcapped_indivs)[1]) {
+    blackcapped_indivs[j,1] <- paste(tempblackcapped[(j*2-1):(j*2)],collapse=" ")
   }
-  # Write out allelic states to their final files for parentals
-  Carolina[(i-1)*2,1] <- paste(finalCCalleles,collapse=" ")
-  black_capped[(i-1)*2,1] <- paste(finalBCalleles,collapse=" ")
-  
-  # Writing out individual level data for admixed birds
-  pasted_alleles <- paste(first_allele,second_allele)
+  # saving these read counts to the outfile
+  bgc_blackcapped[(startpos+1):(startpos+no_blackcapped),1] <- blackcapped_indivs
 
-  # Creating values for biallelic if no parental data recorded
-  # Note - if this causes errors for bgc, will be removing these loci
-  if (is.na(biallelic[1])) {
-    admixedalleles <- table(c(first_allele[which(first_allele!=-9)],second_allele[which(second_allele!=-9)]))
-    # For loci with more than two alleles
-    while(length(admixedalleles)>2) {
-      toremove <- names(admixedalleles)[which(admixedalleles==min(admixedalleles))]
-      first_allele[which(first_allele %in% toremove)] <- -9
-      second_allele[which(second_allele %in% toremove)] <- -9
-      pasted_alleles <- paste(first_allele,second_allele)
-      admixedalleles <- table(c(first_allele[which(first_allele!=-9)],second_allele[which(second_allele!=-9)]))
-    }
-    biallelic <- names(admixedalleles)
+  # Geting bgc_Carolina together
+  tempCarolina <- vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="Carolina")),1])))]
+  tempCarolina <- gsub(".*:","",tempCarolina)
+  # read counts positions that should be selected out of the total
+  snps_to_select <- sort(c(seq(bases[1],no_Carolina*4,4),seq(bases[2],no_Carolina*4,4)))
+  # read counts across the birds at all SNP positions
+  tempCarolina <- unlist(strsplit(tempCarolina,","))[snps_to_select]
+  # getting position in bgc_blackcapped that this locus corresponds to
+  startpos <- (((i-1)*(1+no_Carolina))+1)
+  # locus name
+  bgc_Carolina[startpos,1] <- paste("locus_",i,sep="") 
+  # collapsing read counts into individual read counts
+  Carolina_indivs <- matrix(NA,ncol=1,nrow=no_Carolina)
+  for (j in 1:dim(Carolina_indivs)[1]) {
+    Carolina_indivs[j,1] <- paste(tempCarolina[(j*2-1):(j*2)],collapse=" ")
   }
-  
-  # Getting the admixed birds genotypes together
-  for (k in 1:length(first_allele)) {
-    # For loci where only one allele present
-    if (length(biallelic)==1) {
-      if (first_allele[k]!=-9) {
-        pasted_alleles[k] <- "2 0"
-      }
-    } else {
-      # What to do if two alleles present
-      
-      if (first_allele[k]==biallelic[1] & second_allele[k]==biallelic[1]) {
-        pasted_alleles[k] <- "2 0"
-      } else {
-        if (first_allele[k]==biallelic[2] & second_allele[k]==biallelic[2]) {
-          pasted_alleles[k] <- "0 2"
-        } else {
-          if (first_allele[k]!=-9) {
-            pasted_alleles[k] <- "1 1"
-          }
-        }
-      }
-    }  
+  # saving these read counts to the outfile
+  bgc_Carolina[(startpos+1):(startpos+no_Carolina),1] <- Carolina_indivs
+
+  # Geting bgc_hybrid together
+  temphybrid <- vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="hybrid")),1])))]
+  temphybrid <- gsub(".*:","",temphybrid)
+  # read counts positions that should be selected out of the total
+  snps_to_select <- sort(c(seq(bases[1],no_hybrid*4,4),seq(bases[2],no_hybrid*4,4)))
+  # read counts across the birds at all SNP positions
+  temphybrid <- unlist(strsplit(temphybrid,","))[snps_to_select]
+  # getting position in bgc_blackcapped that this locus corresponds to
+  startpos <- (((i-1)*(2+no_hybrid))+1)
+  # locus name
+  bgc_hybrid[startpos,1] <- paste("locus_",i,sep="")
+  bgc_hybrid[(startpos+1),1] <- "pop_0"
+  # collapsing read counts into individual read counts
+  hybrid_indivs <- matrix(NA,ncol=1,nrow=no_hybrid)
+  for (j in 1:dim(hybrid_indivs)[1]) {
+    hybrid_indivs[j,1] <- paste(temphybrid[(j*2-1):(j*2)],collapse=" ")
   }
-  end_pos <- ((dim(admixed_SNPs)[1]/2+2)*(i-1))
-  start_pos <- end_pos-(dim(admixed_SNPs)[1]/2-1)
-  admixed[start_pos:end_pos,1] <- pasted_alleles
-} 
+  # saving these read counts to the outfile
+  bgc_hybrid[(startpos+2):(startpos+no_hybrid+1),1] <- hybrid_indivs
+}
 
 # writing these files out
-write.table(black_capped,"black_capped.txt",quote = FALSE,col.names = FALSE,row.names = FALSE)
-write.table(Carolina,"Carolina.txt",quote = FALSE,col.names = FALSE,row.names = FALSE)
-write.table(admixed,"admixed.txt",quote = FALSE,col.names = FALSE,row.names = FALSE)
+write.table(bgc_blackcapped,"black_capped.txt",quote = FALSE,col.names = FALSE,row.names = FALSE)
+write.table(bgc_Carolina,"Carolina.txt",quote = FALSE,col.names = FALSE,row.names = FALSE)
+write.table(bgc_hybrid,"admixed.txt",quote = FALSE,col.names = FALSE,row.names = FALSE)
 
 # 5. Setting up the map file
 # Looks like it needs to number each marker, for each chromosome starting at 0
 # then give chromosome as a number, and then distance in kb across chromosome
 # for each of the markers
-genetic_map <- matrix(NA,ncol=3,nrow=dim(snp_locus_map[1]))
-genetic_map[1,] <- c(0,1,snp_locus_map$bp_pos[1]/1000)
-
-for (i in 2:dim(snp_locus_map)[1]) {
-  if(snp_locus_map$chromosome[i]=="Unknown") {
-    if(snp_locus_map$scaffold[i-1]!=snp_locus_map$scaffold[i]) {
-      genetic_map[i,1] <- 0
-      genetic_map[i,2] <- genetic_map[(i-1),2]+1
-      genetic_map[i,3] <- snp_locus_map$bp_pos[i]/1000
-    } else {
-      genetic_map[i,1] <- genetic_map[(i-1),1]+1
-      genetic_map[i,2] <- genetic_map[(i-1),2]
-      genetic_map[i,3] <- snp_locus_map$bp_pos[i]/1000
-    }
-  } else {
-    if(snp_locus_map$chromosome[i-1]!=snp_locus_map$chromosome[i]) {
-      genetic_map[i,1] <- 0
-      genetic_map[i,2] <- genetic_map[(i-1),2]+1
-      genetic_map[i,3] <- snp_locus_map$bp_pos[i]/1000
-    } else {
-      genetic_map[i,1] <- genetic_map[(i-1),1]+1
-      genetic_map[i,2] <- genetic_map[(i-1),2]
-      genetic_map[i,3] <- snp_locus_map$bp_pos[i]/1000
-    }
-  }
-}
+genetic_map <- vcf %>% group_by(bgc_chrom) %>% 
+  mutate(snp_pos=row_number()-1,kbp=POS/1000) %>% select(snp_pos,bgc_chrom,kbp)
 
 write.table(genetic_map,"genetic_map.txt",quote = FALSE,col.names = FALSE,row.names = FALSE)
+
+# 6. Writing out filtered vcf file, for snpeff analysis
+vcf_filtered <- vcf %>% select(-bgc_chrom,-maf,-missing_data,-locus)
+write.table(vcf_filtered,"filtered_headerless.vcf",quote = FALSE,col.names = TRUE,row.names = FALSE)
 
 sessionInfo()
 #R version 3.5.3 (2019-03-11)
