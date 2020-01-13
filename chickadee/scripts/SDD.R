@@ -1,5 +1,7 @@
 # 1. Loading in required libraries
 library(tidyverse)
+library(gtable)
+library(grid)
 
 # 2. Reading in additional files for context on bgc results
 genetic_map <- read_delim("genetic_map.txt",col_names = FALSE,delim=" ")
@@ -59,16 +61,6 @@ combined <- combined %>% mutate(beta=ifelse((beta_95_LB < 0 & beta_95_UB > 0),"N
 
 combined <- combined %>% mutate(both=paste(alpha,beta,sep="_"))
 
-# If the probability that a locus displays ancestry from parental population 1 is significantly 
-# different from the probability predicted by hybrid index, then the α and/or β parameters for 
-# that locus‐specific genomic cline will differ significantly from the null expectation, and 
-# the confidence intervals for these genomic cline parameters will not include zero 
-
-# β: positive values indicate excess ancestry‐based linkage disequilibrium (i.e., P. carolinensis 
-# locus‐specific ancestry confined to P. carolinensis genomic background and P. atricapillus 
-# locus‐specific ancestry confined to P. atricapillus genomic background), whereas negative values 
-# indicate reduced ancestry‐based linkage disequilibrium (e.g., locus‐specific ancestry is less 
-# strongly associated with genomic background; Gompert et al. 2012b).
 
 # 5. Plotting ancestry against hybrid index
 hn_values <- seq(0,1,0.01)
@@ -116,18 +108,58 @@ for (j in 2:dim(locus_trajectories)[2]) {
 }  
 
 locus_trajectories <- as_tibble(locus_trajectories)
+combined <- combined %>% mutate(locus_row=row_number())
+
+both_outlier <- combined %>% 
+  filter(alpha!="Not_outlier" & beta!="Not_outlier") %>% select(locus_row) %>% as.matrix()
+
+alpha_only <- combined %>% 
+  filter(alpha=="Neg|Pos" & beta=="Not_outlier") %>% select(locus_row) %>% as.matrix()
+
+beta_only <- combined %>% 
+  filter(alpha=="Not_outlier" & beta=="Neg|Pos") %>% select(locus_row) %>% as.matrix()
+
+neither_outlier <- combined %>% 
+  filter(alpha=="Not_outlier" & beta=="Not_outlier") %>% select(locus_row) %>% as.matrix()
 
 plotting <- ggplot(locus_trajectories)
 
-for (j in 2:dim(locus_trajectories)[2]) {
-  plotting <- plotting + geom_line(aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]))
+if (length(neither_outlier)>0) {
+  for (j in (neither_outlier+1)) {
+    plotting <- plotting + geom_line(aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="grey",size=1)
+  }
 }
+
+if (length(both_outlier)>0) {
+  for (j in (both_outlier+1)) {
+    plotting <- plotting + geom_line(locus_trajectories,aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="black",size=1)
+  }
+}
+
+if (length(alpha_only)>0) {
+  for (j in (alpha_only+1)) {
+    plotting <- plotting + geom_line(locus_trajectories,aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="blue",size=1)
+  }
+}
+
+if (length(beta_only)>0) {
+  for (j in (beta_only+1)) {
+    plotting <- plotting + geom_line(locus_trajectories,aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="red",size=1)
+  }
+}
+
+# Figure out the plotting
+plotting + theme_bw()
 
 # 6. Plotting by chromosome
 combined <- combined %>% arrange(as.numeric(gsub("[A-Z,a-z]+.*","",chromosome)))
-combined <- combined %>% mutate(snp_order=row_number())
-ggplot(combined) + geom_line(aes(x=snp_order,y=alpha_median))
-ggplot(combined) + geom_line(aes(x=snp_order,y=beta_median))
+alphaplot <- ggplot(combined) + geom_line(aes(x=locus_row,y=alpha_median))
+betaplot <- ggplot(combined) + geom_line(aes(x=locus_row,y=beta_median))
 
-ggplot(combined) + geom_point(aes(x=alpha_median,y=beta_median,colour=chromosome))
+ap <- ggplotGrob(alphaplot)
+bp <- ggplotGrob(betaplot)
+g <- rbind(ap, bp, size = "first")
+g$widths <- unit.pmax(ap$widths, bp$widths)
+grid.newpage()
+grid.draw(g)
 
