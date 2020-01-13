@@ -6,25 +6,81 @@
 # headerless.vcf: to obtain chromosome, and position along chromosome
 # ref_guided.snps.map: in order to find which SNP positions correspond to each locus
 # chromosome_scaffolds.txt: to find which scaffold corresponds to what chromosome
-# popmap_final.txt: will use this file to divide up birds into "blackcapped, "Carolina", and "admixed"
+# popmap.txt: will use this file (and S2.txt) to divide up birds into "blackcapped, "Carolina", and "admixed"
+# The file "popmap.txt" was created by running the following code in the ipyrad directory
+#  ls fastqs/*R1* | sed 's|fastqs/||g' | sed 's/_R1.*//g' > popmap.txt
+# S2.txt: we will use this file (and popmap.txt) to divide the birds into "blackcapped, "Carolina", and "admixed"
 
-# 1. Loading required library
+# 1. Setting parameters
+# required structure assignment to BC to be considered "pure BC"
+structure_thres <- 0.99
+# required completeness of loci to be included
+complete_thres <- 0.75
+# Header rows of vcf says vcf nucleotide order is CATG
+nucleotide_order <- c("C","A","T","G")
+
+# 2. Loading required library
 library(tidyverse)
 
-# 2. Loading in data files and retaining columns of interest
-# Reading in headerless.vcf
+# 3. Creating a bgc-specific popmap file using the structure threshold above
+# This file will be used to filter the vcf file
+# Reading in popmap.txt
+temppopmap <- read_tsv("popmap.txt",col_names=FALSE)
+# Reading in S2 to get structure assignments of each bird
+tempstructure <- read_tsv("S2.txt",col_names=TRUE)
+tempstructure <- tempstructure %>% 
+  select(Catalog_number,Tissue_number,BC_genetic_cluster_assignment) %>% 
+  arrange(BC_genetic_cluster_assignment)
+
+# Creating an object to store the names of the individuals as they are represented
+# in the sequencing file in the same order as S2.txt
+tempnames <- rep(NA,dim(tempstructure)[1])
+
+# replacing names which used tissue number instead of catalog number
+tempstructure[(grepl("90612",as.matrix(tempstructure[,1]))),1] <- "3474_"
+tempstructure[(grepl("95776",as.matrix(tempstructure[,1]))),1] <- "6281_"
+tempstructure[(grepl("131638",as.matrix(tempstructure[,1]))),1] <- "9898_"
+tempstructure[(grepl("92269",as.matrix(tempstructure[,1]))),1] <- "7420_"
+tempstructure[(grepl("92270",as.matrix(tempstructure[,1]))),1] <- "7421_"
+
+# Getting names as they appear in the read file for each of the birds
+for (i in 1:dim(temppopmap)[1]) {
+  temp <- as.matrix(temppopmap[grep(as.matrix(tempstructure[i,1]),as.matrix(temppopmap)),1])
+  if (length(temp)>0) {
+    tempnames[i] <- temp
+  } else {
+    tempnames[i] <- as.matrix(temppopmap[grep(as.matrix(tempstructure[i,2]),as.matrix(temppopmap)),1])
+  }  
+}
+
+tempnames <- as_tibble(tempnames)
+names(tempnames) <- "seqnames"
+tempstructure <- bind_cols(tempnames,tempstructure)
+# Removing any NA-only lines
+tempstructure <- tempstructure %>% filter(!is.na(seqnames))
+
+# Carrying out filtering based on structure_thres
+tempstructure <- tempstructure %>% 
+  mutate(popname=ifelse(BC_genetic_cluster_assignment<=(1-structure_thres),"Carolina",
+                        ifelse(BC_genetic_cluster_assignment>=structure_thres,"blackcapped","hybrid")))
+
+# Also writing out this file for post bgc analyses
+tempstructure <- tempstructure %>% select(seqnames,popname,BC_genetic_cluster_assignment)
+write_delim(tempstructure,"popmap_w_structure.txt",col_names = FALSE)
+
+# Loading in the vcf file so it can be filtered
 vcf <- read_tsv("headerless.vcf",col_names = TRUE)
 
+# 3. Filtering the vcf file to reduce the number of SNPs
 # Removing SNPs where all black_capped or all Carolina 
 # or all admixed populations had missing data
-popmap <- read_delim("popmap_final.txt",col_names = FALSE, delim=" ")
 rows_to_delete <- NULL
 
 for (i in 1:dim(vcf)[1]) {
   print(paste("Up to ",i," out of ",dim(vcf)[1], " SNPs",sep=""))
-  if (all(vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="blackcapped")),1])))]=="./.:0:0,0,0,0") |
-  all(vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="Carolina")),1])))]=="./.:0:0,0,0,0") |
-  all(vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="hybrid")),1])))]=="./.:0:0,0,0,0")) {
+  if (all(vcf[i,(which(names(vcf) %in% as.matrix(tempstructure[(which(tempstructure[,2]=="blackcapped")),1])))]=="./.:0:0,0,0,0") |
+  all(vcf[i,(which(names(vcf) %in% as.matrix(tempstructure[(which(tempstructure[,2]=="Carolina")),1])))]=="./.:0:0,0,0,0") |
+  all(vcf[i,(which(names(vcf) %in% as.matrix(tempstructure[(which(tempstructure[,2]=="hybrid")),1])))]=="./.:0:0,0,0,0")) {
     rows_to_delete <- c(rows_to_delete,i)
   }
 }
@@ -51,10 +107,10 @@ vcf <- bind_cols(missingdata,locus,vcf)
 
 vcf <- vcf %>% group_by(locus) %>% filter(missing_data==min(missing_data))
 
-# Only including SNPs that have data for more than 50% of the total individuals
-# due to computational constraints running bgc
-no_indivs <- dim(vcf)[2]-10+1
-vcf <- vcf %>% filter(missing_data<=(no_indivs/2))
+# Only including SNPs that have data for more than complete_thres of the total 
+# individuals due to computational constraints running bgc
+no_indivs <- dim(vcf)[2]-12+1
+vcf <- vcf %>% filter(missing_data<=(no_indivs*(1-complete_thres)))
 
 # Taking the SNP with the largest MAF
 maf <- rep(NA,dim(vcf)[1])
@@ -110,22 +166,20 @@ vcf <- bind_cols(chromosome,vcf)
 # 4. Setting up each of the SNP input files for bgc
 vcf <- vcf %>% arrange(bgc_chrom,POS)
 
-no_blackcapped <- sum(popmap[,2]=="blackcapped")
-no_Carolina <- sum(popmap[,2]=="Carolina")
-no_hybrid <- sum(popmap[,2]=="hybrid")
+no_blackcapped <- tempstructure %>% filter(popname=="blackcapped") %>% count() %>% as.numeric()
+no_Carolina <- tempstructure %>% filter(popname=="Carolina") %>% count() %>% as.numeric()
+no_hybrid <- tempstructure %>% filter(popname=="hybrid") %>% count() %>% as.numeric()
 
 bgc_blackcapped <- matrix(NA,ncol=1,nrow=(no_blackcapped+1)*dim(vcf)[1])
 bgc_Carolina <- matrix(NA,ncol=1,nrow=(no_Carolina+1)*dim(vcf)[1])
 bgc_hybrid <- matrix(NA,ncol=1,nrow=(no_hybrid+2)*dim(vcf)[1])
 
-# Header rows says vcf nucleotide order is CATG
-nucleotide_order <- c("C","A","T","G")
 for (i in 1:dim(vcf)[1]) {
   # read counts for which nucleotides should be extracted
   bases <- sort(c(which(nucleotide_order %in% as.matrix(vcf$REF[i])),which(nucleotide_order %in% as.matrix(vcf$ALT[i]))))
   
   # Geting bgc_blackcapped together
-  tempblackcapped <- vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="blackcapped")),1])))]
+  tempblackcapped <- vcf[i,(which(names(vcf) %in% as.matrix(tempstructure[(which(tempstructure[,2]=="blackcapped")),1])))]
   tempblackcapped <- gsub(".*:","",tempblackcapped)
   # read counts positions that should be selected out of the total
   snps_to_select <- sort(c(seq(bases[1],no_blackcapped*4,4),seq(bases[2],no_blackcapped*4,4)))
@@ -144,7 +198,7 @@ for (i in 1:dim(vcf)[1]) {
   bgc_blackcapped[(startpos+1):(startpos+no_blackcapped),1] <- blackcapped_indivs
 
   # Geting bgc_Carolina together
-  tempCarolina <- vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="Carolina")),1])))]
+  tempCarolina <- vcf[i,(which(names(vcf) %in% as.matrix(tempstructure[(which(tempstructure[,2]=="Carolina")),1])))]
   tempCarolina <- gsub(".*:","",tempCarolina)
   # read counts positions that should be selected out of the total
   snps_to_select <- sort(c(seq(bases[1],no_Carolina*4,4),seq(bases[2],no_Carolina*4,4)))
@@ -163,7 +217,7 @@ for (i in 1:dim(vcf)[1]) {
   bgc_Carolina[(startpos+1):(startpos+no_Carolina),1] <- Carolina_indivs
 
   # Geting bgc_hybrid together
-  temphybrid <- vcf[i,(which(names(vcf) %in% as.matrix(popmap[(which(popmap[,2]=="hybrid")),1])))]
+  temphybrid <- vcf[i,(which(names(vcf) %in% as.matrix(tempstructure[(which(tempstructure[,2]=="hybrid")),1])))]
   temphybrid <- gsub(".*:","",temphybrid)
   # read counts positions that should be selected out of the total
   snps_to_select <- sort(c(seq(bases[1],no_hybrid*4,4),seq(bases[2],no_hybrid*4,4)))
