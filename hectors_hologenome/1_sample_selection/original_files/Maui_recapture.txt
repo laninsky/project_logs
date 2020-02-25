@@ -1,0 +1,115 @@
+Individual_num	Indiv_ID	Sex	Stranded_sample	2001	2002	2003	2004	2006	2007	2010	2011	2013	2015	2016	2018	Notes	2010_match_status	2011_match_status	2013_match_status	2015_match_status	2016_match_status	2018_match_status
+1	NI33	F		NI33		"NI77,91"		NI0604						16NZ21							matched up on rerun and/or looks like a good individual based on PPHO104 only	
+2	NI34	F		NI34																		
+3	NI35	M		NI35									15NZ18	"16NZ42,46"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+4	NI49	F		NI49		NI85																
+5	NI50	F		NI50																		
+6	NI51	F		NI51																		
+7	NI52	F		NI52																		
+8	NI36	M		"NI36,39"																		
+9	NI37	M		NI37							NI11-26			16NZ43				matched up on rerun and/or looks like a good individual based on PPHO104 only			matched up on rerun and/or looks like a good individual based on PPHO104 only	
+10	NI38	F		"NI38,48"																		
+11	NI40	F		NI40																		
+12	NI41	F		NI41																		
+13	NI43	F		NI43		NI78																
+14	NI44	M		NI44																		
+15	NI45	F		"NI45,53"		"NI71,76"					NI11-19							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+16	NI46	F		NI46																		
+17	NI47	M	NI92	NI47		NI92																
+18	NI42	M		NI42																		
+19	NI54	M	ChemU18-004	NI54		"NI72,80,81"	NI99								ChemU18-004							
+20	NI57	F	NI57	NI57																		
+21	NI55	F		NI55																		
+22	NI56	F		NI56			NI103			"NI10-14,31"	NI11-12						has matching PPHO104 to other individuals/samples but differs at other loci	has matching PPHO104 to other individuals/samples but differs at other loci				
+23	NI58	F	NI58	NI58																		
+24	NI59	M	NI59	NI59																		
+25	NI60	M	NI60		NI60																	
+26	NI63	M			NI63																	
+27	NI61	M	NI61		NI61																	
+28	NI62	M	NI62		NI62																	
+29	NI64	F			"NI64,65"			NI0602					15NZ48							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+30	NI66	M			"NI66,67"		"NI96,100"															
+31	NI68	M				NI68																
+32	NI69	M				NI69				NI10-36							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+33	NI70	F				NI70					NI11-15							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+34	NI73	F				NI73				NI10-30							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+35	NI74	F				NI74				NI10-15							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+36	NI75	F				NI75																
+37	NI79	F				NI79																
+38	NI82	M				NI82		NI0601														
+39	NI83	M				NI83																
+40	NI84	M				"NI84,86"							15NZ47	16NZ20						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+41	NI87	M				NI87																
+42	NI88	M				NI88																
+43	NI89	M				"NI89,90"																
+44	NI93	M					NI93															
+45	NI94	M					"NI94,95,97,98"															
+46	NI101	F					"NI101,102"						15NZ15							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+47	NI104	M					NI104															
+48	NI0603	F						NI0603					15NZ30							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+49	NI0605	F						NI0605														
+50	Chem06NZ02	M	06NZ02					06NZ02														
+51	Chem06NZ04	F	06NZ04					06NZ04														
+52	Chem06NZ05	F	06NZ05					06NZ05														
+53	Chem07NZ09	F	07NZ09						07NZ09													
+54	Chem07NZ01	F	07NZ01						07NZ01													
+55	NI10-01	F								NI10-01			15NZ32	16NZ39			matched up on rerun and/or looks like a good individual based on PPHO104 only			matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+56	NI10-02	F								NI10-02							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+57	NI10-04	F								"NI10-04,12"			15NZ07			couldn't be checked as 10-04 and 15NZ07 both failed	some of these failed in rerun so can't check			some of these failed in rerun so can't check		
+58	NI10-05	F								NI10-05; 7;8	"NI11-03,11-04"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only				
+59	NI10-06	M								NI10-06	NI11-13						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only				
+60	NI10-09	F								NI10-09			"15NZ02,36,38"				has matching PPHO104 to other individuals/samples but differs at other loci			has matching PPHO104 to other individuals/samples but differs at other loci		
+61	NI10-10	M								NI10-10			"15NZ37,43"	"16NZ11,15,16"			matched up on rerun and/or looks like a good individual based on PPHO104 only			matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+62	NI10-11	F								NI10-11	NI11-05		15NZ24				matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only		
+63	NI10-13	F								NI10-13	NI11-02		15NZ27				matched up on rerun and/or looks like a good individual based on PPHO104 only	some of these failed in rerun so can't check		matched up on rerun and/or looks like a good individual based on PPHO104 only		
+64	NI10-16	M								NI10-16	NI11-07		15NZ26				matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only		
+65	NI10-17	F								NI10-17;18;19	NI11-06		"15NZ05,06"				matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only		
+66	NI10-20	M								"NI10-20,22"							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+67	NI10-21	F								NI10-21;23	"NI11-18,36"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only				
+68	NI10-25	M								NI10-25							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+69	NI10-26	F								"NI10-26,29"				16NZ24			matched up on rerun and/or looks like a good individual based on PPHO104 only				matched up on rerun and/or looks like a good individual based on PPHO104 only	
+70	NI10-27	M								"NI10-27,34"	NI11-31						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only				
+71	NI10-28	M								NI10-28	"NI11-29,35"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only				
+72	NI10-32	M								NI10-32						confirmed individual through other loci	has matching PPHO104 to other individuals/samples but differs at other loci					
+73	NI10-33	F								NI10-33							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+74	NI10-35	M								NI10-35	"NI11-10,27"		15NZ34				matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only		
+75	Chem10NZ06	M	10NZ06							10NZ06							matched up on rerun and/or looks like a good individual based on PPHO104 only					
+76	NI11-01	F									NI11-01		15NZ21	16NZ40				matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+77	NI11-09	M									"NI11-09,32"		15NZ35					matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only		
+78	"NI11-14,11-16"	F									"NI11-14,11-16"		15NZ09	"16NZ04,14,30"				matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+79	NI11-17	F									NI11-17			16NZ44		match to 11-17		"these are probably the same, same at PPHO104 but differ at one other locus that I need Becca to check - UPDATE Becca agrees match"			"these are probably the same, same at PPHO104 but differ at one other locus that I need Becca to check - UPDATE Becca agrees match"	
+80	NI11-20	F									NI11-20							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+81	NI11-21	M									"NI11-21,11-22"							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+82	NI11-23	M									NI11-23							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+83	NI11-24	F									NI11-24							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+84	NI11-25	F									NI11-25			16NZ38		 match to 11-25		"these are probably the same, same at PPHO104 but differ at one other locus that I need Becca to check - UPDATE Becca agrees match"			"these are probably the same, same at PPHO104 but differ at one other locus that I need Becca to check - UPDATE Becca agrees match"	
+85	NI11-28	F									NI11-28							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+86	NI11-30	M									NI11-30		15NZ41					matched up on rerun and/or looks like a good individual based on PPHO104 only		matched up on rerun and/or looks like a good individual based on PPHO104 only		
+87	NI11-33	M									"NI11-33,11-34"							matched up on rerun and/or looks like a good individual based on PPHO104 only				
+88	Chem13NZ01	F	13NZ01									13NZ01										
+89	Chem15NZ01	F											15NZ01	16NZ28						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+90	Chem15NZ10	M											15NZ10	16NZ12						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+91	Chem15NZ11	F											"15NZ11,13,42"	"16NZ10,36"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+92	Chem15NZ12	F											15NZ12	"16NZ26,27"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+93	Chem15NZ14	F											15NZ14							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+94	Chem15NZ16	F											15NZ16	"16NZ34,35"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+95	Chem15NZ17	F											15NZ17							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+96	Chem15NZ19	F											15NZ19	"16NZ22,25"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+97	Chem15NZ20	M											15NZ20							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+98	Chem15NZ22	F											15NZ22							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+99	Chem15NZ23	F											15NZ23							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+100	Chem15NZ25	F											"15NZ25,29"							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+101	Chem15NZ28	F											15NZ28	"16NZ02, 03,23"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+102	Chem15NZ31	F											15NZ31	16NZ08						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+103	Chem15NZ33	F											15NZ33	"16NZ32,33.37"						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+104	Chem15NZ39	F											15NZ39							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+105	Chem15NZ40	F											15NZ40			confirmed individual through other loci				has matching PPHO104 to other individuals/samples but differs at other loci		
+106	Chem15NZ44	M											15NZ44			confirmed individual through other loci				has matching PPHO104 to other individuals/samples but differs at other loci		
+107	Chem15NZ45	M											15NZ45	16NZ17						matched up on rerun and/or looks like a good individual based on PPHO104 only	matched up on rerun and/or looks like a good individual based on PPHO104 only	
+108	Chem15NZ46	F											15NZ46							matched up on rerun and/or looks like a good individual based on PPHO104 only		
+109	Chem16NZ07	F												"16NZ07,09,41"							matched up on rerun and/or looks like a good individual based on PPHO104 only	
+110	Chem16NZ13	M												"16NZ13,49"							matched up on rerun and/or looks like a good individual based on PPHO104 only	
+111	Chem16NZ18	M												16NZ18		confirmed individual through other loci					has matching PPHO104 to other individuals/samples but differs at other loci	
+112	Chem16NZ19	M												16NZ19							matched up on rerun and/or looks like a good individual based on PPHO104 only	
+113	Chem16NZ29	M												16NZ29							matched up on rerun and/or looks like a good individual based on PPHO104 only	
+114	Chem16NZ47	M												16NZ47							matched up on rerun and/or looks like a good individual based on PPHO104 only	
