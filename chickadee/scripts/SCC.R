@@ -15,7 +15,7 @@
 # required structure assignment to BC to be considered "pure BC"
 structure_thres <- 0.99
 # required completeness of loci to be included
-complete_thres <- 0.75
+complete_thres <- 0.90
 # Header rows of vcf says vcf nucleotide order is CATG
 nucleotide_order <- c("C","A","T","G")
 

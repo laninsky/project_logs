@@ -121,15 +121,21 @@ bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -
 # files but starting with 0). Each line gives the mean, median, and lower and upper bounds of
 # the specified credible interval (this is an equal-tail probability interval).
 
-# Posterior point estimates and 95% ETPIs for the α and β parameters and cline parameter quantiles:
-Alpha: ./estpost -i mcmcout.hdf5 -o alphaest.txt -p alpha -s 0 -c 0.95 -w 1
-Beta: ./estpost -i mcmcout.hdf5 -o betaest.txt -p beta -s 0 -c 0.95 -w 1
-Gamma: ./estpost -i mcmcout.hdf5 -o gammaest.txt -p gamma-quantile -s 0 -c 0.95 -w 1
-Zeta: ./estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.95 -w 1
-Hi: ./estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.95 -w 1
+# Posterior point estimates and 95% ETPIs for the α and β parameters and cline parameter quantiles
+# With Bonferroni correction for 5,722 loci
+#Alpha:
+estpost -i mcmcout.hdf5 -o alphaest.txt -p alpha -s 0 -c 0.9999912618 -w 1
+#Beta
+estpost -i mcmcout.hdf5 -o betaest.txt -p beta -s 0 -c 0.9999912618 -w 1
+#Gamma
+estpost -i mcmcout.hdf5 -o gammaest.txt -p gamma-quantile -s 0 -c 0.9999912618 -w 1
+#Zeta
+estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.9999912618 -w 1
+#Hi
+estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.9999912618 -w 1
 
 # Checking for stationarity and presenting results
-Rscript
+Rscript SDD.R
 
 
 # 

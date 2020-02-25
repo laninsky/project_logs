@@ -59,8 +59,9 @@ combined <- combined %>% mutate(alpha=ifelse((alpha_95_LB < 0 & alpha_95_UB > 0)
 combined <- combined %>% mutate(beta=ifelse((beta_95_LB < 0 & beta_95_UB > 0),"Not_outlier",
                                              ifelse((beta_95_UB < 0),"Neg","Pos")))
 
-combined <- combined %>% mutate(both=paste(alpha,beta,sep="_"))
+combined <- combined %>% mutate(alpha_beta=paste(alpha,beta,sep="+"))
 
+combined <- combined %>% mutate(locus_row=row_number())
 
 # 5. Plotting ancestry against hybrid index
 hn_values <- seq(0,1,0.01)
@@ -77,14 +78,14 @@ slope <- function(hn,a,b) {
   return(theta)
 }
 
-locus_trajectories <- matrix(NA,ncol=(dim(combined)[1]+1),nrow=length(hn_values))
+locus_trajectories <- matrix(NA,ncol=3,nrow=(length(hn_values)*dim(combined)[1]))
 
-locus_trajectories[,1] <- hn_values
+locus_trajectories[,1] <- rep(hn_values,(dim(combined)[1]))
 
-for (j in 2:dim(locus_trajectories)[2]) {
+for (j in 1:(dim(combined)[1])) {
   prob_ancestry <- rep(NA,length(hn_values))
-  a <- combined$alpha_median[j-1]
-  b <- combined$beta_median[j-1]
+  a <- combined$alpha_median[j]
+  b <- combined$beta_median[j]
   
   for (i in 1:length(hn_values)) {
     prob_ancestry[i] <- slope(hn_values[i],a,b)
@@ -92,64 +93,84 @@ for (j in 2:dim(locus_trajectories)[2]) {
   local_max <- NULL
   local_min <- NULL
   for (i in 2:(length(prob_ancestry)-1)) {
-    if (prob_ancestry[i] > prob_ancestry[i+1] & prob_ancestry[i] > prob_ancestry[i-1] ) {
+    if (prob_ancestry[i] > prob_ancestry[i-1] & prob_ancestry[i] > min(prob_ancestry[i:length(prob_ancestry)]) ) {
       local_max <- i
     } 
-    if (prob_ancestry[i] < prob_ancestry[i+1] & prob_ancestry[i] < prob_ancestry[i-1] ) {
+    if (prob_ancestry[i] < prob_ancestry[i-1] & prob_ancestry[i] < max(prob_ancestry[i:length(prob_ancestry)]) ) {
       local_min <- i
     } 
   }
   if (!is.null(local_max) & !is.null(local_min)) {
+    replacementvalue <- 0.5
     startline <- which(prob_ancestry>0.5)[1]
     endline <- which(prob_ancestry<0.5)[length(which(prob_ancestry<0.5))]
-    prob_ancestry[startline:endline] <- 0.5
+    if (startline > endline) {
+      tempstart <- max(prob_ancestry[1:50])
+      tempend <- min(prob_ancestry[51:101])
+      replacementvalue <- (tempstart+tempend)/2
+      startline <- which(prob_ancestry>replacementvalue)[1]
+      endline <- which(prob_ancestry<replacementvalue)[length(which(prob_ancestry<replacementvalue))]
+    }
+    prob_ancestry[startline:endline] <- replacementvalue
   }
-  locus_trajectories[,j] <- prob_ancestry
+  locus_trajectories[((j*length(hn_values))-length(hn_values)+1):(j*length(hn_values)),2] <- prob_ancestry
+  locus_trajectories[((j*length(hn_values))-length(hn_values)+1):(j*length(hn_values)),3] <- j
 }  
 
 locus_trajectories <- as_tibble(locus_trajectories)
-combined <- combined %>% mutate(locus_row=row_number())
+names(locus_trajectories) <- c("hybrid_index","ancestry","locus_row")
+combined <- full_join(locus_trajectories,combined)
 
-both_outlier <- combined %>% 
-  filter(alpha!="Not_outlier" & beta!="Not_outlier") %>% select(locus_row) %>% as.matrix()
+Not_outlier_Not_outlier <- combined %>% filter(alpha_beta=="Not_outlier+Not_outlier")
+Pos_Not_outlier <- combined %>% filter(alpha_beta=="Pos+Not_outlier")
+Neg_Not_outlier <- combined %>% filter(alpha_beta=="Neg+Not_outlier")
+Not_outlier_Pos <- combined %>% filter(alpha_beta=="Not_outlier+Pos")
+Not_outlier_Neg <- combined %>% filter(alpha_beta=="Not_outlier+Neg")
+Neg_Pos <- combined %>% filter(alpha_beta=="Neg+Pos")
+Pos_Neg <- combined %>% filter(alpha_beta=="Pos+Neg")
 
-alpha_only <- combined %>% 
-  filter(alpha=="Neg|Pos" & beta=="Not_outlier") %>% select(locus_row) %>% as.matrix()
+ggplot() + 
+  geom_line(data=Not_outlier_Not_outlier,aes(group=locus_row,x=hybrid_index,y=ancestry), color="grey50",size=1,alpha=0.5) + 
+  geom_line(data=Not_outlier_Pos,aes(group=locus_row,x=hybrid_index,y=ancestry), color="red",size=1) + 
+  geom_line(data=Not_outlier_Neg,aes(group=locus_row,x=hybrid_index,y=ancestry), color="red4",size=1) + 
+  geom_line(data=Neg_Pos,aes(group=locus_row,x=hybrid_index,y=ancestry), color="purple",size=1) + 
+  geom_line(data=Pos_Neg,aes(group=locus_row,x=hybrid_index,y=ancestry), color="purple4",size=1) + 
+  geom_line(data=Pos_Not_outlier,aes(group=locus_row,x=hybrid_index,y=ancestry), color="steelblue2",size=1) + 
+  geom_line(data=Neg_Not_outlier,aes(group=locus_row,x=hybrid_index,y=ancestry), color="blue",size=1) + 
+  theme_bw() +
+  theme(legend.position = "none")
 
-beta_only <- combined %>% 
-  filter(alpha=="Not_outlier" & beta=="Neg|Pos") %>% select(locus_row) %>% as.matrix()
 
-neither_outlier <- combined %>% 
-  filter(alpha=="Not_outlier" & beta=="Not_outlier") %>% select(locus_row) %>% as.matrix()
+# Light blue: positive α not overlapping with zero (non-significant β)
+# Increase in the probability of black-capped ancestry from the base
+# probability (predicted by hybrid index)
 
-plotting <- ggplot(locus_trajectories)
+# Dark blue: negative α not overlapping with zero (non-significant β)
+# Increase in the probability of Carolina ancestry from the base
+# probability (predicted by hybrid index)
 
-if (length(neither_outlier)>0) {
-  for (j in (neither_outlier+1)) {
-    plotting <- plotting + geom_line(aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="grey",size=1)
-  }
-}
+# Light red: positive β not overlapping with zero (non-significant α)
+# Excess ancestry‐based linkage disequilibrium (e.g. Carolina locus-
+# specific ancestry restricted to Carolina genomic background).
 
-if (length(both_outlier)>0) {
-  for (j in (both_outlier+1)) {
-    plotting <- plotting + geom_line(locus_trajectories,aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="black",size=1)
-  }
-}
+# Dark red: negative β not overlapping with zero (non-significant α)
+# Locus-specific ancestry is less strongly associated with genomic background
+# than in other loci.
 
-if (length(alpha_only)>0) {
-  for (j in (alpha_only+1)) {
-    plotting <- plotting + geom_line(locus_trajectories,aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="blue",size=1)
-  }
-}
+# Light purple: significantly negative α and positive β. An increase in the 
+# probability of Carolina ancestry, while also that that locus background 
+# is strongly associated with genomic background
 
-if (length(beta_only)>0) {
-  for (j in (beta_only+1)) {
-    plotting <- plotting + geom_line(locus_trajectories,aes_string(x=names(locus_trajectories)[1],y=names(locus_trajectories)[j]),color="red",size=1)
-  }
-}
+# Dark purple: significantly positive α and negative β. An increase in the
+# probability of black-capped ancestry, while also that the locus background
+# is less associated with genomic background than in other loci.
 
-# Figure out the plotting
-plotting + theme_bw()
+# (Gompert et al. 2012b).
+
+
+
+
+
 
 # 6. Plotting by chromosome
 combined <- combined %>% arrange(as.numeric(gsub("[A-Z,a-z]+.*","",chromosome)))
