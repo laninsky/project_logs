@@ -1,0 +1,95 @@
+H_no.	Path_No.	Maui?	Age_class	Sex	COD_category	Cause_of_death	Death_by_pathogen?	Notes						
+H153	41043	y	A	F	Disease	toxoplasma	y							
+H157	41223		A	F	Predation	shark predation	n							
+H163	42764		A	F	Misc	Renal cyst/haemorrhage/blunt trauma	n							
+H166	42428		S	M	Disease	toxoplasma	y							
+H168	42366		A	F	Disease	fungal septicaemia	y							
+H169	42644		A	F	Disease	toxoplasma	y							
+H176	42749		A	F	Disease	bacterial + fungal	y							
+H182	43204		S	M	Known bycatch	known bycatch	n							
+H188	44214		A	F	Disease	toxoplasma	y							
+H189	44217		S	M	Known bycatch	known bycatch	n							
+H195	44862		S	M	Known bycatch	known bycatch	n							
+H196	44666		A	F	Prob bycatch	probable bycatch	n							
+H197	45290		J	M	Disease	unknown	unknown							
+H198	45494		A	F	Disease	toxoplasma	y							
+H199	45552		A	F	Disease	brucellosis	y							
+H202	45670	y	S	M	Disease	toxoplasma	y							
+H203	45752		J	M	Maternal sep	maternal separation	n							
+H204	45872		J	F	Maternal sep	maternal separation	n							
+H207	46037		A	F	Disease	unknown; renal and lung lesions	unknown							
+H208	46194		J	M	Maternal sep	maternal separation	n							
+H210	46864		A	F	Disease	toxoplasma	y							
+H217	47298		A	F	Misc	internal haemorrhage	n							
+H218	47323		J	F	Maternal sep	maternal separation	n							
+H221	47731		A	M	Disease	"fungal septicemia, pneumonia, encephalitis"	y							
+H225	48721		A	F	Disease	chronic parasitism + renal disease	unknown							
+H228	49053		S	F	Known bycatch	known bycatch	n							
+H231	49091		J	F	Maternal sep	maternal separation	n							
+H235	49196		A	F	Disease	pneumonia	y							
+H237	49284		J	F	Maternal sep	maternal separation	n							
+H238	49350		A	M	Disease	renal disease 	unknown							
+H241	49657		A	M	Disease	renal disease/parasitism	unknown							
+H243	50066	y	A	F	Misc	emaciation/parastism/age	unknown							
+H244	50157		J	F	Disease	myocarditis	y							
+H246	50352		S	F	Prob bycatch	probable bycatch	n							
+H248	50404		A	M	Disease	pneumonia	y							
+H250	51361		J	M	Disease	myocarditis	y							
+H251	51492		A	M	Disease	severe parasitism/starvation		not sure if you want to include parasites in your 'pathogen' category?						
+H252	51579		J	M	Misc	spinal deformity/starvation	n							
+H253	51635		J	M	Known bycatch	known bycatch	n							
+H254	51752		A	F	Misc	spinal deformity/starvation	n							
+H255	51888		S	M	Prob bycatch	probable bycatch	n							
+H256	52509		A	F	Disease	toxoplasma	y							
+H258	53951		J	F	Disease	meningitis + resp distress	y							
+H260	54144		A	F	Disease	tuberculosis	y							
+H261	54221		A	M	Known bycatch	known bycatch	n							
+H262	54222		J	M	Disease	pneumonia/resp distress	y							
+H263	54334		A	U	Poss bycatch	possible bycatch	n							
+H264	54428		A	M	Disease	pneumonia	y							
+H265	55222		A	F	Disease	toxoplasma	y							
+H267	55411	y	A	M	Predation	shark predation	kind of	"this one had disease of the aorta which likely contributed to the predation, and was likely due to a pathogen but too decomposed to identify fully"						
+H269	55594		A	M	Prob bycatch	probable bycatch	n							
+H270	55663		S	M	Misc	severe parasitism + impacted stomach contents		not sure if you want to include parasites in your 'pathogen' category?						
+H271	55810		A	U	Misc	renal disease/aortic and heart disease	unknown							
+H273	56495		A	F	Disease	septicaemia due to retention of dead fetus + Brucellosis	y							
+H274	""""		fetus	M	Disease	brucella	y							
+H277	56791		J	F	Maternal sep	maternal separation + possible pneumonia	unknown	testing underway to evaluate cause of pneumonia						
+H278	56797		A	M	Known bycatch	known bycatch	n							
+H279	56798		A	M	Known bycatch	known bycatch	n							
+H280	56799		A	M	Known bycatch	known bycatch	n							
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
