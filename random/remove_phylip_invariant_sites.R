@@ -1,4 +1,4 @@
-remove_phylip_invariant sites <-  function(path_to_file) {
+remove_phylip_invariant_sites <-  function(path_to_file) {
   # This script takes a phylip file with SNP genotypes where invariant sites are present
   # It strips the invariant sites out and updates the total number of sites in the alignment 
   # and outputs a phylip file suffixed by no_invariant.phy
