@@ -2,7 +2,7 @@ remove_phylip_invariant_sites <-  function(path_to_file) {
   # This script takes a phylip file with SNP genotypes where invariant sites are present
   # It strips the invariant sites out and updates the total number of sites in the alignment 
   # and outputs a phylip file suffixed by no_invariant.phy
-  # e.g. remove_phylip_invariant sites("/users/alanaalexander/Downloads/select_pig_data.phy")
+  # e.g. remove_phylip_invariant_sites("/users/alanaalexander/Downloads/select_pig_data.phy")
   
   # Loading required libraries
   if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse')
