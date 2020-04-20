@@ -128,6 +128,11 @@ Not_outlier_Pos <- combined %>% filter(alpha_beta=="Not_outlier+Pos")
 Not_outlier_Neg <- combined %>% filter(alpha_beta=="Not_outlier+Neg")
 Neg_Pos <- combined %>% filter(alpha_beta=="Neg+Pos")
 Pos_Neg <- combined %>% filter(alpha_beta=="Pos+Neg")
+Neg_Neg <- combined %>% filter(alpha_beta=="Neg+Neg")
+Pos_Pos <- combined %>% filter(alpha_beta=="Pos+Pos")
+
+# Summarizing the counts in each category. Note, no Neg+Neg or Pos+Pos observed
+combined %>% filter(hybrid_index==0) %>% group_by(alpha_beta) %>% count()
 
 ggplot() + 
   geom_line(data=Not_outlier_Not_outlier,aes(group=locus_row,x=hybrid_index,y=ancestry), color="grey50",size=1,alpha=0.5) + 
