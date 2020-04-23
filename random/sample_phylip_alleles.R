@@ -13,25 +13,25 @@ sample_phylip_alleles <- function(path_to_file,suffix_A,suffix_B) {
     if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse')
   
     # Reading in file
-    file <- read_table2(path_to_file)
+    phylip_file <- read_table2(path_to_file)
     
     # Getting new number of taxa and creating beginning of output
-    new_taxa <- as.numeric(names(file)[1])/2
-    output <- c(new_taxa,as.numeric(names(file)[2]))
+    new_taxa <- as.numeric(names(phylip_file)[1])/2
+    output <- c(new_taxa,as.numeric(names(phylip_file)[2]))
     
     # Stripping off the suffixes from the sample names
     gsub_pattern <- paste(suffix_A,"$","|",suffix_B,"$",sep="")
-    file[,1] <- gsub(gsub_pattern,"",as.matrix(file[,1]))
+    phylip_file[,1] <- gsub(gsub_pattern,"",as.matrix(phylip_file[,1]))
     
     # Obtaining list of unique sample names
-    sample_names <- as.matrix(unique(file[,1]))
+    sample_names <- as.matrix(unique(phylip_file[,1]))
     
     # Going through the sample names and randomly sampling allele states at each SNP
     for (i in sample_names) {
       # Getting the rows corresponding to the ith sample name
-      temp <- file[which(as.matrix(file[,1]) %in% i),]
+      temp <- phylip_file[which(as.matrix(phylip_file[,1]) %in% i),]
       # Creating a random array to select which allele will represent each SNP
-      rand_array <- runif(as.numeric(names(file)[2]))
+      rand_array <- runif(as.numeric(names(phylip_file)[2]))
       # Creating an output variable to record the individual's data, and populating it with allele1
       indiv_SNPs <- unlist(strsplit(as.matrix(temp[1,2]),split=""))
       # Doing the same thing for allele2, because we'll replace some of indiv_SNPs (i.e. allele1)
