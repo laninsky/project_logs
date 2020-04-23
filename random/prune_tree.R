@@ -31,14 +31,21 @@ prune_tree <- function(path_to_newick_tree,path_to_id_group_file) {
       othergroups <- groups[which(!(groups[,1] %in% tempgroup)),1]
       # We make a "temp tree" that we can drop tips off
       temptree <- treefile
-      # For each of the other groups
-      for (j in othergroups) {
-        # Get the list of sample IDs that correspond to that group, but exclude the first sample in that list
-        toremove <- as.matrix(speciesid_files[which(as.matrix(speciesid_files)[,2]==j),1])[-1,]
-        # Drop these sample IDs from "temp tree"
-        temptree <- drop.tip(temptree,toremove)
-      }
-      # Write out the tree file, suffixed by the group where all the individuals are kept
-      write.tree(temptree,paste(path_to_newick_tree,".",groups[i],".tre",sep=""))  
-    }
-}   
+      
+      monophyletic_status <- is.monophyletic(treefile, as.matrix(speciesid_files[which(as.matrix(speciesid_files)[,2]==tempgroup),1]))
+
+      print(paste("Is the group ",tempgroup," monophyletic? ", monophyletic_status,sep=""))
+      
+      if (monophyletic_status) {
+        # For each of the other groups
+        for (j in othergroups) {
+          # Get the list of sample IDs that correspond to that group, but exclude the first sample in that list
+          toremove <- as.matrix(speciesid_files[which(as.matrix(speciesid_files)[,2]==j),1])[-1,]
+          # Drop these sample IDs from "temp tree"
+          temptree <- drop.tip(temptree,toremove)
+        }
+        # Write out the tree file, suffixed by the group where all the individuals are kept
+          write.tree(temptree,paste(path_to_newick_tree,".",groups[i],".tre",sep=""))  
+        }
+    }   
+}
