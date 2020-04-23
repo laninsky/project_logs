@@ -8,14 +8,14 @@ remove_phylip_invariant_sites <-  function(path_to_file) {
   if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse')
   
   # Reading in file
-  file <- read_table2(path_to_file)
+  phylip_file <- read_table2(path_to_file)
   
   # Setting up a matrix to save the "split" alignment into (site by site)
-  split_alignment <- matrix(NA,nrow=as.numeric(names(file)[1]),ncol=as.numeric(names(file)[2]))
+  split_alignment <- matrix(NA,nrow=as.numeric(names(phylip_file)[1]),ncol=as.numeric(names(phylip_file)[2]))
   
   # Populating this matrix with the sequence data split out by site
   for (i in 1:dim(split_alignment)[1]) {
-    split_alignment[i,] <- unlist(strsplit(as.matrix(file[i,2]),""))
+    split_alignment[i,] <- unlist(strsplit(as.matrix(phylip_file[i,2]),""))
   }
   
   # Finding the sites that are invariant across the alignment
@@ -34,12 +34,12 @@ remove_phylip_invariant_sites <-  function(path_to_file) {
   split_alignment <- split_alignment[,-invariant_sites]
   
   # Getting the new number of sites for the output
-  output <- c(as.numeric(names(file)[1]),dim(split_alignment)[2])
+  output <- c(as.numeric(names(phylip_file)[1]),dim(split_alignment)[2])
   
   # Creating a matrix to capture the output
-  output_sequence <- matrix(NA,nrow=as.numeric(names(file)[1]),ncol=2)
+  output_sequence <- matrix(NA,nrow=as.numeric(names(phylip_file)[1]),ncol=2)
   # Populating this with the sequence names
-  output_sequence[,1] <- as.matrix(file[,1])
+  output_sequence[,1] <- as.matrix(phylip_file[,1])
   
   
   # Collapsing the sequence data to a string for each individual
