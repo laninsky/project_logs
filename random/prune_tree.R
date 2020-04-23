@@ -36,7 +36,7 @@ prune_tree <- function(path_to_newick_tree,path_to_id_group_file) {
 
       print(paste("Is the group ",tempgroup," monophyletic? ", monophyletic_status,sep=""))
       
-      if (monophyletic_status) {
+      if (monophyletic_status==TRUE) {
         # For each of the other groups
         for (j in othergroups) {
           # Get the list of sample IDs that correspond to that group, but exclude the first sample in that list
