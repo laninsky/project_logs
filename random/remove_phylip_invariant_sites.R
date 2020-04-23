@@ -51,6 +51,6 @@ remove_phylip_invariant_sites <-  function(path_to_file) {
   output <- rbind(output,output_sequence)
   
   # Writing out the resultant file
-  write.table(output,paste(path_to_file,"no_invariant.phy",sep=""),col.names = FALSE,row.names = FALSE,quote = FALSE)
+  write.table(output,paste(path_to_file,".no_invariant.phy",sep=""),col.names = FALSE,row.names = FALSE,quote = FALSE)
   
 }  
