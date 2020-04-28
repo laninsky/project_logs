@@ -30,10 +30,17 @@ for (i in 1:length(Sample)) {
       Sample[i] <- gsub(".trimmed.R2.fastq.gz","",fastqc$X3[i])
     }     
   } else {
+    # If the file name in fastqc doesn't have "trimmed" in it
+    # If the file name is not in key.txt
     if (length((which(key$X1 %in% fastqc$X3[i])))==0) {
+      # Adding the row number to 'undetermined rows' (probably unassigned barcodes)
       undertermined_rows <- c(undertermined_rows,i)
-    } else {  
+    } else { 
+      # If the file name in fastqc doesn't have "trimmed" in it
+      # And the file name IS in key.txt
+      # Then Sample is whatever sample name the file name corresponds to in key.txt
       Sample[i] <- as.matrix(key[(which(key$X1 %in% fastqc$X3[i])),2])[1,1]
+      # And then we determine whether this file is R1 or R2 based on the file ending
       if (grepl("_R1_001.fastq.gz",fastqc$X3[i])) {
         R1_R2[i] <- "R1"
       } else {
