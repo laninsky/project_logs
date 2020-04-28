@@ -81,3 +81,24 @@ comparisons_to_check <- fastqc %>% filter(N!=Y) %>%
 sample_names <- gsub(".R1|.R2","",comparisons_to_check$full_name)
 trimmed_name <- rep(NA,length(sample_names))
 original_name <- rep(NA,length(sample_names))
+
+for (i in 1:length(sample_names)) {
+  # Getting whether the sample is R1 or R2
+  R1_R2_placeholder <- gsub(paste(sample_names[i],".",sep=""),"",comparisons_to_check[i,1])
+  # Recapitulating the trimmed name 
+  trimmed_name[i] <-  paste(sample_names[i],".trimmed.",R1_R2_placeholder,".fastq.gz",sep="")
+  # Getting the original file name
+  if (R1_R2_placeholder=="R1") {
+    original_name[i] <- as.matrix(key[which(key$X2 %in% sample_names[i])[1],1])
+  } else {
+    original_name[i] <- as.matrix(key[which(key$X2 %in% sample_names[i])[2],1])
+  }  
+}
+
+# Binding this to the comparisons_to_check, giving it informative column names, and writing it out
+comparisons_to_check <- as_tibble(cbind(comparisons_to_check,original_name,trimmed_name))
+names(comparisons_to_check) <- c("sample","QC parameter","QC_after_trimming","QC_before_trimming","before_trimming_filename","after_trimming_filename")
+write_tsv(comparisons_to_check,"comparisons_to_check.txt")
+
+
+
