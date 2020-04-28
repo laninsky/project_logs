@@ -50,15 +50,20 @@ for (i in 1:length(Sample)) {
   }
 }  
 
-# Removing rows not present in the key.txt file
+# Sticking our new variables to the tibble
+fastqc <- as_tibble(cbind(fastqc,Sample,R1_R2))
+
+# Removing rows not present in the key.txt file (probably undetermined files)
 fastqc <- fastqc[-undertermined_rows,]
 
-fastqc <- fastqc %>% mutate(Sample=gsub("_L00.*","",X3)) %>% 
-  mutate(Read_file=gsub(".trimmed","",gsub(".fastq.gz","",X3))) %>% 
-    mutate(Trimmed=ifelse(grepl("trimmed",X3),"Y","N"))
+# Adding a row to say whether trimmed or not
+fastqc <- fastqc %>% mutate(Trimmed=ifelse(grepl("trimmed",X3),"Y","N"))
+
+# Merging sample name and whether R1 or R2
+fastqc <- fastqc %>% mutate(full_name=paste(Sample,R1_R2,sep="."))
 
 # Selecting columns of interest
-fastqc <- fastqc %>% select(Sample, Read_file, Trimmed, X2, X1)
+fastqc <- fastqc %>% select(full_name, Trimmed, X2, X1)
 
 # Pivot_wider on Trimmed, filling in with pass/fail results
 fastqc <- fastqc %>% pivot_wider(names_from=Trimmed,values_from=X1)
@@ -67,7 +72,12 @@ fastqc <- fastqc %>% pivot_wider(names_from=Trimmed,values_from=X1)
 # Ignoring 'Per tile sequence quality' where quality hasn't changed between before and after trimming
 # Ignoring 'Per sequence GC quality' where quality hasn't changed between before and after trimming
 # Ignoring sequence length distribution warning (due to trimming)
-fastqc %>% filter(N!=Y) %>%
+comparisons_to_check <- fastqc %>% filter(N!=Y) %>%
   filter(((X2=="Per tile sequence quality"| X2=="Per sequence GC quality") & N!=Y) | (X2!="Per tile sequence quality"| X2!="Per sequence GC quality")) %>%
     filter(X2!="Sequence Length Distribution" | (X2=="Sequence Length Distribution" & !(N=="PASS" & Y=="WARN"))) %>%
       filter(Y!="PASS")
+
+# Grabbing the original file names
+sample_names <- gsub(".R1|.R2","",comparisons_to_check$full_name)
+trimmed_name <- rep(NA,length(sample_names))
+original_name <- rep(NA,length(sample_names))
