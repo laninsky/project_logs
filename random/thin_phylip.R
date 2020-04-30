@@ -6,7 +6,7 @@ thin_phylip <- function(path_to_file,path_to_id_group_file,groups_comma_delimite
   # The function requires the path and name of your phylip file [path_to_file];
   # a tab-delimited file with individual ID in the first column (matching the phylip file) 
   # and the group in the second [path_to_id_group_file]; and a comma-delimited string
-  # of the breeds to be completely retained [breeds_comma_delimited].
+  # of the groups to be completely retained [groups_comma_delimited].
   
   # It outputs a phylip file with the same name as the input file, appended by "thinned.phy" 
   # e.g. thin_phylip("/Users/alanaalexander/Downloads/individual_level_phylip.phy","/Users/alanaalexander/Downloads/sample_id_and_breed_columns.txt","Canterbury_pig,Auckland_Island_feral_pig,North_Island_pig,Ossabaw")
@@ -21,17 +21,17 @@ thin_phylip <- function(path_to_file,path_to_id_group_file,groups_comma_delimite
   # Reading in the tab delimited file with groups
   speciesid_files <- read_delim(path_to_id_group_file,delim="\t")
   
-  # Getting the list of breeds to completely retain
-  breed_list <- unlist(strsplit(breeds_comma_delimited,","))
+  # Getting the list of groups to completely retain
+  group_list <- unlist(strsplit(groups_comma_delimited,","))
   
-  # Getting taxa names of breeds that won't be completely retain
+  # Getting taxa names of groups that won't be completely retain
   thinned_taxa <- as.matrix(speciesid_files %>% 
-                              filter(!(.[[2]] %in% breed_list)) %>% 
+                              filter(!(.[[2]] %in% group_list)) %>% 
                               group_by(.[[2]]) %>% slice(1))[,1]
   
-  # Getting taxa names of breeds that will be completely retained
+  # Getting taxa names of groups that will be completely retained
   non_thinned_taxa <- as.matrix(speciesid_files %>% 
-                                  filter(.[[2]] %in% breed_list))[,1]
+                                  filter(.[[2]] %in% group_list))[,1]
   
   # Retaining the rows in the phylip file pertaining to the samples we want to keep
   phylip_file_thinned <- phylip_file[(which(as.matrix(phylip_file[,1]) %in% c(thinned_taxa,non_thinned_taxa))),]
