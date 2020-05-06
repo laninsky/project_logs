@@ -7,14 +7,14 @@ library(tidyverse)
 
 # Reading in popmap.txt
 temppopmap <- read_tsv("popmap.txt",col_names=FALSE)
-# Reading in S2 to get structure assignments of each bird
-tempstructure <- read_tsv("S2.txt",col_names=TRUE)
+# Reading in Table S1 to get structure assignments of each bird
+tempstructure <- read_tsv("Table_S1.txt",col_names=TRUE)
 tempstructure <- tempstructure %>% 
   select(Catalog_number,Tissue_number,BC_genetic_cluster_assignment) %>% 
   arrange(BC_genetic_cluster_assignment)
 
 # Creating an object to store the names of the individuals as they are represented
-# in the sequencing file in the same order as S2.txt
+# in the sequencing file in the same order as Table_S1.txt
 tempnames <- rep(NA,dim(tempstructure)[1])
 
 
