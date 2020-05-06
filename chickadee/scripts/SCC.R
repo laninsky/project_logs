@@ -6,10 +6,10 @@
 # headerless.vcf: to obtain chromosome, and position along chromosome
 # ref_guided.snps.map: in order to find which SNP positions correspond to each locus
 # chromosome_scaffolds.txt: to find which scaffold corresponds to what chromosome
-# popmap.txt: will use this file (and S2.txt) to divide up birds into "blackcapped, "Carolina", and "admixed"
+# popmap.txt: will use this file (and Table_S1.txt) to divide up birds into "blackcapped, "Carolina", and "admixed"
 # The file "popmap.txt" was created by running the following code in the ipyrad directory
 #  ls fastqs/*R1* | sed 's|fastqs/||g' | sed 's/_R1.*//g' > popmap.txt
-# S2.txt: we will use this file (and popmap.txt) to divide the birds into "blackcapped, "Carolina", and "admixed"
+# Table_S1.txt: we will use this file (and popmap.txt) to divide the birds into "blackcapped, "Carolina", and "admixed"
 
 # 1. Setting parameters
 # required structure assignment to BC to be considered "pure BC"
@@ -26,14 +26,14 @@ library(tidyverse)
 # This file will be used to filter the vcf file
 # Reading in popmap.txt
 temppopmap <- read_tsv("popmap.txt",col_names=FALSE)
-# Reading in S2 to get structure assignments of each bird
-tempstructure <- read_tsv("S2.txt",col_names=TRUE)
+# Reading in Table S1 to get structure assignments of each bird
+tempstructure <- read_tsv("Table_S1.txt",col_names=TRUE)
 tempstructure <- tempstructure %>% 
   select(Catalog_number,Tissue_number,BC_genetic_cluster_assignment) %>% 
   arrange(BC_genetic_cluster_assignment)
 
 # Creating an object to store the names of the individuals as they are represented
-# in the sequencing file in the same order as S2.txt
+# in the sequencing file in the same order as Table_S1.txt
 tempnames <- rep(NA,dim(tempstructure)[1])
 
 # replacing names which used tissue number instead of catalog number
