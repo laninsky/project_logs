@@ -10,7 +10,7 @@ library(hzar)
 setwd("chickadee/output/")
 
 # 3. Reading in data (tab delimited), dropping last blank row
-temp <- read_tsv("../data/S2.txt")
+temp <- read_tsv("../data/Table_S1.txt")
 temp <- temp[1:165,]
 
 # 4. Creating variables with our data of interest
