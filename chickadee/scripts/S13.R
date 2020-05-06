@@ -10,7 +10,7 @@ library(tidyverse)
 setwd("chickadee/output/")
 
 # 3. Reading in data (tab delimited), dropping last blank row and filtering for samples where song data available
-temp <- read_tsv("../data/S2.txt")
+temp <- read_tsv("../data/Table_S1.txt")
 temp <- temp[1:165,]
 temp <- temp %>% filter(!is.na(Song_summary))  %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Song_summary)
 
