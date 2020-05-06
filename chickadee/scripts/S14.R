@@ -15,22 +15,22 @@ temp <- t(temp)
 temp[1,seq(1,length(temp[1,]),2)] <- gsub("_.*","_A",temp[1,seq(1,length(temp[1,]),2)])
 temp[1,seq(2,length(temp[1,]),2)] <- gsub("_.*","_B",temp[1,seq(2,length(temp[1,]),2)])
 
-# Some minor tweaking of reference sample names based on tissue number used in structure file vs catalog number in S2
+# Some minor tweaking of reference sample names based on tissue number used in structure file vs catalog number in Table S1
 temp[1,which(grepl("3474",temp[1,]))] <- c("90612_A","90612_B")
 temp[1,which(grepl("6281",temp[1,]))] <- c("95776_A","95776_B")
 temp[1,which(grepl("9898",temp[1,]))] <- c("131638_A","131638_B")
 temp[1,which(grepl("7420",temp[1,]))] <- c("92269_A","92269_B")
 temp[1,which(grepl("7421",temp[1,]))] <- c("92270_A","92270_B")
 
-# 3B. Reading in S2 data (tab delimited), dropping last blank row
-tempS2 <- read_table2("../data/S2.txt")
-tempS2 <- tempS2[1:165,]
+# 3B. Reading in Table S1 data (tab delimited), dropping last blank row
+tempS1 <- read_table2("../data/Table_S1.txt")
+tempS1 <- tempS1[1:165,]
 
 # 3C. Reading in ipyrad summary, including read depth data (tab delimited)
 tempread <- read_tsv("../data/ipyrad_summary.txt")
 tempread[,1] <- as_tibble(gsub("_.*","",as.matrix(tempread[,1])))
 
-# Some minor tweaking of reference sample names based on tissue number used in readfile vs catalog number in S2
+# Some minor tweaking of reference sample names based on tissue number used in readfile vs catalog number in Table_S1
 tempread[which(grepl("3474",as.matrix(tempread[,1]))),1] <- "90612"
 tempread[which(grepl("6281",as.matrix(tempread[,1]))),1] <- "95776"
 tempread[which(grepl("9898",as.matrix(tempread[,1]))),1] <- "131638"
@@ -38,14 +38,14 @@ tempread[which(grepl("7420",as.matrix(tempread[,1]))),1] <- "92269"
 tempread[which(grepl("7421",as.matrix(tempread[,1]))),1] <- "92270"
 
 # 4. Creating a new data object to store our comparisons and populating it with sample codes
-norows <- factorial(dim(tempS2)[1])/(factorial(dim(tempS2)[1]-2)*factorial(2))
+norows <- factorial(dim(tempS1)[1])/(factorial(dim(tempS1)[1]-2)*factorial(2))
 
 pairwise_comparisons <- matrix(NA,ncol=6,nrow=norows)
 x <- 1
-for (i in 1:(dim(tempS2)[1]-1)) {
-  for (j in (i+1):((dim(tempS2)[1]))) {
-    pairwise_comparisons[x,1] <- as.character(tempS2[i,1])
-    pairwise_comparisons[x,2] <- as.character(tempS2[j,1])
+for (i in 1:(dim(tempS1)[1]-1)) {
+  for (j in (i+1):((dim(tempS1)[1]))) {
+    pairwise_comparisons[x,1] <- as.character(tempS1[i,1])
+    pairwise_comparisons[x,2] <- as.character(tempS1[j,1])
     x <- x + 1
   }
 }
@@ -56,39 +56,39 @@ for (i in 1:dim(pairwise_comparisons)[1]) {
   structure_sample_1 <- which(grepl(pairwise_comparisons[i,1], temp[1,]))[1]
   # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
   if (is.na(structure_sample_1)) {
-    structure_sample_1 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,1]),2]), temp[1,]))[1]
+    structure_sample_1 <- which(grepl(as.matrix(tempS1[which(as.matrix(tempS1[,1])==pairwise_comparisons[i,1]),2]), temp[1,]))[1]
   }
   structure_sample_2 <- which(grepl(pairwise_comparisons[i,2], temp[1,]))[1]
   # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
   if (is.na(structure_sample_2)) {  
-    structure_sample_2 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,2]),2]), temp[1,]))[1]
+    structure_sample_2 <- which(grepl(as.matrix(tempS1[which(as.matrix(tempS1[,1])==pairwise_comparisons[i,2]),2]), temp[1,]))[1]
   }
   
-  # Finding the rows in S2 so we can extract cluster assignments
-  S2_sample_1 <- which(grepl(pairwise_comparisons[i,1], as.matrix(tempS2[,1])))
-  S2_sample_2 <- which(grepl(pairwise_comparisons[i,2], as.matrix(tempS2[,1])))
+  # Finding the rows in Table S1 so we can extract cluster assignments
+  S1_sample_1 <- which(grepl(pairwise_comparisons[i,1], as.matrix(tempS1[,1])))
+  S1_sample_2 <- which(grepl(pairwise_comparisons[i,2], as.matrix(tempS1[,1])))
   
   # Finding the rows in tempread so we can pull our read depth
   read_sample_1 <- which(grepl(pairwise_comparisons[i,1], as.matrix(tempread[,1])))
   # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
   if(length(read_sample_1)==0) {
-    as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,1]),2])
-    read_sample_1 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,1]),2]), as.matrix(tempread[,1])))
+    as.matrix(tempS1[which(as.matrix(tempS1[,1])==pairwise_comparisons[i,1]),2])
+    read_sample_1 <- which(grepl(as.matrix(tempS1[which(as.matrix(tempS1[,1])==pairwise_comparisons[i,1]),2]), as.matrix(tempread[,1])))
   }
   read_sample_2 <- which(grepl(pairwise_comparisons[i,2], as.matrix(tempread[,1])))
   # The smithsonian samples have the tissue number instead of the catalog - looking in this column if need be
   if(length(read_sample_2)==0) {
-    read_sample_2 <- which(grepl(as.matrix(tempS2[which(as.matrix(tempS2[,1])==pairwise_comparisons[i,2]),2]), as.matrix(tempread[,1])))
+    read_sample_2 <- which(grepl(as.matrix(tempS1[which(as.matrix(tempS1[,1])==pairwise_comparisons[i,2]),2]), as.matrix(tempread[,1])))
   }  
   
   # Number of loci that overlap between the samples
   pairwise_comparisons[i,3] <- length(which(temp[,structure_sample_1]!="-9" & temp[,structure_sample_2]!="-9"))-1
   
   # Mean cluster assignment across the pair of samples
-  pairwise_comparisons[i,4] <- (as.matrix(tempS2[S2_sample_1,3])+as.matrix(tempS2[S2_sample_2,3]))/2
+  pairwise_comparisons[i,4] <- (as.matrix(tempS1[S1_sample_1,3])+as.matrix(tempS1[S1_sample_2,3]))/2
   
   # Absolute difference in cluster assignment between pairs
-  pairwise_comparisons[i,5] <- abs(as.matrix(tempS2[S2_sample_1,3])-as.matrix(tempS2[S2_sample_2,3]))
+  pairwise_comparisons[i,5] <- abs(as.matrix(tempS1[S1_sample_1,3])-as.matrix(tempS1[S1_sample_2,3]))
   
   # Mean read depth across the pair of samples
   pairwise_comparisons[i,6] <- (as.numeric(as.matrix(tempread[read_sample_1,3]))+as.numeric(as.matrix(tempread[read_sample_2,3])))/2
