@@ -2,7 +2,7 @@
 # total number of SNPs in the dataset
 
 # Necessary files: 
-# S2.txt (https://github.com/laninsky/project_logs/blob/master/chickadee/data/S2.txt): will use 
+# Table_S1.txt (https://github.com/laninsky/project_logs/blob/master/chickadee/data/Table_S1.txt): will use 
 # this file to divide up birds into "parental" and "admixed"
 # snp_locus_gene_function.txt (created in SAA.R): gives genomic coordinates of SNPs to account for LD
 # ref_guided.str: genotypes per locus and per individual used to create data files
@@ -33,8 +33,8 @@ snp_locus_map <- read_delim("snp_locus_gene_function.txt", delim=" ",
                                     col_character(),
                                     col_character()))
 
-# Reading in S2.txt to get genomic assignments for each bird
-structure_assignments <- read_tsv("S2.txt")
+# Reading in Table_S1.txt to get genomic assignments for each bird
+structure_assignments <- read_tsv("Table_S1.txt")
 
 # Reading in the SNPs for the birds
 SNPs <- read_tsv("ref_guided.str",col_names = FALSE)
@@ -46,7 +46,7 @@ for (i in 1:dim(SNPs)[2]) {
 }
 SNPs <- SNPs[,-cols_to_delete]
 
-# Some minor tweaking of sample names based on tissue number in SNPs vs catalog number in S2
+# Some minor tweaking of sample names based on tissue number in SNPs vs catalog number in Table S1
 SNPs[which(grepl("3474",as.matrix(SNPs[,1]))),1] <- "90612"
 SNPs[which(grepl("6281",as.matrix(SNPs[,1]))),1] <- "95776"
 SNPs[which(grepl("9898",as.matrix(SNPs[,1]))),1] <- "131638"
