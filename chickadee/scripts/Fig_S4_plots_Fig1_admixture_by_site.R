@@ -18,9 +18,10 @@ library(ggrepel)
 # 2. Setwd
 setwd("chickadee/output/")
 
-# 3. Reading in data (tab delimited), dropping last blank row
+# 3. Reading in data (tab delimited), dropping row
+# corresponding to sample 99788 with low coverage
 temp <- read_tsv("../data/Table_S1.txt")
-temp <- temp[1:165,]
+temp <- temp %>% filter(Catalog_number!="99788")
 
 # 4. Creating a new table with the variables we are interested in
 reduced_table <- temp %>% filter(Sampling_period=="MODERN" | Sampling_period=="SMITHSONIAN") %>% select(Catalog_number, BC_genetic_cluster_assignment, CC_genetic_cluster_assignment, DecimalLongitude, DecimalLatitude, Sampling_period, Location_code,Included_in_tess3r)
@@ -105,32 +106,40 @@ historicalpies + geom_label_repel(historical,mapping=aes(fontface="bold",x=Decim
 ggsave(filename="Fig_1_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
 sessionInfo()
-#R version 3.5.2 (2018-12-20)
+#R version 3.6.2 (2019-12-12)
 #Platform: x86_64-apple-darwin15.6.0 (64-bit)
-#Running under: macOS High Sierra 10.13.6
-#
+#Running under: macOS Sierra 10.12.6
+
 #Matrix products: default
-#BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-#LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
-#
+#BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+#LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
 #locale:
 #  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-#
+
 #attached base packages:
-#  [1] stats     graphics  grDevices utils     datasets  methods   base     
-#
+#  [1] stats     graphics  grDevices utils     datasets  methods  
+#[7] base     
+
 #other attached packages:
-#  [1] ggrepel_0.8.0.9000 ggmap_3.0.0        scatterpie_0.1.2   ggplot2_3.1.1.9000 dplyr_0.8.0.1     
-#[6] readr_1.3.1       
-#
+#  [1] ggrepel_0.8.1    ggmap_3.0.0      scatterpie_0.1.4
+#[4] ggplot2_3.2.1    dplyr_0.8.4      readr_1.3.1     
+
 #loaded via a namespace (and not attached):
-#  [1] Rcpp_1.0.1        pillar_1.3.1      compiler_3.5.2    plyr_1.8.4        bitops_1.0-6     
-#[6] tools_3.5.2       digest_0.6.18     tibble_2.1.1      gtable_0.3.0      pkgconfig_2.0.2  
-#[11] png_0.1-7         rlang_0.3.4       cli_1.1.0         rstudioapi_0.9.0  rvcheck_0.1.3    
-#[16] curl_3.3          yaml_2.2.0        withr_2.1.2       httr_1.4.0        stringr_1.4.0    
-#[21] hms_0.4.2         RgoogleMaps_1.4.3 grid_3.5.2        tidyselect_0.2.5  glue_1.3.1       
-#[26] R6_2.4.0          jpeg_0.1-8        fansi_0.4.0       polyclip_1.10-0   purrr_0.3.2      
-#[31] tidyr_0.8.3       tweenr_1.0.1      farver_1.1.0      magrittr_1.5      scales_1.0.0     
-#[36] MASS_7.3-51.1     assertthat_0.2.1  ggforce_0.2.2     colorspace_1.4-1  labeling_0.3     
-#[41] utf8_1.1.4        stringi_1.4.3     lazyeval_0.2.2    munsell_0.5.0     crayon_1.3.4     
-#[46] rjson_0.2.20  
+#  [1] Rcpp_1.0.3          plyr_1.8.5          pillar_1.4.3       
+#[4] compiler_3.6.2      BiocManager_1.30.10 bitops_1.0-6       
+#[7] tools_3.6.2         digest_0.6.24       lattice_0.20-38    
+#[10] lifecycle_0.1.0     tibble_2.1.3        gtable_0.3.0       
+#[13] pkgconfig_2.0.3     png_0.1-7           rlang_0.4.4        
+#[16] cli_2.0.1           rstudioapi_0.11     rvcheck_0.1.7      
+#[19] curl_4.3            stringr_1.4.0       httr_1.4.1         
+#[22] withr_2.1.2         RgoogleMaps_1.4.5.3 vctrs_0.2.2        
+#[25] hms_0.5.3           grid_3.6.2          tidyselect_1.0.0   
+#[28] glue_1.3.1          R6_2.4.1            jpeg_0.1-8.1       
+#[31] fansi_0.4.1         sp_1.3-2            polyclip_1.10-0    
+#[34] purrr_0.3.3         tweenr_1.0.1        farver_2.0.3       
+#[37] tidyr_1.0.2         magrittr_1.5        ellipsis_0.3.0     
+#[40] scales_1.1.0        MASS_7.3-51.5       assertthat_0.2.1   
+#[43] ggforce_0.3.1       colorspace_1.4-1    labeling_0.3       
+#[46] utf8_1.1.4          stringi_1.4.5       lazyeval_0.2.2     
+#[49] munsell_0.5.0       rjson_0.2.20        crayon_1.3.4 
