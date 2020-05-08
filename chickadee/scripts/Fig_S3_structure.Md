@@ -197,6 +197,8 @@ structure_threader run -K 1 -R 1 -i chickadee_singleton_filtered.stru -o infer_l
 
 # Sbatch for doing "actual" structure runs
 # Following code runs K1 through 5
+# Job finished in ~11 hours and didn't use more than 1GB
+# so those SBATCH parameters could be adjusted for future runs
 
 #!/bin/bash -e
 
