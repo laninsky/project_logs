@@ -1,5 +1,6 @@
 # This code corresponds to Fig. S6 in Alexander et al.
-# It creates Fig. 4 (geographic cline) in the main manuscript of Alexander et al.
+# It creates the geographic cline component of Fig. 2 
+# in the main manuscript of Alexander et al.
 
 # 1. Loading required libraries and scripts
 library(tidyverse)
@@ -9,9 +10,10 @@ library(hzar)
 # 2. Setwd
 setwd("chickadee/output/")
 
-# 3. Reading in data (tab delimited), dropping last blank row
+# 3. Reading in data (tab delimited), dropping row
+# corresponding to sample 99788 with low coverage
 temp <- read_tsv("../data/Table_S1.txt")
-temp <- temp[1:165,]
+temp <- temp %>% filter(Catalog_number!="99788")
 
 # 4. Creating variables with our data of interest
 mod_names <- as.matrix(temp %>% filter(Sampling_period=="MODERN") %>% filter(Included_in_tess3r=="YES") %>% dplyr::select(Catalog_number))
@@ -263,23 +265,24 @@ names(mod_conf_min_max_mean) <- c("dist","min","max","mean")
 
 ggplot() +
   geom_ribbon(data=hist_conf_min_max_mean,aes(x=dist/1000,ymax = max, ymin = min),fill="grey90",color="grey65") +
-  geom_line(data=hist_conf_min_max_mean,aes(x=dist/1000,y=mean),color="grey75", size=1.5, alpha=0.5) +
-  geom_vline(xintercept = hist_center/1000, linetype="longdash", color = "grey75", size=1.5, alpha=0.5) +
-  geom_vline(xintercept = hist_center_min/1000, color = "grey75", size=1.0, alpha=0.5) +
-  geom_vline(xintercept = hist_center_max/1000, color = "grey75", size=1.0, alpha=0.5) +
+  geom_line(data=hist_conf_min_max_mean,aes(x=dist/1000,y=mean),color="grey75", size=7, alpha=0.5) +
+  geom_vline(xintercept = hist_center/1000, linetype="longdash", color = "grey75", size=7, alpha=0.5) +
+  geom_vline(xintercept = hist_center_min/1000, color = "grey75", size=5, alpha=0.5) +
+  geom_vline(xintercept = hist_center_max/1000, color = "grey75", size=5, alpha=0.5) +
   geom_ribbon(data=mod_conf_min_max_mean,aes(x=dist/1000,ymax = max, ymin = min),fill="grey40",color="grey15") +
-  geom_line(data=mod_conf_min_max_mean,aes(x=dist/1000,y=mean),color="grey25", size=1.5, alpha=0.5) +
-    geom_vline(xintercept = mod_center/1000, linetype="longdash", color = "grey25", size=1.5, alpha=0.5) +
-  geom_vline(xintercept = mod_center_min/1000, color = "grey25", size=1.0, alpha=0.5) +
-  geom_vline(xintercept = mod_center_max/1000, color = "grey25", size=1.0, alpha=0.5) +
-    geom_point(data=mod_qmat_dist,aes(x = dist/1000, y = BC_cluster),shape=21,color="black", fill="black", size=6) +
-  geom_point(data=hist_qmat_dist,aes(x = dist/1000, y = BC_cluster),shape=21,color="black", fill="white", size=6) + theme_bw(base_size=20) +
+  geom_line(data=mod_conf_min_max_mean,aes(x=dist/1000,y=mean),color="grey25", size=7, alpha=0.5) +
+    geom_vline(xintercept = mod_center/1000, linetype="longdash", color = "grey25", size=7, alpha=0.5) +
+  geom_vline(xintercept = mod_center_min/1000, color = "grey25", size=5, alpha=0.5) +
+  geom_vline(xintercept = mod_center_max/1000, color = "grey25", size=5, alpha=0.5) +
+    geom_point(data=mod_qmat_dist,aes(x = dist/1000, y = BC_cluster),shape=21,color="black", fill="black", size=30) +
+  geom_point(data=hist_qmat_dist,aes(x = dist/1000, y = BC_cluster),shape=21,color="black", fill="white", size=30) + theme_bw(base_size=66) +
   theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
-  theme(axis.title=element_text(size=24,face="bold")) +
+  theme(axis.title=element_text(size=80,face="bold")) +
   scale_y_continuous(name="Assignment to BC genetic cluster") +
   scale_x_continuous(name="Distance along transect (km)") 
 
-# Saved manually as a plot 1000 pixels wide, Fig_SX_transect.png
+# Saved manually as a plot 4000 pixels wide * 2000 pixels wall
+# Fig_2_transect.png
 
 # 9. Printing to screen some parameters of interest to report in manuscript
 results <- as_tibble(rbind(c("Center",hist_center/1000,mod_center/1000),
@@ -309,26 +312,40 @@ sessionInfo()
 #  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 #attached base packages:
-#  [1] stats     graphics  grDevices utils     datasets  methods   base     
+#  [1] grid      stats     graphics  grDevices utils     datasets 
+#[7] methods   base     
 
 #other attached packages:
-#  [1] hzar_0.2-5       foreach_1.4.7    MCMCpack_1.4-5   MASS_7.3-51.5   
-#[5] coda_0.19-3      geosphere_1.5-10 forcats_0.4.0    stringr_1.4.0   
-#[9] dplyr_0.8.3      purrr_0.3.3      readr_1.3.1      tidyr_1.0.0     
-#[13] tibble_2.1.3     ggplot2_3.2.1    tidyverse_1.3.0 
+#  [1] hzar_0.2-5         foreach_1.4.8      MCMCpack_1.4-6    
+#[4] MASS_7.3-51.5      coda_0.19-3        geosphere_1.5-10  
+#[7] fields_10.3        maps_3.3.0         spam_2.5-1        
+#[10] dotCall64_1.0-0    RColorBrewer_1.1-2 tess3r_1.1.0      
+#[13] forcats_0.4.0      stringr_1.4.0      purrr_0.3.3       
+#[16] tidyr_1.0.2        tibble_2.1.3       tidyverse_1.3.0   
+#[19] ggrepel_0.8.1      ggmap_3.0.0        scatterpie_0.1.4  
+#[22] ggplot2_3.2.1      dplyr_0.8.4        readr_1.3.1       
 
 #loaded via a namespace (and not attached):
-#  [1] Rcpp_1.0.3         lubridate_1.7.4    lattice_0.20-38    assertthat_0.2.1  
-#[5] zeallot_0.1.0      utf8_1.1.4         R6_2.4.1           cellranger_1.1.0  
-#[9] backports_1.1.5    MatrixModels_0.4-1 reprex_0.3.0       httr_1.4.1        
-#[13] pillar_1.4.3       rlang_0.4.2        lazyeval_0.2.2     readxl_1.3.1      
-#[17] rstudioapi_0.10    SparseM_1.78       Matrix_1.2-18      labeling_0.3      
-#[21] munsell_0.5.0      broom_0.5.3        compiler_3.6.2     modelr_0.1.5      
-#[25] pkgconfig_2.0.3    mcmc_0.9-6         tidyselect_0.2.5   codetools_0.2-16  
-#[29] fansi_0.4.0        crayon_1.3.4       dbplyr_1.4.2       withr_2.1.2       
-#[33] grid_3.6.2         nlme_3.1-143       jsonlite_1.6       gtable_0.3.0      
-#[37] lifecycle_0.1.0    DBI_1.1.0          magrittr_1.5       scales_1.1.0      
-#[41] cli_2.0.0          stringi_1.4.3      farver_2.0.1       fs_1.3.1          
-#[45] sp_1.3-2           xml2_1.2.2         generics_0.0.2     vctrs_0.2.1       
-#[49] iterators_1.0.12   tools_3.6.2        glue_1.3.1         hms_0.5.2         
-#[53] colorspace_1.4-1   rvest_0.3.5        haven_2.2.0        quantreg_5.54   
+#  [1] nlme_3.1-144        mcmc_0.9-6.1        bitops_1.0-6       
+#[4] fs_1.3.1            lubridate_1.7.4     httr_1.4.1         
+#[7] tools_3.6.2         backports_1.1.5     utf8_1.1.4         
+#[10] R6_2.4.1            DBI_1.1.0           lazyeval_0.2.2     
+#[13] colorspace_1.4-1    withr_2.1.2         sp_1.3-2           
+#[16] tidyselect_1.0.0    curl_4.3            compiler_3.6.2     
+#[19] cli_2.0.1           rvest_0.3.5         quantreg_5.54      
+#[22] SparseM_1.78        xml2_1.2.2          labeling_0.3       
+#[25] scales_1.1.0        digest_0.6.24       jpeg_0.1-8.1       
+#[28] pkgconfig_2.0.3     dbplyr_1.4.2        rlang_0.4.4        
+#[31] readxl_1.3.1        rstudioapi_0.11     farver_2.0.3       
+#[34] generics_0.0.2      jsonlite_1.6.1      magrittr_1.5       
+#[37] Matrix_1.2-18       Rcpp_1.0.3          munsell_0.5.0      
+#[40] fansi_0.4.1         lifecycle_0.1.0     stringi_1.4.5      
+#[43] plyr_1.8.5          crayon_1.3.4        lattice_0.20-38    
+#[46] haven_2.2.0         hms_0.5.3           pillar_1.4.3       
+#[49] rjson_0.2.20        codetools_0.2-16    reprex_0.3.0       
+#[52] glue_1.3.1          BiocManager_1.30.10 modelr_0.1.5       
+#[55] png_0.1-7           vctrs_0.2.2         tweenr_1.0.1       
+#[58] RgoogleMaps_1.4.5.3 MatrixModels_0.4-1  cellranger_1.1.0   
+#[61] gtable_0.3.0        polyclip_1.10-0     assertthat_0.2.1   
+#[64] ggforce_0.3.1       broom_0.5.4         RcppEigen_0.3.3.7.0
+#[67] iterators_1.0.12    rvcheck_0.1.7       ellipsis_0.3.0 
