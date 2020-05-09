@@ -15,13 +15,15 @@ library(tidyverse)
 library(tess3r)
 library(ggrepel)
 source("http://membres-timc.imag.fr/Olivier.Francois/POPSutilities.R")
+library(fields)
 
 # 2. Setwd
 setwd("chickadee/output/")
 
-# 3. Reading in data (tab delimited), dropping last blank row
+# 3. Reading in data (tab delimited), dropping row
+# corresponding to sample 99788 with low coverage
 temp <- read_tsv("../data/Table_S1.txt")
-temp <- temp[1:165,]
+temp <- temp %>% filter(Catalog_number!="99788")
 
 # 4. Creating variables with our variables of interest
 mod_coords <- as.matrix(temp %>% filter(Sampling_period=="MODERN") %>% filter(Included_in_tess3r=="YES") %>% select(DecimalLongitude,DecimalLatitude))
@@ -63,40 +65,49 @@ historical <- ggplot(grid, aes(x = grid$V1, y = grid$V2)) + geom_point(historica
 # Manually exported as a *.png 2000*2000 pixels in size, Fig_2_historical_overlay.png in output folder
 
 sessionInfo()
-#R version 3.5.1 (2018-07-02)
+#R version 3.6.2 (2019-12-12)
 #Platform: x86_64-apple-darwin15.6.0 (64-bit)
 #Running under: macOS Sierra 10.12.6
-#
+
 #Matrix products: default
-#BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-#LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
-#
+#BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+#LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
 #locale:
-#  [1] en_NZ.UTF-8/en_NZ.UTF-8/en_NZ.UTF-8/C/en_NZ.UTF-8/en_NZ.UTF-8
-#
+#  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
 #attached base packages:
-#  [1] grid      stats     graphics  grDevices utils     datasets  methods  
-#[8] base     
-#
+#  [1] grid      stats     graphics  grDevices utils     datasets 
+#[7] methods   base     
+
 #other attached packages:
-#  [1] bindrcpp_0.2.2     forcats_0.3.0      stringr_1.3.1      dplyr_0.7.8       
-#[5] purrr_0.3.0        readr_1.3.1        tidyr_0.8.2        tibble_2.0.1      
-#[9] tidyverse_1.2.1    RColorBrewer_1.1-2 fields_9.6         maps_3.3.0        
-#[13] spam_2.2-1         dotCall64_1.0-0    ggrepel_0.8.0.9000 ggplot2_3.1.0.9000
-#[17] tess3r_1.1.0      
-#
+#  [1] fields_10.3        maps_3.3.0         spam_2.5-1        
+#[4] dotCall64_1.0-0    RColorBrewer_1.1-2 tess3r_1.1.0      
+#[7] forcats_0.4.0      stringr_1.4.0      purrr_0.3.3       
+#[10] tidyr_1.0.2        tibble_2.1.3       tidyverse_1.3.0   
+#[13] ggrepel_0.8.1      ggmap_3.0.0        scatterpie_0.1.4  
+#[16] ggplot2_3.2.1      dplyr_0.8.4        readr_1.3.1       
+
 #loaded via a namespace (and not attached):
-#  [1] RcppEigen_0.3.3.5.0 tidyselect_0.2.5    haven_2.0.0        
-#[4] lattice_0.20-38     colorspace_1.4-0    generics_0.0.2     
-#[7] yaml_2.2.0          rlang_0.3.1         pillar_1.3.1       
-#[10] glue_1.3.0          withr_2.1.2         modelr_0.1.2       
-#[13] readxl_1.2.0        bindr_0.1.1         munsell_0.5.0      
-#[16] gtable_0.2.0        cellranger_1.1.0    rvest_0.3.2        
-#[19] labeling_0.3        broom_0.5.1         Rcpp_1.0.1         
-#[22] scales_1.0.0        backports_1.1.3     jsonlite_1.6       
-#[25] hms_0.4.2           stringi_1.2.4       cli_1.0.1          
-#[28] tools_3.5.1         magrittr_1.5        lazyeval_0.2.1     
-#[31] crayon_1.3.4        pkgconfig_2.0.2     Matrix_1.2-15      
-#[34] xml2_1.2.0          lubridate_1.7.4     assertthat_0.2.0   
-#[37] httr_1.4.0          rstudioapi_0.9.0    R6_2.3.0           
-#[40] nlme_3.1-137        compiler_3.5.1  
+#  [1] Rcpp_1.0.3          lubridate_1.7.4     lattice_0.20-38    
+#[4] png_0.1-7           assertthat_0.2.1    digest_0.6.24      
+#[7] utf8_1.1.4          ggforce_0.3.1       R6_2.4.1           
+#[10] cellranger_1.1.0    plyr_1.8.5          backports_1.1.5    
+#[13] reprex_0.3.0        httr_1.4.1          pillar_1.4.3       
+#[16] RgoogleMaps_1.4.5.3 rlang_0.4.4         lazyeval_0.2.2     
+#[19] curl_4.3            readxl_1.3.1        rstudioapi_0.11    
+#[22] Matrix_1.2-18       labeling_0.3        RcppEigen_0.3.3.7.0
+#[25] polyclip_1.10-0     munsell_0.5.0       broom_0.5.4        
+#[28] compiler_3.6.2      modelr_0.1.5        pkgconfig_2.0.3    
+#[31] tidyselect_1.0.0    fansi_0.4.1         crayon_1.3.4       
+#[34] dbplyr_1.4.2        withr_2.1.2         MASS_7.3-51.5      
+#[37] bitops_1.0-6        nlme_3.1-144        jsonlite_1.6.1     
+#[40] gtable_0.3.0        lifecycle_0.1.0     DBI_1.1.0          
+#[43] magrittr_1.5        scales_1.1.0        cli_2.0.1          
+#[46] stringi_1.4.5       farver_2.0.3        fs_1.3.1           
+#[49] sp_1.3-2            xml2_1.2.2          ellipsis_0.3.0     
+#[52] rvcheck_0.1.7       generics_0.0.2      vctrs_0.2.2        
+#[55] rjson_0.2.20        tools_3.6.2         glue_1.3.1         
+#[58] tweenr_1.0.1        hms_0.5.3           jpeg_0.1-8.1       
+#[61] colorspace_1.4-1    BiocManager_1.30.10 rvest_0.3.5        
+#[64] haven_2.2.0        
