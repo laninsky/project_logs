@@ -1,22 +1,43 @@
-# This code corresponds to Fig SZ in Alexander et al.
+# This code corresponds to Fig. S7 in Alexander et al.
 # It runs programs/scripts to summarize the genic regions covered
 # by the ddRADseq sequencine and generating genomic cline analyses in 
 # Alexander et al.
 
+#1. Downloading annotations for black-capped chickadee genome
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/011/421/415/GCA_011421415.1_CUB_Patr_1.0/GCA_011421415.1_CUB_Patr_1.0_genomic.gbff.gz
+
 # 1. Summazing genic content and chromosome position of RADseq loci
-# Obtain chromosome labels for scaffolds
-zgrep -E "RefSeq" GCF_001522545.3_Parus_major1.1_genomic.gff.gz | grep "region" | grep "chromosome" | sed 's/RefSeq.*Name=//g' | sed 's/;chromosome.*//g' > chromosome_scaffolds.txt
+# Obtain chromosome labels for scaffolds from a gff file
+# zgrep -E "RefSeq" GCF_001522545.3_Parus_major1.1_genomic.gff.gz | grep "region" | grep "chromosome" | sed 's/RefSeq.*Name=//g' | sed 's/;chromosome.*//g' > chromosome_scaffolds.txt
+
+# Obtain chromosome labels for scaffolds from a gbff file
+gunzip GCA_011421415.1_CUB_Patr_1.0_genomic.gbff.gz
+grep VERSION GCA_011421415.1_CUB_Patr_1.0_genomic.gbff | awk '{ print $2 }' > scaffold_names.txt
+grep DEFINITION GCA_011421415.1_CUB_Patr_1.0_genomic.gbff | sed 's/DEFINITION  Poecile atricapillus chromosome //g' | sed 's/DEFINITION  Poecile atricapillus scaffold[0-9]*-unlocalized-//g' | sed 's/DEFINITION  Poecile atricapillus //g' | sed 's/, .*//g' | sed 's/ .*//g' > chromosomes.txt
+paste scaffold_names.txt chromosomes.txt > chromosome_scaffolds.txt
+
+# Example of what chromosome_scaffolds.txt looks like
+CM022157.1	1
+JAAMOC010000001.1	1
+JAAMOC010000002.1	1
+JAAMOC010000003.1	1
+JAAMOC010000004.1	2
+JAAMOC010000005.1	2
+JAAMOC010000550.1	2
+JAAMOC010000551.1	2
+JAAMOC010000552.1	2
+JAAMOC010000010.1	3
 
 # Strip comment rows off the output vcf file and GFF file
-grep -v "##" ref_guided.vcf > headerless.vcf
-grep -F -e "##" ref_guided.vcf > header_rows.txt
+grep -v "##" chickadee_ref.vcf > headerless.vcf
+grep -F -e "##" chickadee_ref.vcf > header_rows.txt
 
 # Using R code to summarize RADseq markers based on ref_guided.snps.map
 # (in order to find which SNP positions correspond to each locus),
 # headerless.vcf (to obtain chromosome, and position along chromosome),
 # chromosome_scaffolds.txt (to find which scaffold corresponds to what chromosome)
 # popmap_final.txt (to divide up birds into "Carolina", "blackcapped", "hybrid"
-Rscript SCC.R
+Rscript S7_generate_bgc_inputs.R
 
 # 2. Compiling the bgc software in bin directory
 # Loading required modules
