@@ -1,5 +1,5 @@
-# This code corresponds to Fig SX in Alexander et al.
-# It creates Fig X (geographic cline) in the main manuscript of Alexander et al.
+# This code corresponds to Fig. S6 in Alexander et al.
+# It creates Fig. 4 (geographic cline) in the main manuscript of Alexander et al.
 
 # 1. Loading required libraries and scripts
 library(tidyverse)
