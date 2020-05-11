@@ -1,5 +1,5 @@
-# This code corresponds to Fig SCC in Alexander et al.
-# It generates the input files for the bgc analysis represented in SZ.sh and a vcf
+# This code corresponds to Fig S7(b) in Alexander et al.
+# It generates the input files for the bgc analysis represented in Fig_S7a_BGC_anslyses.sh and a vcf
 # file (without the header) that can be used in SnpEff
 
 # Necessary files 

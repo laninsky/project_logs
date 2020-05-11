@@ -1,4 +1,4 @@
-# This code corresponds to Fig. S7 in Alexander et al.
+# This code corresponds to Fig. S7(a) in Alexander et al.
 # It runs programs/scripts to summarize the genic regions covered
 # by the ddRADseq sequencine and generating genomic cline analyses in 
 # Alexander et al.
@@ -7,10 +7,10 @@
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/011/421/415/GCA_011421415.1_CUB_Patr_1.0/GCA_011421415.1_CUB_Patr_1.0_genomic.gbff.gz
 
 # 1. Summazing genic content and chromosome position of RADseq loci
-# Obtain chromosome labels for scaffolds from a gff file
+# Obtain chromosome labels for scaffolds from a gff file (when previously using P. major as reference)
 # zgrep -E "RefSeq" GCF_001522545.3_Parus_major1.1_genomic.gff.gz | grep "region" | grep "chromosome" | sed 's/RefSeq.*Name=//g' | sed 's/;chromosome.*//g' > chromosome_scaffolds.txt
 
-# Obtain chromosome labels for scaffolds from a gbff file
+# Obtain chromosome labels for scaffolds from a gbff file (current code)
 gunzip GCA_011421415.1_CUB_Patr_1.0_genomic.gbff.gz
 grep VERSION GCA_011421415.1_CUB_Patr_1.0_genomic.gbff | awk '{ print $2 }' > scaffold_names.txt
 grep DEFINITION GCA_011421415.1_CUB_Patr_1.0_genomic.gbff | sed 's/DEFINITION  Poecile atricapillus chromosome //g' | sed 's/DEFINITION  Poecile atricapillus scaffold[0-9]*-unlocalized-//g' | sed 's/DEFINITION  Poecile atricapillus //g' | sed 's/, .*//g' | sed 's/ .*//g' > chromosomes.txt
