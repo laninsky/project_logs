@@ -3,10 +3,22 @@
 # by the ddRADseq sequencine and generating genomic cline analyses in 
 # Alexander et al.
 
-#1. Downloading annotations for black-capped chickadee genome
+# 1. Getting bgc inputs together
+# Making directory and copying necessary inputs into it
+mkdir bgc
+cd bgc
+
+# Following files need to be copied into the bgc folder
+# chickadee_ref.vcf 
+# chromosome_scaffolds.txt
+# popmap_final.txt
+# *.snps.map or *.snpsmap from ipyrad outfiles
+# S7_generate_bgc_inputs.R
+
+#2. Downloading annotations for black-capped chickadee genome
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/011/421/415/GCA_011421415.1_CUB_Patr_1.0/GCA_011421415.1_CUB_Patr_1.0_genomic.gbff.gz
 
-# 1. Summazing genic content and chromosome position of RADseq loci
+# Summazing genic content and chromosome position of RADseq loci
 # Obtain chromosome labels for scaffolds from a gff file (when previously using P. major as reference)
 # zgrep -E "RefSeq" GCF_001522545.3_Parus_major1.1_genomic.gff.gz | grep "region" | grep "chromosome" | sed 's/RefSeq.*Name=//g' | sed 's/;chromosome.*//g' > chromosome_scaffolds.txt
 
@@ -36,10 +48,17 @@ grep -F -e "##" chickadee_ref.vcf > header_rows.txt
 # (in order to find which SNP positions correspond to each locus),
 # headerless.vcf (to obtain chromosome, and position along chromosome),
 # chromosome_scaffolds.txt (to find which scaffold corresponds to what chromosome)
-# popmap_final.txt (to divide up birds into "Carolina", "blackcapped", "hybrid"
+# popmap_final.txt (to divide up birds into "Carolina", "blackcapped", "hybrid"),
+# *.snps.map or *.snpsmap from ipyrad outfiles: in order to find which SNP 
+# positions correspond to each locus (in this case chickadee_ref.snpsmap )
+module load R/3.6.2-gimkl-2020a 
 Rscript S7_generate_bgc_inputs.R
 
-# 2. Compiling the bgc software in bin directory
+# 3. Compiling the bgc software in bin directory
+# Obtaining the bgc tar
+wget https://sites.google.com/site/bgcsoftware/home/bgcdist1.03.tar.gz
+tar -zvxf bgcdist1.03.tar.gz
+cd 
 # Loading required modules
 module load HDF5/1.10.5-gimkl-2018b
 module load GSL/2.4-GCC-7.4.0
@@ -48,20 +67,8 @@ h5c++ -Wall -O2 -L/usr/include/gsl -I/usr/include/gsl -o bgc bgc_main.C bgc_func
 # Compiling estpost
 h5c++ -Wall -O3  -o estpost estpost_h5.c -lgsl -lgslcblas
 
-# 3. Running bgc
-# Making directory and copying necessary inputs into it
-mkdir bgc
-mv black_capped.txt bgc
-mv Carolina.txt bgc
-mv admixed.txt bgc
-mv genetic_map.txt bgc
 
-# Loading required modules and setting path
-module load HDF5/1.10.5-gimkl-2018b
-module load GSL/2.4-GCC-7.4.0
-export PATH=/nesi/nobackup/uoo00105/bin/bgcdist:$PATH
-
-# Bgc input explanation (guided by mix of bgc manual and Taylor et al. 2014)
+# 4. Bgc input options explanation (guided by mix of bgc manual and Taylor et al. 2014)
 # -a Infile with genetic data for parental population 0.
 # -b Infile with genetic data for parental population 1.
 # -h Infile with genetic data for admixed population(s).
@@ -83,8 +90,8 @@ export PATH=/nesi/nobackup/uoo00105/bin/bgcdist:$PATH
 # -I Select algorithm to initialize MCMC [default = 1]. 0 = use information from the
 # data to initialize ancestry and hybrid index [0 only works with read data not called genotypes]
 # -D Maximum distance between loci, free recombination [default = 0.5]. [In contrast to manual
-# set this to 522.727 as this was the maximum distance in kb of any of the LG in the
-# P. major genome: manual was in cM in comparison]
+# set this to 1252.497 as this was the maximum size of scaffolds in kb mapping to LG in the
+# black-capped chickadee genome: manual was in cM in comparison]
 # -T If non-zero, use a truncated gamma prior for tau with this upper bound [default =
 # 0]. Otherwise use a full gamma prior.
 # -u MCMC tuning parameter, maximum deviate from uniform for proposed hybrid index
@@ -94,8 +101,32 @@ export PATH=/nesi/nobackup/uoo00105/bin/bgcdist:$PATH
 # -z MCMC tuning parameter, standard deviation for Gaussian proposal of cline parameter zeta [default = 0.05]
 # -e MCMC tuning paramteer, standard deviation for Gaussian proposal of cline parameters eta and kappa [default = 0.02]
 
-bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -x 50000 -n 25000 -t 5 -p 1 -q 1 -i 0 -N 1 -E 0.0001 -m 1 -d 1 -s 1 -o 0 -I 0 -D 522.727 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2
-# After copying out outputfiles, using same code as above, ran a second chain to check convergence
+# 4. Sbatch script for running bgc
+#!/bin/bash -e
+
+#SBATCH -A uoo00105 
+#SBATCH -J bgc
+#SBATCH --ntasks 1
+#SBATCH -c 1
+#SBATCH -t 72:00:00
+#SBATCH --mem=3G
+#SBATCH -D /nesi/nobackup/uoo00105/chickadees/bgc 
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=alana.alexander@otago.ac.nz
+#SBATCH -N 1
+#SBATCH --hint=nomultithread
+#SBATCH --partition=large
+
+module load HDF5/1.10.5-gimkl-2018b
+module load GSL/2.4-GCC-7.4.0
+export PATH=/nesi/nobackup/uoo00105/chickadees/bin/bgcdist:$PATH
+
+bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -x 50000 -n 25000 -t 5 -p 1 -q 1 -i 0 -N 1 -E 0.0001 -m 1 -d 1 -s 1 -o 0 -I 0 -D 1252.497 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2
+
+
+# 5. After copying out outputfiles, using same code as above, ran a second chain to check convergence
+
+# Output files
  
 # LnL output.txt: Each line in this file contains the log likelihood for a single MCMC step.
 # For this and all other files only post-burnin post-thinning MCMC samples are included.
@@ -122,7 +153,7 @@ bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -
 # genome-wide distribution and follows the format described for q gamma output.txt.
 
  
-# 4. Summarizing bgc output
+# 6. Summarizing bgc output
 # -i Infile, MCMC results from bgc in HDF5 format.
 # -o Outfile [default = postout].
 # -p Name of parameter to summarize, possibilities include: ’LnL’, ’alpha’, ’beta’,
@@ -143,17 +174,17 @@ bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -
 # the specified credible interval (this is an equal-tail probability interval).
 
 # Posterior point estimates and 95% ETPIs for the α and β parameters and cline parameter quantiles
-# With Bonferroni correction for 5,722 loci
+# With Bonferroni correction for 6,748 loci
 #Alpha:
-estpost -i mcmcout.hdf5 -o alphaest.txt -p alpha -s 0 -c 0.9999912618 -w 1
+estpost -i mcmcout.hdf5 -o alphaest.txt -p alpha -s 0 -c 0.99999259039 -w 1
 #Beta
-estpost -i mcmcout.hdf5 -o betaest.txt -p beta -s 0 -c 0.9999912618 -w 1
+estpost -i mcmcout.hdf5 -o betaest.txt -p beta -s 0 -c 0.99999259039 -w 1
 #Gamma
-estpost -i mcmcout.hdf5 -o gammaest.txt -p gamma-quantile -s 0 -c 0.9999912618 -w 1
+estpost -i mcmcout.hdf5 -o gammaest.txt -p gamma-quantile -s 0 -c 0.99999259039 -w 1
 #Zeta
-estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.9999912618 -w 1
+estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.99999259039 -w 1
 #Hi
-estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.9999912618 -w 1
+estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.99999259039 -w 1
 
 # Checking for stationarity and presenting results
 Rscript SDD.R
