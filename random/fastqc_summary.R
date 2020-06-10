@@ -54,8 +54,11 @@ for (i in 1:length(Sample)) {
 fastqc <- as_tibble(cbind(fastqc,Sample,R1_R2))
 
 # Removing rows not present in the key.txt file (probably undetermined files)
-fastqc <- fastqc[-undertermined_rows,]
-
+# If there are undetermined_rows
+if (!(is.null(undertermined_rows))) {
+  fastqc <- fastqc[-undertermined_rows,]
+}
+    
 # Adding a row to say whether trimmed or not
 fastqc <- fastqc %>% mutate(Trimmed=ifelse(grepl("trimmed",X3),"Y","N"))
 
