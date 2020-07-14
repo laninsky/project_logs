@@ -67,7 +67,6 @@ h5c++ -Wall -O2 -L/usr/include/gsl -I/usr/include/gsl -o bgc bgc_main.C bgc_func
 # Compiling estpost
 h5c++ -Wall -O3  -o estpost estpost_h5.c -lgsl -lgslcblas
 
-
 # 4. Bgc input options explanation (guided by mix of bgc manual and Taylor et al. 2014)
 # -a Infile with genetic data for parental population 0.
 # -b Infile with genetic data for parental population 1.
@@ -123,10 +122,10 @@ export PATH=/nesi/nobackup/uoo00105/chickadees/bin/bgcdist:$PATH
 
 bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -x 50000 -n 25000 -t 5 -p 1 -q 1 -i 0 -N 1 -E 0.0001 -m 1 -d 1 -s 1 -o 0 -I 0 -D 1252.497 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2
 
+# 5. After copying out outputfiles, using same code as above, ran a second shorter chain
+# (-x 25000 -n 12500) to check convergence
 
-# 5. After copying out outputfiles, using same code as above, ran a second chain to check convergence
-
-# Output files
+# Summary of output files
  
 # LnL output.txt: Each line in this file contains the log likelihood for a single MCMC step.
 # For this and all other files only post-burnin post-thinning MCMC samples are included.
@@ -152,7 +151,6 @@ bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -
 # zeta output.txt: This file contains the quantile of each ζ cline parameter in the estimated
 # genome-wide distribution and follows the format described for q gamma output.txt.
 
- 
 # 6. Summarizing bgc output
 # -i Infile, MCMC results from bgc in HDF5 format.
 # -o Outfile [default = postout].
@@ -186,16 +184,5 @@ estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.99999259039 -w
 #Hi
 estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.99999259039 -w 1
 
-# Checking for stationarity and presenting results
-Rscript SDD.R
-
-
-# 
-
-
-
-The parameter arguments gamma-quantile and zeta-quantile refer to the locus effects for
-α (γ) and β (ζ; Gompert & Buerkle 2011a). We use the credbile intervals to identify loci with
-excess ancestry and the quantile estimates to identify outlier loci (Lexer et al. 2007; Gompert
-& Buerkle 2011a; Gompert et al. 2012a).
-
+# 7. Checking for stationarity and convergence and presenting results
+Rscript Fig_S7c_stationarity_convergence_results.R
