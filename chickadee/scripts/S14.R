@@ -1,6 +1,6 @@
 # This code corresponds to Fig S14 in Alexander et al.
-# It creates Fig. S8 (average number of loci recovered across 
-# the 13,530 pairwise comparisons) in the main manuscript of 
+# It creates Fig. S9 (average number of loci recovered across 
+# the 13,366 pairwise comparisons) in the supplementary materials of 
 # Alexander et al.
 
 # 1. Loading required library
@@ -10,7 +10,7 @@ library(tidyverse)
 setwd("chickadee/output/")
 
 # 3A. Reading in structure data (tab delimited) and standardizing names
-temp <- read.table("../data/chickadee_structure_file.txt")
+temp <- read.table("../data/chickadee_singleton_filtered.stru")
 temp <- t(temp)
 temp[1,seq(1,length(temp[1,]),2)] <- gsub("_.*","_A",temp[1,seq(1,length(temp[1,]),2)])
 temp[1,seq(2,length(temp[1,]),2)] <- gsub("_.*","_B",temp[1,seq(2,length(temp[1,]),2)])
@@ -25,10 +25,14 @@ temp[1,which(grepl("7421",temp[1,]))] <- c("92270_A","92270_B")
 # 3B. Reading in Table S1 data (tab delimited), dropping last blank row
 tempS1 <- read_table2("../data/Table_S1.txt")
 tempS1 <- tempS1[1:165,]
+# Also will drop the sample excluded from Structure analyses due to low depth
+tempS1 <- tempS1[-(which(tempS1$Catalog_number=="99788")),]
 
 # 3C. Reading in ipyrad summary, including read depth data (tab delimited)
 tempread <- read_tsv("../data/ipyrad_summary.txt")
 tempread[,1] <- as_tibble(gsub("_.*","",as.matrix(tempread[,1])))
+# Also will drop the sample excluded from Structure analyses due to low depth
+tempread <- tempread[-(which(tempread$Sample=="649257")),]
 
 # Some minor tweaking of reference sample names based on tissue number used in readfile vs catalog number in Table_S1
 tempread[which(grepl("3474",as.matrix(tempread[,1]))),1] <- "90612"
@@ -38,7 +42,7 @@ tempread[which(grepl("7420",as.matrix(tempread[,1]))),1] <- "92269"
 tempread[which(grepl("7421",as.matrix(tempread[,1]))),1] <- "92270"
 
 # 4. Creating a new data object to store our comparisons and populating it with sample codes
-norows <- factorial(dim(tempS1)[1])/(factorial(dim(tempS1)[1]-2)*factorial(2))
+norows <- round(factorial(dim(tempS1)[1])/(factorial(dim(tempS1)[1]-2)*factorial(2)))
 
 pairwise_comparisons <- matrix(NA,ncol=6,nrow=norows)
 x <- 1
@@ -123,7 +127,7 @@ pairwise_comparisons <- pairwise_comparisons %>% mutate(grouped_read_depth=cut(a
 # 7. Now grouping for the first plot
 firstplot <- pairwise_comparisons %>% group_by(grouped_av_cluster,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_cluster=mean(average_cluster),av_diff=mean(abs_cluster_diff))
 
-# export as 1000 pixels width, SupFig1_firstplot_main.png in output folder
+# export as 1000 pixels width, Fig_S9_firstplot_main.png in output folder
 firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cluster,fill=mean_loci)) + 
   geom_tile(color="black") + 
   scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
@@ -136,7 +140,7 @@ firstplot_to_save <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=grouped_av_cl
   theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
   theme(aspect.ratio = 1)
 
-# export as 840 pixels width, 210 high, SupFig1_numpairs_cluster_diff.png in output folder
+# export as 840 pixels width, 210 high, Fig_S9_numpairs_cluster_diff.png in output folder
 numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) + 
   geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
   theme_bw(base_size = 16) + 
@@ -145,7 +149,7 @@ numpairsdiff <- ggplot(firstplot,aes(x=grouped_cluster_diff,y=num_pairs)) +
   theme(axis.title=element_text(size=18,face="bold")) +
   theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
-# export as 225 pixels width, 840 high, SupFig1_numpairs_cluster_av.png in output folder
+# export as 225 pixels width, 840 high, Fig_S9_numpairs_cluster_av.png in output folder
 numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) + 
   geom_bar(stat='identity', width=0.025,fill="black",color="black") + 
   theme_bw(base_size = 16) + 
@@ -159,7 +163,7 @@ numpairsav <- ggplot(firstplot,aes(x=grouped_av_cluster,y=num_pairs)) +
 # 8. Now grouping for the second plot
 secondplot <- pairwise_comparisons %>% group_by(grouped_read_depth,grouped_cluster_diff) %>% summarise(mean_loci=mean(overlapping_loci),num_pairs=n(),av_readdepth=mean(average_read_cov),av_diff=mean(abs_cluster_diff))
 
-# export as 1000 pixels wide, SupFig1_secondplot_main.png in output folder
+# export as 1000 pixels wide, Fig_S9_secondplot_main.png in output folder
 secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_read_depth,fill=mean_loci)) + 
   geom_tile(color="black") +
   scale_fill_gradientn(colors=c("royalblue3","lightseagreen","chartreuse3","greenyellow","yellow"), guide = guide_colorbar(frame.colour = "black")) + 
@@ -172,7 +176,7 @@ secondplot_to_save <- ggplot(secondplot,aes(x=grouped_cluster_diff,y=grouped_rea
   theme(plot.margin=unit(c(1,1,1,1),"cm"))  + 
   theme(aspect.ratio = 1)
 
-# export as 210 pixels width, 840 high, SupFig1_numpairs_read.png in output folder
+# export as 210 pixels width, 840 high, Fig_S9_numpairs_read.png in output folder
 numpairsreads <- ggplot(secondplot,aes(x=grouped_read_depth,y=num_pairs)) + 
   geom_bar(stat='identity', width=0.07,fill="black",color="black") + 
   theme_bw(base_size = 16) + 
@@ -186,13 +190,13 @@ numpairsreads <- ggplot(secondplot,aes(x=grouped_read_depth,y=num_pairs)) +
 # assembled the plots manually in ppt/illustrator
 
 sessionInfo()
-#R version 3.5.2 (2018-12-20)
+#R version 3.6.3 (2020-02-29)
 #Platform: x86_64-apple-darwin15.6.0 (64-bit)
-#Running under: macOS High Sierra 10.13.6
+#Running under: macOS Sierra 10.12.6
 #
 #Matrix products: default
-#BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
-#LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+#BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+#LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
 #
 #locale:
 #  [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -201,16 +205,17 @@ sessionInfo()
 #  [1] stats     graphics  grDevices utils     datasets  methods   base     
 #
 #other attached packages:
-#  [1] bindrcpp_0.2.2  forcats_0.3.0   stringr_1.3.1   dplyr_0.7.8     purrr_0.2.5     readr_1.3.1    
-#[7] tidyr_0.8.2     tibble_2.0.1    ggplot2_3.1.0   tidyverse_1.2.1
+#  [1] forcats_0.4.0   stringr_1.4.0   dplyr_0.8.4     purrr_0.3.3     readr_1.3.1    
+#[6] tidyr_1.0.2     tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.3.0
 #
 #loaded via a namespace (and not attached):
-#  [1] Rcpp_1.0.0       cellranger_1.1.0 pillar_1.3.1     compiler_3.5.2   plyr_1.8.4      
-#[6] bindr_0.1.1      tools_3.5.2      digest_0.6.18    jsonlite_1.6     lubridate_1.7.4 
-#[11] nlme_3.1-137     gtable_0.2.0     lattice_0.20-38  pkgconfig_2.0.2  rlang_0.3.1     
-#[16] cli_1.0.1        rstudioapi_0.9.0 yaml_2.2.0       haven_2.0.0      withr_2.1.2     
-#[21] xml2_1.2.0       httr_1.4.0       generics_0.0.2   hms_0.4.2        grid_3.5.2      
-#[26] tidyselect_0.2.5 glue_1.3.0       R6_2.3.0         readxl_1.2.0     modelr_0.1.2    
-#[31] magrittr_1.5     backports_1.1.3  scales_1.0.0     rvest_0.3.2      assertthat_0.2.0
-#[36] colorspace_1.4-0 labeling_0.3     stringi_1.2.4    lazyeval_0.2.1   munsell_0.5.0   
-#[41] broom_0.5.1      crayon_1.3.4 
+#  [1] Rcpp_1.0.4.6     cellranger_1.1.0 pillar_1.4.3     compiler_3.6.3   dbplyr_1.4.2 #   
+#[6] tools_3.6.3      digest_0.6.24    lubridate_1.7.4  jsonlite_1.6.1   lifecycle_0.1.0 
+#[11] nlme_3.1-144     gtable_0.3.0     lattice_0.20-38  pkgconfig_2.0.3  rlang_0.4.4     
+#[16] reprex_0.3.0     cli_2.0.1        DBI_1.1.0        rstudioapi_0.11  haven_2.2.0     
+#[21] withr_2.1.2      xml2_1.2.2       httr_1.4.1       fs_1.3.1         generics_0.0.2  
+#[26] vctrs_0.2.2      hms_0.5.3        grid_3.6.3       tidyselect_1.0.0 glue_1.3.1      
+#[31] R6_2.4.1         fansi_0.4.1      readxl_1.3.1     farver_2.0.3     modelr_0.1.5    
+#[36] magrittr_1.5     backports_1.1.5  scales_1.1.0     rvest_0.3.5      assertthat_0.2.1
+#[41] colorspace_1.4-1 labeling_0.3     utf8_1.1.4       stringi_1.4.5    lazyeval_0.2.2  
+#[46] munsell_0.5.0    broom_0.5.4      crayon_1.3.4
