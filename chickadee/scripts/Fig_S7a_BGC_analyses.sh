@@ -122,8 +122,9 @@ export PATH=/nesi/nobackup/uoo00105/chickadees/bin/bgcdist:$PATH
 
 bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -x 50000 -n 25000 -t 5 -p 1 -q 1 -i 0 -N 1 -E 0.0001 -m 1 -d 1 -s 1 -o 0 -I 0 -D 1252.497 -T 0 -u 0.1 -g 0.08 -z 0.05 -e 0.2
 
-# 5. After copying out outputfiles, using same code as above, ran a second shorter chain
-# (-x 25000 -n 12500) to check convergence
+# 5. After copying out outputfiles into run1_output, using same code as above, 
+# ran a second shorter chain (-x 25000 -n 12500) to check convergence and copied
+# these files into run2_output
 
 # Summary of output files
  
