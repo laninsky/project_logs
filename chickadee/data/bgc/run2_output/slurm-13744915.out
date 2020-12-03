@@ -1,0 +1,36 @@
+Reading input files
+Number of loci: 6748
+Number of admixed populations: 1
+Number of individuals: 56
+Using the linkage model for locus effects
+Allowing for uncertainty in allele counts
+Allocating memory
+Initializing MCMC chain
+Initialization complete
+mcmc iteration: 0 ........ LnL: -832866
+mcmc iteration: 1000 ........ LnL: -829617
+mcmc iteration: 2000 ........ LnL: -829742
+mcmc iteration: 3000 ........ LnL: -829268
+mcmc iteration: 4000 ........ LnL: -829341
+mcmc iteration: 5000 ........ LnL: -829094
+mcmc iteration: 6000 ........ LnL: -829237
+mcmc iteration: 7000 ........ LnL: -829473
+mcmc iteration: 8000 ........ LnL: -829893
+mcmc iteration: 9000 ........ LnL: -829779
+mcmc iteration: 10000 ........ LnL: -829578
+mcmc iteration: 11000 ........ LnL: -829612
+mcmc iteration: 12000 ........ LnL: -830164
+mcmc iteration: 13000 ........ LnL: -830778
+mcmc iteration: 14000 ........ LnL: -830318
+mcmc iteration: 15000 ........ LnL: -831069
+mcmc iteration: 16000 ........ LnL: -831152
+mcmc iteration: 17000 ........ LnL: -831739
+mcmc iteration: 18000 ........ LnL: -832155
+mcmc iteration: 19000 ........ LnL: -832949
+mcmc iteration: 20000 ........ LnL: -832480
+mcmc iteration: 21000 ........ LnL: -832678
+mcmc iteration: 22000 ........ LnL: -832532
+mcmc iteration: 23000 ........ LnL: -832794
+mcmc iteration: 24000 ........ LnL: -832464
+Finished mcmc
+Runtime: 46 hr 10 min 58 sec
