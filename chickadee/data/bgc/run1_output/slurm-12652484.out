@@ -1,0 +1,61 @@
+Reading input files
+Number of loci: 6748
+Number of admixed populations: 1
+Number of individuals: 56
+Using the linkage model for locus effects
+Allowing for uncertainty in allele counts
+Allocating memory
+Initializing MCMC chain
+Initialization complete
+mcmc iteration: 0 ........ LnL: -832932
+mcmc iteration: 1000 ........ LnL: -829605
+mcmc iteration: 2000 ........ LnL: -829467
+mcmc iteration: 3000 ........ LnL: -829304
+mcmc iteration: 4000 ........ LnL: -829262
+mcmc iteration: 5000 ........ LnL: -829256
+mcmc iteration: 6000 ........ LnL: -829390
+mcmc iteration: 7000 ........ LnL: -828726
+mcmc iteration: 8000 ........ LnL: -829147
+mcmc iteration: 9000 ........ LnL: -829630
+mcmc iteration: 10000 ........ LnL: -829218
+mcmc iteration: 11000 ........ LnL: -829122
+mcmc iteration: 12000 ........ LnL: -829166
+mcmc iteration: 13000 ........ LnL: -829339
+mcmc iteration: 14000 ........ LnL: -829320
+mcmc iteration: 15000 ........ LnL: -829244
+mcmc iteration: 16000 ........ LnL: -829090
+mcmc iteration: 17000 ........ LnL: -829246
+mcmc iteration: 18000 ........ LnL: -830265
+mcmc iteration: 19000 ........ LnL: -830329
+mcmc iteration: 20000 ........ LnL: -830916
+mcmc iteration: 21000 ........ LnL: -831340
+mcmc iteration: 22000 ........ LnL: -831418
+mcmc iteration: 23000 ........ LnL: -831328
+mcmc iteration: 24000 ........ LnL: -831890
+mcmc iteration: 25000 ........ LnL: -832488
+mcmc iteration: 26000 ........ LnL: -832144
+mcmc iteration: 27000 ........ LnL: -832683
+mcmc iteration: 28000 ........ LnL: -832452
+mcmc iteration: 29000 ........ LnL: -832311
+mcmc iteration: 30000 ........ LnL: -832763
+mcmc iteration: 31000 ........ LnL: -832761
+mcmc iteration: 32000 ........ LnL: -833181
+mcmc iteration: 33000 ........ LnL: -833115
+mcmc iteration: 34000 ........ LnL: -833148
+mcmc iteration: 35000 ........ LnL: -832696
+mcmc iteration: 36000 ........ LnL: -832722
+mcmc iteration: 37000 ........ LnL: -832326
+mcmc iteration: 38000 ........ LnL: -832783
+mcmc iteration: 39000 ........ LnL: -832434
+mcmc iteration: 40000 ........ LnL: -832744
+mcmc iteration: 41000 ........ LnL: -832602
+mcmc iteration: 42000 ........ LnL: -832997
+mcmc iteration: 43000 ........ LnL: -833306
+mcmc iteration: 44000 ........ LnL: -832581
+mcmc iteration: 45000 ........ LnL: -833108
+mcmc iteration: 46000 ........ LnL: -833162
+mcmc iteration: 47000 ........ LnL: -833540
+mcmc iteration: 48000 ........ LnL: -833663
+mcmc iteration: 49000 ........ LnL: -833255
+Finished mcmc
+Runtime: 93 hr 33 min 38 sec
