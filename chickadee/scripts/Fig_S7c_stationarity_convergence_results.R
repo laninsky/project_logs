@@ -3,10 +3,13 @@ library(tidyverse)
 library(gtable)
 library(grid)
 
-# 2. Reading in additional files for context on bgc results
-genetic_map <- read_delim("genetic_map.txt",col_names = FALSE,delim=" ")
+# 2. Setwd
+setwd("chickadee/output/")
+
+# 3. Reading in additional files for context on bgc results
+genetic_map <- read_delim("../data/bgc/genetic_map.txt",col_names = FALSE,delim=" ")
 no_of_loci <- dim(genetic_map)[1]
-bgc_chrom_key <- read_tsv("bgc_chrom_key.txt",col_names = TRUE)
+bgc_chrom_key <- read_tsv("../data/bgc/bgc_chrom_key.txt",col_names = TRUE)
 names(genetic_map) <- c("SNP","chromosome","kbp_pos")
 
 actual_chroms <- rep(NA,dim(genetic_map)[1])
@@ -16,43 +19,110 @@ for (i in 1:dim(bgc_chrom_key)[1]) {
 
 genetic_map$chromosome <- actual_chroms
 
-# 3. Reading in raw bgc files to look at stationarity
-likelihood <- read_tsv("OF_LnL_output.txt",col_names = FALSE)
+# 4. Reading in raw bgc files to look at stationarity
+likelihood <- read_tsv("../data/bgc/run1_output/OF_LnL_output.txt",col_names = FALSE)
 likelihood <- likelihood %>% mutate(state=row_number())
 names(likelihood)[1] <- "LnL"
 
-alpha <-  read_delim("OF_alpha_output.txt",col_names = FALSE,delim = ",")
+likelihood_run2 <- read_tsv("../data/bgc/run2_output/OF_LnL_output.txt",col_names = FALSE)
+likelihood_run2 <- likelihood_run2 %>% mutate(state=row_number())
+names(likelihood_run2)[1] <- "LnL"
+
+# Checking stationarity for likelihood
+ggplot() + geom_point(likelihood,mapping=aes(x=state,y=LnL)) + geom_point(likelihood_run2,mapping=aes(x=state,y=LnL),color="red")
+
+# Reading in the raw alpha data
+alpha <-  read_delim("../data/bgc/run1_output/OF_alpha_output.txt",col_names = FALSE,delim = ",")
 alpha0 <- alpha %>% filter(X1==0)
 alpha0 <- alpha0 %>% mutate(state=row_number())
 names(alpha0) <- c("locus","alpha","state")
+
 alphaz <- alpha %>% filter(X1==max(X1))
 alphaz <- alphaz %>% mutate(state=row_number())
 names(alphaz) <- c("locus","alpha","state")
 
-beta <-  read_delim("OF_beta_output.txt",col_names = FALSE,delim = ",")
+alpha_run2 <-  read_delim("../data/bgc/run2_output/OF_alpha_output.txt",col_names = FALSE,delim = ",")
+alpha0_run2 <- alpha_run2 %>% filter(X1==0)
+alpha0_run2 <- alpha0_run2 %>% mutate(state=row_number())
+names(alpha0_run2) <- c("locus","alpha","state")
+
+alphaz_run2 <- alpha_run2 %>% filter(X1==max(X1))
+alphaz_run2 <- alphaz_run2 %>% mutate(state=row_number())
+names(alphaz_run2) <- c("locus","alpha","state")
+
+# Checking stationarity for alpha0 (first locus) and alphaz (last locus)
+ggplot() + geom_line(alpha0,mapping=aes(x=state,y=alpha)) + geom_line(alpha0_run2,mapping=aes(x=state,y=alpha),color="red")
+  
+ggplot() + geom_line(alphaz,mapping=aes(x=state,y=alpha)) + geom_line(alphaz_run2,mapping=aes(x=state,y=alpha),color="red")
+
+ggplot() + geom_point(mapping=aes(x=likelihood$LnL,y=alpha0$alpha)) + geom_point(mapping=aes(x=likelihood_run2$LnL,y=alpha0_run2$alpha),color="red") 
+
+ggplot() + geom_point(mapping=aes(x=likelihood$LnL,y=alphaz$alpha)) + geom_point(mapping=aes(x=likelihood_run2$LnL,y=alphaz_run2$alpha),color="red") 
+
+# Reading in the raw beta data
+beta <-  read_delim("../data/bgc/run1_output/OF_beta_output.txt",col_names = FALSE,delim = ",")
 beta0 <- beta %>% filter(X1==0)
 beta0 <- beta0 %>% mutate(state=row_number())
 names(beta0) <- c("locus","beta","state")
+
 betaz <- beta %>% filter(X1==max(X1))
 betaz <- betaz %>% mutate(state=row_number())
 names(betaz) <- c("locus","beta","state")
 
-# Checking stationarity for likelihood
-ggplot(likelihood) + geom_point(aes(x=state,y=LnL))
-# Checking stationarity for alpha0 (first locus) and alphaz (last locus)
-ggplot(alpha0) + geom_point(aes(x=state,y=alpha))
-ggplot(alphaz) + geom_point(aes(x=state,y=alpha))
+beta_run2 <-  read_delim("../data/bgc/run2_output/OF_beta_output.txt",col_names = FALSE,delim = ",")
+beta0_run2 <- beta_run2 %>% filter(X1==0)
+beta0_run2 <- beta0_run2 %>% mutate(state=row_number())
+names(beta0_run2) <- c("locus","beta","state")
+
+betaz_run2 <- beta_run2 %>% filter(X1==max(X1))
+betaz_run2 <- betaz_run2 %>% mutate(state=row_number())
+names(betaz_run2) <- c("locus","beta","state")
+
 # Checking stationarity for beta0 (first locus) and betaz (last locus)
-ggplot(beta0) + geom_point(aes(x=state,y=beta))
-ggplot(betaz) + geom_point(aes(x=state,y=beta))
+ggplot() + geom_line(beta0,mapping=aes(x=state,y=beta)) + geom_line(beta0_run2,mapping=aes(x=state,y=beta),color="red")
 
-# 4. Reading in summmarized results to find outlier loci
-alphaest <- read_delim("alphaest.txt",col_names = TRUE,delim = ",")
+ggplot() + geom_line(betaz,mapping=aes(x=state,y=beta)) + geom_line(betaz_run2,mapping=aes(x=state,y=beta),color="red")
+
+ggplot() + geom_point(mapping=aes(x=likelihood$LnL,y=beta0$beta)) + geom_point(mapping=aes(x=likelihood_run2$LnL,y=beta0_run2$beta),color="red") 
+
+ggplot() + geom_point(mapping=aes(x=likelihood$LnL,y=betaz$beta)) + geom_point(mapping=aes(x=likelihood_run2$LnL,y=betaz_run2$beta),color="red") 
+
+# 4. Reading in summmarized results to first investigate convergence before doing any other analyses
+alphaest <- read_delim("../data/bgc/run1_output/alphaest.txt",col_names = TRUE,delim = ",")
 names(alphaest) <- c("alpha_loci", "alpha_mean", "alpha_median", "alpha_95_LB", "alpha_95_UB")
-betaest <- read_delim("betaest.txt",col_names = TRUE,delim = ",")
+betaest <- read_delim("../data/bgc/run1_output/betaest.txt",col_names = TRUE,delim = ",")
 names(betaest) <- c("beta_loci", "beta_mean", "beta_median", "beta_95_LB", "beta_95_UB")
-combined <- bind_cols(genetic_map,alphaest,betaest) %>% select(-SNP,-alpha_loci,-beta_loci)
 
+alphaest_run2 <- read_delim("../data/bgc/run2_output/alphaest.txt",col_names = TRUE,delim = ",")
+names(alphaest_run2) <- c("alpha_loci", "alpha_mean", "alpha_median", "alpha_95_LB", "alpha_95_UB")
+betaest_run2 <- read_delim("../data/bgc/run2_output/betaest.txt",col_names = TRUE,delim = ",")
+names(betaest_run2) <- c("beta_loci", "beta_mean", "beta_median", "beta_95_LB", "beta_95_UB")
+
+# Testing if the medians and means of the alpha values are significantly different between the runs
+t.test(alphaest$alpha_median,alphaest_run2$alpha_median,paired=TRUE)
+t.test(alphaest$alpha_mean,alphaest_run2$alpha_mean,paired=TRUE)
+
+# Testing if the medians and means of the beta values are significantly different between the runs
+t.test(betaest$beta_median,betaest_run2$beta_median,paired=TRUE)
+t.test(betaest$beta_mean,betaest_run2$beta_mean,paired=TRUE)
+
+# Creating some combined tibbles so we can plot 
+combined <- bind_cols(genetic_map,alphaest,betaest) %>% select(-SNP,-alpha_loci,-beta_loci)
+combined_run2 <- bind_cols(genetic_map,alphaest_run2,betaest_run2) %>% select(-SNP,-alpha_loci,-beta_loci)
+
+# Confirming the distribution of alpha and beta values looks similar between the runs
+ggplot() + geom_point(combined,mapping=aes(x=alpha_median,y=beta_median)) +
+  geom_point(combined_run2,mapping=aes(x=alpha_median,y=beta_median),color="red")
+
+# Confirming positive correlation between the runs for alpha
+ggplot() + geom_point(mapping=aes(x=combined$alpha_median,y=combined_run2$alpha_median))
+cor(combined$alpha_median,combined_run2$alpha_median)
+
+# Confirming positive correlation between the runs for beta
+ggplot() + geom_point(mapping=aes(x=combined$beta_median,y=combined_run2$beta_median))
+cor(combined$beta_median,combined_run2$beta_median)  
+
+# 5. Finding outlier loci
 combined <- combined %>% mutate(alpha=ifelse((alpha_95_LB < 0 & alpha_95_UB > 0),"Not_outlier",
                                              ifelse((alpha_95_UB < 0),"Neg","Pos")))
 
