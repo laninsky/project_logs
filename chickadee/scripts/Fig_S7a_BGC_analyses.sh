@@ -153,6 +153,8 @@ bgc -a black_capped.txt -b Carolina.txt -h admixed.txt -M genetic_map.txt -O 2 -
 # genome-wide distribution and follows the format described for q gamma output.txt.
 
 # 6. Summarizing bgc output
+# Within the run1_output and run2_output folders:
+
 # -i Infile, MCMC results from bgc in HDF5 format.
 # -o Outfile [default = postout].
 # -p Name of parameter to summarize, possibilities include: ’LnL’, ’alpha’, ’beta’,
