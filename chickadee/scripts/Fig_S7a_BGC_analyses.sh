@@ -13,7 +13,8 @@ cd bgc
 # chromosome_scaffolds.txt
 # popmap_final.txt
 # *.snps.map or *.snpsmap from ipyrad outfiles
-# S7_generate_bgc_inputs.R
+# S7b_generate_bgc_inputs.R
+# S7c_stationarity_convergence_results.R
 
 #2. Downloading annotations for black-capped chickadee genome
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/011/421/415/GCA_011421415.1_CUB_Patr_1.0/GCA_011421415.1_CUB_Patr_1.0_genomic.gbff.gz
@@ -187,5 +188,23 @@ estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.99999259039 -w
 #Hi
 estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.99999259039 -w 1
 
-# 7. Checking for stationarity and convergence and presenting results
+# 7a. Checking for stationarity and convergence
+Rscript Fig_S7c_stationarity_convergence_results.R
+
+# Based on the stationarity/convergence results, it might be a good idea to remove additional burn-in
+# In our case, 1500 states were removed for both run1 and run2, and these are the summarized files
+# in the github repository
+
+#Alpha:
+estpost -i mcmcout.hdf5 -o alphaest.txt -p alpha -s 0 -c 0.99999259039 -w 1 -b 1500
+#Beta
+estpost -i mcmcout.hdf5 -o betaest.txt -p beta -s 0 -c 0.99999259039 -w 1 -b 1500
+#Gamma
+estpost -i mcmcout.hdf5 -o gammaest.txt -p gamma-quantile -s 0 -c 0.99999259039 -w 1 -b 1500
+#Zeta
+estpost -i mcmcout.hdf5 -o zetaest.txt -p zeta-quantile -s 0 -c 0.99999259039 -w 1 -b 1500
+#Hi
+estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.99999259039 -w 1 -b 1500
+
+# 7b. Re-checking for stationarity and convergence and presenting results
 Rscript Fig_S7c_stationarity_convergence_results.R
