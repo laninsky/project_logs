@@ -32,7 +32,9 @@ names(likelihood_run2)[1] <- "LnL"
 ggplot() + geom_point(likelihood,mapping=aes(x=state,y=LnL)) + geom_point(likelihood_run2,mapping=aes(x=state,y=LnL),color="red")
 
 # Reading in the raw alpha data
-alpha <-  read_delim("../data/bgc/run1_output/OF_alpha_output.txt",col_names = FALSE,delim = ",")
+# Alpha files unavailable in github repository due to size limits
+# instead, they will be available in the dryad repository
+alpha <-  read_delim("../../../bgc_run1_output_large_files/OF_alpha_output.txt",col_names = FALSE,delim = ",")
 alpha0 <- alpha %>% filter(X1==0)
 alpha0 <- alpha0 %>% mutate(state=row_number())
 names(alpha0) <- c("locus","alpha","state")
@@ -41,7 +43,7 @@ alphaz <- alpha %>% filter(X1==max(X1))
 alphaz <- alphaz %>% mutate(state=row_number())
 names(alphaz) <- c("locus","alpha","state")
 
-alpha_run2 <-  read_delim("../data/bgc/run2_output/OF_alpha_output.txt",col_names = FALSE,delim = ",")
+alpha_run2 <-  read_delim("../../../bgc_run2_output_large_files/OF_alpha_output.txt",col_names = FALSE,delim = ",")
 alpha0_run2 <- alpha_run2 %>% filter(X1==0)
 alpha0_run2 <- alpha0_run2 %>% mutate(state=row_number())
 names(alpha0_run2) <- c("locus","alpha","state")
@@ -60,7 +62,9 @@ ggplot() + geom_point(mapping=aes(x=likelihood$LnL,y=alpha0$alpha)) + geom_point
 ggplot() + geom_point(mapping=aes(x=likelihood$LnL,y=alphaz$alpha)) + geom_point(mapping=aes(x=likelihood_run2$LnL,y=alphaz_run2$alpha),color="red") 
 
 # Reading in the raw beta data
-beta <-  read_delim("../data/bgc/run1_output/OF_beta_output.txt",col_names = FALSE,delim = ",")
+# Beta files unavailable in github repository due to size limits
+# instead, they will be available in the dryad repository
+beta <-  read_delim("../../../bgc_run1_output_large_files/OF_beta_output.txt",col_names = FALSE,delim = ",")
 beta0 <- beta %>% filter(X1==0)
 beta0 <- beta0 %>% mutate(state=row_number())
 names(beta0) <- c("locus","beta","state")
@@ -69,7 +73,7 @@ betaz <- beta %>% filter(X1==max(X1))
 betaz <- betaz %>% mutate(state=row_number())
 names(betaz) <- c("locus","beta","state")
 
-beta_run2 <-  read_delim("../data/bgc/run2_output/OF_beta_output.txt",col_names = FALSE,delim = ",")
+beta_run2 <-  read_delim("../../../bgc_run2_output_large_files/OF_beta_output.txt",col_names = FALSE,delim = ",")
 beta0_run2 <- beta_run2 %>% filter(X1==0)
 beta0_run2 <- beta0_run2 %>% mutate(state=row_number())
 names(beta0_run2) <- c("locus","beta","state")
@@ -212,8 +216,15 @@ ggplot() +
   geom_line(data=Pos_Neg,aes(group=locus_row,x=hybrid_index,y=ancestry), color="purple4",size=1) + 
   geom_line(data=Pos_Not_outlier,aes(group=locus_row,x=hybrid_index,y=ancestry), color="steelblue2",size=1) + 
   geom_line(data=Neg_Not_outlier,aes(group=locus_row,x=hybrid_index,y=ancestry), color="blue",size=1) + 
-  theme_bw() +
-  theme(legend.position = "none")
+  geom_line(data=Pos_Pos,aes(group=locus_row,x=hybrid_index,y=ancestry), color="magenta",size=1) + 
+  theme_bw(base_size=33) +
+  theme(legend.position = "none")  +
+  theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+  theme(axis.title=element_text(size=40,face="bold")) +
+  scale_y_continuous(name="Locus specific ancestry") +
+  scale_x_continuous(name="Hybrid index") 
+
+ggsave(paste("FigS10A.png",sep=""),width=400,height=200,units="mm")
 
 
 # Light blue: positive α not overlapping with zero (non-significant β)
@@ -240,22 +251,83 @@ ggplot() +
 # probability of black-capped ancestry, while also that the locus background
 # is less associated with genomic background than in other loci.
 
+# Magenta: significantly positive α and positive β: An increase in the
+# probability of black-capped ancestry, while also that that locus background 
+# is strongly associated with genomic background
+
 # (Gompert et al. 2012b).
 
-
-
-
-
-
 # 6. Plotting by chromosome
-combined <- combined %>% arrange(as.numeric(gsub("[A-Z,a-z]+.*","",chromosome)))
-alphaplot <- ggplot(combined) + geom_line(aes(x=locus_row,y=alpha_median))
-betaplot <- ggplot(combined) + geom_line(aes(x=locus_row,y=beta_median))
+reduced_combined <- combined %>% filter(hybrid_index==0)
 
-ap <- ggplotGrob(alphaplot)
-bp <- ggplotGrob(betaplot)
-g <- rbind(ap, bp, size = "first")
-g$widths <- unit.pmax(ap$widths, bp$widths)
-grid.newpage()
-grid.draw(g)
+reduced_combined <- reduced_combined %>% arrange(as.numeric(gsub("[A-Z,a-z]+.*","",chromosome)))
+
+total_length <- reduced_combined %>% group_by(chromosome) %>% filter(kbp_pos==max(kbp_pos)) %>% ungroup(chromosome) %>% select(kbp_pos) %>% sum()
+
+for (i in unique(reduced_combined$chromosome)) {
+  tempcombined <- reduced_combined %>% filter(chromosome==i)
+  
+  tempNot_outlier_Not_outlier <- tempcombined %>% filter(alpha_beta=="Not_outlier+Not_outlier")
+  tempPos_Not_outlier <- tempcombined %>% filter(alpha_beta=="Pos+Not_outlier")
+  tempNeg_Not_outlier <- tempcombined %>% filter(alpha_beta=="Neg+Not_outlier")
+  tempNot_outlier_Pos <- tempcombined %>% filter(alpha_beta=="Not_outlier+Pos")
+  tempNot_outlier_Neg <- tempcombined %>% filter(alpha_beta=="Not_outlier+Neg")
+  tempNeg_Pos <- tempcombined %>% filter(alpha_beta=="Neg+Pos")
+  tempPos_Neg <- tempcombined %>% filter(alpha_beta=="Pos+Neg")
+  tempNeg_Neg <- tempcombined %>% filter(alpha_beta=="Neg+Neg")
+  tempPos_Pos <- tempcombined %>% filter(alpha_beta=="Pos+Pos")
+
+  ggplot() + geom_line(tempcombined,mapping=aes(x=kbp_pos,y=alpha_median)) +
+    geom_point(data=tempNot_outlier_Pos,aes(x=kbp_pos,y=alpha_median), color="red",size=7) + 
+    geom_point(data=tempNot_outlier_Neg,aes(x=kbp_pos,y=alpha_median), color="red4",size=7) + 
+    geom_point(data=tempNeg_Pos,aes(x=kbp_pos,y=alpha_median), color="purple",size=7) + 
+    geom_point(data=tempPos_Neg,aes(x=kbp_pos,y=alpha_median), color="purple4",size=7) + 
+    geom_point(data=tempPos_Not_outlier,aes(x=kbp_pos,y=alpha_median), color="steelblue2",size=7) + 
+    geom_point(data=tempNeg_Not_outlier,aes(x=kbp_pos,y=alpha_median), color="blue",size=7) + 
+    geom_point(data=tempPos_Pos,aes(x=kbp_pos,y=alpha_median), color="magenta",size=7) +
+    theme_bw(base_size=33) +
+    theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+    theme(axis.title=element_text(size=40,face="bold")) +
+    scale_y_continuous(name="Median α") +
+    scale_x_continuous(name="Distance along chromosome (kbp)") 
+  
+  ggsave(paste("FigS10_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+  
+  ggplot() + geom_line(tempcombined,mapping=aes(x=kbp_pos,y=beta_median)) +
+    geom_point(data=tempNot_outlier_Pos,aes(x=kbp_pos,y=beta_median), color="red",size=7) + 
+    geom_point(data=tempNot_outlier_Neg,aes(x=kbp_pos,y=beta_median), color="red4",size=7) + 
+    geom_point(data=tempNeg_Pos,aes(x=kbp_pos,y=beta_median), color="purple",size=7) + 
+    geom_point(data=tempPos_Neg,aes(x=kbp_pos,y=beta_median), color="purple4",size=7) + 
+    geom_point(data=tempPos_Not_outlier,aes(x=kbp_pos,y=beta_median), color="steelblue2",size=7) + 
+    geom_point(data=tempNeg_Not_outlier,aes(x=kbp_pos,y=beta_median), color="blue",size=7) + 
+    geom_point(data=tempPos_Pos,aes(x=kbp_pos,y=alpha_median), color="magenta",size=7) +
+    theme_bw(base_size=33) +
+    theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+    theme(axis.title=element_text(size=40,face="bold")) +
+    scale_y_continuous(name="Median β") +
+    scale_x_continuous(name="Distance along chromosome (kbp)") 
+  
+  ggsave(paste("FigS10_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+  
+  print(paste("Chromosome ",i," makes up ",round(max(tempcombined$kbp_pos)/total_length*100,2),"% of the assembly",sep=""))
+  print("It has the following % of alpha/beta outliers:")
+  print(paste("Not_outlier/Not_outlier",round(dim(tempNot_outlier_Not_outlier)[1]/dim(Not_outlier_Not_outlier %>% filter(hybrid_index==0))[1]*100,2)))
+  print(paste("Pos/Not_outlier:",(round(dim(tempPos_Not_outlier)[1]/dim(Pos_Not_outlier %>% filter(hybrid_index==0))[1]*100,2))))
+  print(paste("Neg/Not_outlier:",(round(dim(tempNeg_Not_outlier)[1]/dim(Neg_Not_outlier %>% filter(hybrid_index==0))[1]*100,2))))
+  print(paste("Not/outlier_Pos:",(round(dim(tempNot_outlier_Pos)[1]/dim(Not_outlier_Pos %>% filter(hybrid_index==0))[1]*100,2))))
+  print(paste("Not/outlier_Neg:",(round(dim(tempNot_outlier_Neg)[1]/dim(Not_outlier_Neg %>% filter(hybrid_index==0))[1]*100,2))))
+  print(paste("Neg/Pos:",(round(dim(tempNeg_Pos)[1]/dim(Not_outlier_Neg %>% filter(hybrid_index==0))[1]*100,2))))
+  print(paste("Pos/Neg:",(round(dim(tempPos_Neg)[1]/dim(Pos_Neg %>% filter(hybrid_index==0))[1]*100,2))))
+  print(paste("Neg/Neg:",(round(dim(tempNeg_Neg)[1]/dim(Neg_Neg %>% filter(hybrid_index==0))[1]*100,2))))
+  print(paste("Pos/Pos:",(round(dim(tempPos_Pos)[1]/dim(Pos_Pos %>% filter(hybrid_index==0))[1]*100,2))))
+  
+  print("In summary across the 3 significantly negative alpha outliers, it has (%):")
+  print(((dim(tempNeg_Not_outlier)[1]+dim(tempNeg_Pos)[1]))/3*100)
+  print("In summary across the 230 significantly positive alpha outliers, it has (%):")
+  print(((dim(tempPos_Neg)[1]+dim(tempPos_Not_outlier)[1])+dim(tempPos_Pos)[1])/230*100)
+  print("In summary across the 1141 significantly negative beta outliers, it has (%):")
+  print((dim(tempNot_outlier_Neg)[1]+dim(tempPos_Neg)[1])/1141*100)
+  print("In summary across the 671 significantly positive beta outliers, it has (%):")
+  print((dim(tempNeg_Pos)[1]+dim(tempNot_outlier_Pos)[1]+dim(tempPos_Pos)[1])/671*100)
+}
 
