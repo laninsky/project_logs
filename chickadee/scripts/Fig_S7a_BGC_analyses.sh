@@ -208,3 +208,84 @@ estpost -i mcmcout.hdf5 -o hi.txt -p hi -s 0 -c 0.99999259039 -w 1 -b 1500
 
 # 7b. Re-checking for stationarity and convergence and presenting results
 Rscript Fig_S7c_stationarity_convergence_results.R
+
+# 8. Loading necessary modules for pulling out genes of interest
+module load seqtk/1.3-gimkl-2018b
+
+# Copying across the annotations for the other black-capped chickadee genome (less contiguous than the one we
+# used for reference mapping, but with annotations available)
+wget https://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_other/Poecile_atricapillus/latest_assembly_versions/GCA_013398625.1_ASM1339862v1/GCA_013398625.1_ASM1339862v1_cds_from_genomic.fna.gz
+gunzip GCA_013398625.1_ASM1339862v1_cds_from_genomic.fna.gz
+
+# downloading magic-blast (need splice-aware method, as the nucleotide CDS we've downloaded will exclude intons)
+wget https://ftp.ncbi.nlm.nih.gov/blast/executables/magicblast/LATEST/ncbi-magicblast-1.5.0-x64-linux.tar.gz
+tar -zvxf ncbi-magicblast-1.5.0-x64-linux.tar.gz 
+export PATH=/nesi/nobackup/uoo00105/chickadees/bin/ncbi-magicblast-1.5.0/bin:$PATH
+
+number_of_matches=`wc -l FigS10_outlying_marker_bed_format.bed | awk '{print $1}'`
+
+# Outputting a list of genes found in the regions of interest (potential inversions)
+for i in `seq 1 $number_of_matches`;
+  do bedline=`head -n $i FigS10_outlying_marker_bed_format.bed | tail -n 1`;
+  echo $bedline > temp.bed;
+  seqname=`echo $bedline | awk '{print $1}'`;
+  seqtk subseq GCA_011421415.1_CUB_Patr_1.0_genomic.fna temp.bed > $seqname.$i.fa;
+  magicblast -query GCA_013398625.1_ASM1339862v1_cds_from_genomic.fna -subject $seqname.$i.fa -perc_identity 99 -outfmt tabular -no_unaligned > $seqname.$i.matches.txt;
+  grep -v "#" $seqname.$i.matches.txt | awk '{print $1}' > temp_sequence_name.txt;
+  seqtk subseq GCA_013398625.1_ASM1339862v1_cds_from_genomic.fna temp_sequence_name.txt | grep -F "[gene=" | sed 's/.*\[gene=//g' | sed 's/\].*//g' > $seqname.$i.gene_matches.txt;
+  rm temp.bed;
+  rm temp_sequence_name.txt;
+done
+
+# Combintions of these genes were then used in geneontology.org
+# Chromosome Z
+cat CM022174*gene_matches.txt | sort | uniq
+# Region by region chromosome Z
+cat CM022174.1.2.gene_matches.txt
+cat CM022174.1.3.gene_matches.txt
+cat CM022174.1.4.gene_matches.txt
+cat CM022174.1.5.gene_matches.txt
+cat CM022174.1.6.gene_matches.txt
+cat CM022174.1.7.gene_matches.txt
+cat CM022174.1.8.gene_matches.txt
+cat CM022174.1.9.gene_matches.txt
+cat CM022174.1.10.gene_matches.txt
+cat CM022174.1.11.gene_matches.txt
+
+#Chromosome 1A
+cat JAAMOC010000547.1.1.gene_matches.txt
+
+# All putative inversions
+cat *gene_matches.txt
+
+# Repeating a similar analysis on each of the SNPs. Creating a subfolder to hold all the data
+mkdir positive_beta_SNPs
+cd positive_beta_SNPs
+# Place FigS10_poitive_beta_SNPs_bed_format.bed into this folder
+number_of_matches=`wc -l FigS10_positive_beta_SNPs_bed_format.bed | awk '{print $1}'`
+
+# Outputting a list of genes found in the regions of interest
+for i in `seq 1 $number_of_matches`;
+  do bedline=`head -n $i FigS10_positive_beta_SNPs_bed_format.bed | tail -n 1`;
+  echo $bedline > temp.bed;
+  seqname=`echo $bedline | awk '{print $1}'`;
+  seqtk subseq ../GCA_011421415.1_CUB_Patr_1.0_genomic.fna temp.bed > $seqname.$i.fa;
+  magicblast -query ../GCA_013398625.1_ASM1339862v1_cds_from_genomic.fna -subject $seqname.$i.fa -perc_identity 99 -outfmt tabular -no_unaligned > $seqname.$i.matches.txt;
+  grep -v "#" $seqname.$i.matches.txt | awk '{print $1}' > temp_sequence_name.txt;
+  seqtk subseq ../GCA_013398625.1_ASM1339862v1_cds_from_genomic.fna temp_sequence_name.txt | grep -F "[gene=" | sed 's/.*\[gene=//g' | sed 's/\].*//g' > $seqname.$i.gene_matches.txt;
+  rm temp.bed;
+  rm temp_sequence_name.txt;
+done
+
+# Obtaining a list of uniq genes to run through Gene Ontology
+cat *gene_matches.txt | sort | uniq
+
+# Finding the genes that are within 5,000 bp of multiple outlying SNPs
+cat *gene_matches.txt | sort | uniq -c | grep -v "1 "
+
+# Getting a summary of what genes were associated with what SNPs to add to Fig S10
+for i in `seq 1 $number_of_matches`; 
+  do filename=`echo *.$i.gene_matches.txt`;
+  seqs=`cat $filename | tr '\n' '\t'`;
+  echo $filename $seqs >> ordered_gene_matches.txt;
+done

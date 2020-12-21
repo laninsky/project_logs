@@ -2,6 +2,9 @@
 library(tidyverse)
 library(gtable)
 library(grid)
+#install.packages("DescTools")
+library(DescTools)
+library(ggrepel)
 
 # 2. Setwd
 setwd("chickadee/output/")
@@ -13,11 +16,16 @@ bgc_chrom_key <- read_tsv("../data/bgc/bgc_chrom_key.txt",col_names = TRUE)
 names(genetic_map) <- c("SNP","chromosome","kbp_pos")
 
 actual_chroms <- rep(NA,dim(genetic_map)[1])
+actual_scaffolds <- rep(NA,dim(genetic_map)[1])
 for (i in 1:dim(bgc_chrom_key)[1]) {
   actual_chroms[which(genetic_map$chromosome==bgc_chrom_key$bgc_chrom[i])] <- bgc_chrom_key$chrom[i]
+  actual_scaffolds[which(genetic_map$chromosome==bgc_chrom_key$bgc_chrom[i])] <- bgc_chrom_key$scaffold[i]
 }
 
 genetic_map$chromosome <- actual_chroms
+genetic_map <- as_tibble(cbind(genetic_map,actual_scaffolds))
+names(genetic_map) <- c("SNP","chromosome","kbp_pos","scaffolds")
+genetic_map <- genetic_map %>%   mutate_at(vars(scaffolds),funs(as.character))
 
 # 4. Reading in raw bgc files to look at stationarity
 likelihood <- read_tsv("../data/bgc/run1_output/OF_LnL_output.txt",col_names = FALSE)
@@ -205,6 +213,9 @@ Pos_Neg <- combined %>% filter(alpha_beta=="Pos+Neg")
 Neg_Neg <- combined %>% filter(alpha_beta=="Neg+Neg")
 Pos_Pos <- combined %>% filter(alpha_beta=="Pos+Pos")
 
+# Making a two by two table for testing sig difference in proportions by chromosome further down
+prob_matrix <- rbind(c(length(unique(Pos_Pos$locus_row)),length(unique(Neg_Pos$locus_row)),length(unique(Not_outlier_Pos$locus_row))),c(length(unique(Pos_Neg$locus_row)),length(unique(Neg_Neg$locus_row)),length(unique(Not_outlier_Neg$locus_row))),c(length(unique(Pos_Not_outlier$locus_row)),length(unique(Neg_Not_outlier$locus_row)),length(unique(Not_outlier_Not_outlier$locus_row))))
+
 # Summarizing the counts in each category. Note, no Neg+Neg or Pos+Pos observed
 combined %>% filter(hybrid_index==0) %>% group_by(alpha_beta) %>% count()
 
@@ -225,7 +236,6 @@ ggplot() +
   scale_x_continuous(name="Hybrid index") 
 
 ggsave(paste("FigS10A.png",sep=""),width=400,height=200,units="mm")
-
 
 # Light blue: positive α not overlapping with zero (non-significant β)
 # Increase in the probability of black-capped ancestry from the base
@@ -257,77 +267,330 @@ ggsave(paste("FigS10A.png",sep=""),width=400,height=200,units="mm")
 
 # (Gompert et al. 2012b).
 
-# 6. Plotting by chromosome
+# 6. Plotting and summarizing stats by chromosome
 reduced_combined <- combined %>% filter(hybrid_index==0)
 
-reduced_combined <- reduced_combined %>% arrange(as.numeric(gsub("[A-Z,a-z]+.*","",chromosome)))
+reduced_combined <- reduced_combined  %>% arrange(kbp_pos) %>% arrange(scaffolds) %>% arrange(as.numeric(gsub("[A-Z,a-z]+.*","",chromosome)))
 
-total_length <- reduced_combined %>% group_by(chromosome) %>% filter(kbp_pos==max(kbp_pos)) %>% ungroup(chromosome) %>% select(kbp_pos) %>% sum()
+# Creating an output variable with the background genome values for comparison to chromosome by chromosome
+
+chrom_output <- c("total",dim(reduced_combined)[1], (dim(reduced_combined)[1]-length(unique(Not_outlier_Not_outlier$locus_row))),NA,NA,length(unique(Pos_Pos$locus_row)),length(unique(Neg_Pos$locus_row)),length(unique(Not_outlier_Pos$locus_row)),length(unique(Pos_Neg$locus_row)),length(unique(Neg_Neg$locus_row)),length(unique(Not_outlier_Neg$locus_row)),length(unique(Pos_Not_outlier$locus_row)),length(unique(Neg_Not_outlier$locus_row)),length(unique(Not_outlier_Not_outlier$locus_row)))
 
 for (i in unique(reduced_combined$chromosome)) {
   tempcombined <- reduced_combined %>% filter(chromosome==i)
   
-  tempNot_outlier_Not_outlier <- tempcombined %>% filter(alpha_beta=="Not_outlier+Not_outlier")
-  tempPos_Not_outlier <- tempcombined %>% filter(alpha_beta=="Pos+Not_outlier")
-  tempNeg_Not_outlier <- tempcombined %>% filter(alpha_beta=="Neg+Not_outlier")
-  tempNot_outlier_Pos <- tempcombined %>% filter(alpha_beta=="Not_outlier+Pos")
-  tempNot_outlier_Neg <- tempcombined %>% filter(alpha_beta=="Not_outlier+Neg")
-  tempNeg_Pos <- tempcombined %>% filter(alpha_beta=="Neg+Pos")
-  tempPos_Neg <- tempcombined %>% filter(alpha_beta=="Pos+Neg")
-  tempNeg_Neg <- tempcombined %>% filter(alpha_beta=="Neg+Neg")
-  tempPos_Pos <- tempcombined %>% filter(alpha_beta=="Pos+Pos")
+  tempprob_matrix <- rbind(c(length(which((tempcombined$alpha_beta=="Pos+Pos")==TRUE)),length(which((tempcombined$alpha_beta=="Neg+Pos")==TRUE)),length(which((tempcombined$alpha_beta=="Not_outlier+Pos")==TRUE))),c(length(which((tempcombined$alpha_beta=="Pos+Neg")==TRUE)),length(which((tempcombined$alpha_beta=="Neg+Neg")==TRUE)),length(which((tempcombined$alpha_beta=="Not_outlier+Neg")==TRUE))),c(length(which((tempcombined$alpha_beta=="Pos+Not_outlier")==TRUE)),length(which((tempcombined$alpha_beta=="Neg+Not_outlier")==TRUE)), length(which((tempcombined$alpha_beta=="Not_outlier+Not_outlier")==TRUE))))
+  
+  mod_prob_matrix <- prob_matrix
+  
+  if (any(rowSums(tempprob_matrix)==0)) {
+    todel <- which(rowSums(tempprob_matrix)==0) 
+    tempprob_matrix <- tempprob_matrix[-todel,]
+    mod_prob_matrix <- mod_prob_matrix[-todel,]
+  }
+  if(!is.null(nrow(tempprob_matrix))) {
+    if (any(colSums(tempprob_matrix)==0)) {
+      todel <- which(colSums(tempprob_matrix)==0) 
+      tempprob_matrix <- tempprob_matrix[,-todel]
+      mod_prob_matrix <- mod_prob_matrix[,-todel]
+    }
+  }
+  
+  total_mod_prob_matrix <- sum(mod_prob_matrix)
+  mod_prob_matrix <- mod_prob_matrix/total_mod_prob_matrix
+  
+  gtest <- GTest(tempprob_matrix,p = mod_prob_matrix) 
+  
+  temprow <- c(i,sum(tempprob_matrix),(sum(tempprob_matrix)-length(which((tempcombined$alpha_beta=="Not_outlier+Not_outlier")==TRUE))),gtest$statistic,gtest$p.value, length(which((tempcombined$alpha_beta=="Pos+Pos")==TRUE)),length(which((tempcombined$alpha_beta=="Neg+Pos")==TRUE)),length(which((tempcombined$alpha_beta=="Not_outlier+Pos")==TRUE)),length(which((tempcombined$alpha_beta=="Pos+Neg")==TRUE)),length(which((tempcombined$alpha_beta=="Neg+Neg")==TRUE)),length(which((tempcombined$alpha_beta=="Not_outlier+Neg")==TRUE)),length(which((tempcombined$alpha_beta=="Pos+Not_outlier")==TRUE)),length(which((tempcombined$alpha_beta=="Neg+Not_outlier")==TRUE)), length(which((tempcombined$alpha_beta=="Not_outlier+Not_outlier")==TRUE)))
+    
+  chrom_output <- rbind(chrom_output,temprow)
+  
+  point_colours <- c(NA,
+                     "red",
+                     "red4",
+                     "purple",
+                     "purple4",
+                     "steelblue2",
+                     "blue",
+                     "magenta")
+  
+  names(point_colours) <- c("Not_outlier+Not_outlier",
+                            "Not_outlier+Pos",
+                            "Not_outlier+Neg",
+                            "Neg+Pos",
+                            "Pos+Neg",
+                            "Pos+Not_outlier",
+                            "Neg+Not_outlier",
+                            "Pos+Pos"
+  )
 
-  ggplot() + geom_line(tempcombined,mapping=aes(x=kbp_pos,y=alpha_median)) +
-    geom_point(data=tempNot_outlier_Pos,aes(x=kbp_pos,y=alpha_median), color="red",size=7) + 
-    geom_point(data=tempNot_outlier_Neg,aes(x=kbp_pos,y=alpha_median), color="red4",size=7) + 
-    geom_point(data=tempNeg_Pos,aes(x=kbp_pos,y=alpha_median), color="purple",size=7) + 
-    geom_point(data=tempPos_Neg,aes(x=kbp_pos,y=alpha_median), color="purple4",size=7) + 
-    geom_point(data=tempPos_Not_outlier,aes(x=kbp_pos,y=alpha_median), color="steelblue2",size=7) + 
-    geom_point(data=tempNeg_Not_outlier,aes(x=kbp_pos,y=alpha_median), color="blue",size=7) + 
-    geom_point(data=tempPos_Pos,aes(x=kbp_pos,y=alpha_median), color="magenta",size=7) +
-    theme_bw(base_size=33) +
-    theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
-    theme(axis.title=element_text(size=40,face="bold")) +
-    scale_y_continuous(name="Median α") +
-    scale_x_continuous(name="Distance along chromosome (kbp)") 
+  # Reordering our data based on the order we want "names"
+  point_colours <- point_colours[order(factor(names(point_colours), levels=rev(c("Not_outlier+Not_outlier",
+                                                                                 "Not_outlier+Neg",
+                                                                                 "Pos+Neg",
+                                                                                 "Not_outlier+Pos",
+                                                                                 "Neg+Pos",
+                                                                                 "Pos+Pos",
+                                                                                 "Neg+Not_outlier",
+                                                                                 "Pos+Not_outlier"
+  ))))]
   
-  ggsave(paste("FigS10_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
   
-  ggplot() + geom_line(tempcombined,mapping=aes(x=kbp_pos,y=beta_median)) +
-    geom_point(data=tempNot_outlier_Pos,aes(x=kbp_pos,y=beta_median), color="red",size=7) + 
-    geom_point(data=tempNot_outlier_Neg,aes(x=kbp_pos,y=beta_median), color="red4",size=7) + 
-    geom_point(data=tempNeg_Pos,aes(x=kbp_pos,y=beta_median), color="purple",size=7) + 
-    geom_point(data=tempPos_Neg,aes(x=kbp_pos,y=beta_median), color="purple4",size=7) + 
-    geom_point(data=tempPos_Not_outlier,aes(x=kbp_pos,y=beta_median), color="steelblue2",size=7) + 
-    geom_point(data=tempNeg_Not_outlier,aes(x=kbp_pos,y=beta_median), color="blue",size=7) + 
-    geom_point(data=tempPos_Pos,aes(x=kbp_pos,y=alpha_median), color="magenta",size=7) +
-    theme_bw(base_size=33) +
-    theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
-    theme(axis.title=element_text(size=40,face="bold")) +
-    scale_y_continuous(name="Median β") +
-    scale_x_continuous(name="Distance along chromosome (kbp)") 
+  point_colours <- point_colours[names(point_colours) %in% unique(tempcombined$alpha_beta)]
   
-  ggsave(paste("FigS10_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+  tempcombined$alpha_beta <- factor(tempcombined$alpha_beta, levels = names(point_colours))
   
-  print(paste("Chromosome ",i," makes up ",round(max(tempcombined$kbp_pos)/total_length*100,2),"% of the assembly",sep=""))
-  print("It has the following % of alpha/beta outliers:")
-  print(paste("Not_outlier/Not_outlier",round(dim(tempNot_outlier_Not_outlier)[1]/dim(Not_outlier_Not_outlier %>% filter(hybrid_index==0))[1]*100,2)))
-  print(paste("Pos/Not_outlier:",(round(dim(tempPos_Not_outlier)[1]/dim(Pos_Not_outlier %>% filter(hybrid_index==0))[1]*100,2))))
-  print(paste("Neg/Not_outlier:",(round(dim(tempNeg_Not_outlier)[1]/dim(Neg_Not_outlier %>% filter(hybrid_index==0))[1]*100,2))))
-  print(paste("Not/outlier_Pos:",(round(dim(tempNot_outlier_Pos)[1]/dim(Not_outlier_Pos %>% filter(hybrid_index==0))[1]*100,2))))
-  print(paste("Not/outlier_Neg:",(round(dim(tempNot_outlier_Neg)[1]/dim(Not_outlier_Neg %>% filter(hybrid_index==0))[1]*100,2))))
-  print(paste("Neg/Pos:",(round(dim(tempNeg_Pos)[1]/dim(Not_outlier_Neg %>% filter(hybrid_index==0))[1]*100,2))))
-  print(paste("Pos/Neg:",(round(dim(tempPos_Neg)[1]/dim(Pos_Neg %>% filter(hybrid_index==0))[1]*100,2))))
-  print(paste("Neg/Neg:",(round(dim(tempNeg_Neg)[1]/dim(Neg_Neg %>% filter(hybrid_index==0))[1]*100,2))))
-  print(paste("Pos/Pos:",(round(dim(tempPos_Pos)[1]/dim(Pos_Pos %>% filter(hybrid_index==0))[1]*100,2))))
+  scaffold_loci_count <- tempcombined %>% group_by(scaffolds) %>% count()
+  scaffolds_to_remove <- as.matrix(scaffold_loci_count %>% filter(n<=1) %>% select(scaffolds))[,1]
   
-  print("In summary across the 3 significantly negative alpha outliers, it has (%):")
-  print(((dim(tempNeg_Not_outlier)[1]+dim(tempNeg_Pos)[1]))/3*100)
-  print("In summary across the 230 significantly positive alpha outliers, it has (%):")
-  print(((dim(tempPos_Neg)[1]+dim(tempPos_Not_outlier)[1])+dim(tempPos_Pos)[1])/230*100)
-  print("In summary across the 1141 significantly negative beta outliers, it has (%):")
-  print((dim(tempNot_outlier_Neg)[1]+dim(tempPos_Neg)[1])/1141*100)
-  print("In summary across the 671 significantly positive beta outliers, it has (%):")
-  print((dim(tempNeg_Pos)[1]+dim(tempNot_outlier_Pos)[1]+dim(tempPos_Pos)[1])/671*100)
+  if (length(scaffolds_to_remove>0)) {
+    print(paste("The following scaffolds will not be displayed on the plot for chromosome ",i,sep=""))
+    print("as they have one or few loci to display:")
+    print(scaffolds_to_remove)
+  
+    remove_rows <- which(as.matrix(tempcombined$scaffolds) %in% scaffolds_to_remove)
+  
+    tempcombined <- tempcombined[-remove_rows,]
+  }
+  
+  if (length(unique(tempcombined$scaffolds))>1) {
+    ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=alpha_median)) +
+      geom_point(aes(x=kbp_pos,y=alpha_median, color=alpha_beta), size=7) +
+      scale_colour_manual(values=c(point_colours)) +
+      theme_bw(base_size=33) +
+      theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+      theme(axis.title=element_text(size=40,face="bold")) +
+      scale_y_continuous(name="Median α") +
+      scale_x_continuous(name="Distance along chromosome (kbp)")  +
+      theme(legend.position = "none") +
+      facet_wrap (~ scaffolds, scales = "free_x")
+  
+    ggsave(paste("FigS10_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+  
+    ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=beta_median)) +
+      geom_point(aes(x=kbp_pos,y=beta_median, color=alpha_beta), size=7) +
+      scale_colour_manual(values=c(point_colours)) +
+      theme_bw(base_size=33) +
+      theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+      theme(axis.title=element_text(size=40,face="bold")) +
+      scale_y_continuous(name="Median β") +
+      scale_x_continuous(name="Distance along chromosome (kbp)")  +
+      theme(legend.position = "none") +
+      facet_wrap (~ scaffolds, scales = "free_x")
+  
+    ggsave(paste("FigS10_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+
+  } else {
+    ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=alpha_median)) +
+      geom_point(aes(x=kbp_pos,y=alpha_median, color=alpha_beta), size=7) +
+      scale_colour_manual(values=c(point_colours)) +
+      theme_bw(base_size=33) +
+      theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+      theme(axis.title=element_text(size=40,face="bold")) +
+      scale_y_continuous(name="Median α") +
+      scale_x_continuous(name="Distance along chromosome (kbp)")  +
+      theme(legend.position = "none") 
+    
+    ggsave(paste("FigS10_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    
+    ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=beta_median)) +
+      geom_point(aes(x=kbp_pos,y=beta_median, color=alpha_beta), size=7) +
+      scale_colour_manual(values=c(point_colours)) +
+      theme_bw(base_size=33) +
+      theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+      theme(axis.title=element_text(size=40,face="bold")) +
+      scale_y_continuous(name="Median β") +
+      scale_x_continuous(name="Distance along chromosome (kbp)")  +
+      theme(legend.position = "none") 
+    
+    ggsave(paste("FigS10_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    
+  }
+
 }
+
+chrom_output <- as_tibble(chrom_output)
+
+names(chrom_output) <- c("scaffold_name","total_markers","total_outlying_markers","gtest_statistic","gtest_pvalue","pos_alpha.pos_beta","neg_alpha.pos_beta","NS_alpha.pos_beta","pos_alpha.neg_beta","neg_alpha.neg_beta","NS_alpha.neg_beta","pos_alpha.NS_beta","neg_alpha.NS_beta","NS_alpha.NS_beta")
+
+# If the output table is desired, uncomment following line
+# write_csv(chrom_output,"FigS7_outlier_by_chrom.csv")
+
+# Plotting chromosomes by numbers of markers and gtest statistic
+chrom_output <- chrom_output %>% mutate_at(vars(total_markers:NS_alpha.NS_beta),funs(as.numeric))
+
+chrom_output <- chrom_output %>% mutate(sig=ifelse(gtest_pvalue<(0.05/dim(chrom_output)[1]),"sig","NS"))
+
+ggplot(data=chrom_output[-1,]) + geom_point(aes(x=gtest_statistic,y=total_markers,fill=sig),shape = 21, colour = "black",size=7) +
+  scale_fill_manual(values=c("white","grey")) +
+  theme_bw(base_size=33) +
+  theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+  theme(axis.title=element_text(size=40,face="bold")) +
+  scale_y_continuous(name="Number of SNP markers") +
+  scale_x_continuous(name="G-test statistic") +
+  theme(legend.position = "none") +
+  geom_text_repel(aes(label=scaffold_name,x=gtest_statistic,y=total_markers),point.padding = 0.1,size=10)
+
+ggsave("FigS10_Gtest_SNP_comparison.png",width=400,height=400,units="mm")  
+  
+  # Pivoting our data so that we can plot by category on each of the chromosomes
+  chrom_output_long <- pivot_longer(data=chrom_output,cols=c(pos_alpha.pos_beta:NS_alpha.NS_beta))
+  
+  # Tweaking colours to do so
+  point_colours <- c("grey50",
+                       "red",
+                       "red4",
+                       "purple",
+                       "purple4",
+                       "steelblue2",
+                       "blue",
+                       "magenta")
+  
+  names(point_colours) <- c("NS_alpha.NS_beta",
+                              "NS_alpha.pos_beta",
+                              "NS_alpha.neg_beta",
+                              "neg_alpha.pos_beta",
+                              "pos_alpha.neg_beta",
+                              "pos_alpha.NS_beta",
+                              "neg_alpha.NS_beta",
+                              "pos_alpha.pos_beta"
+                            )
+  
+  # Reordering our data based on the order we want "names"
+  point_colours <- point_colours[order(factor(names(point_colours), levels=rev(c("NS_alpha.NS_beta",
+                                                                             "NS_alpha.neg_beta",
+                                                                             "pos_alpha.neg_beta",
+                                                                             "NS_alpha.pos_beta",
+                                                                             "neg_alpha.pos_beta",
+                                                                             "pos_alpha.pos_beta",
+                                                                             "neg_alpha.NS_beta",
+                                                                             "pos_alpha.NS_beta"
+                                                                             ))))]
+  
+  
+  chrom_output_long$name <- factor(chrom_output_long$name, levels = rev(c("NS_alpha.NS_beta",
+                                                                          "NS_alpha.neg_beta",
+                                                                          "pos_alpha.neg_beta",
+                                                                          "NS_alpha.pos_beta",
+                                                                          "neg_alpha.pos_beta",
+                                                                          "pos_alpha.pos_beta",
+                                                                          "neg_alpha.NS_beta",
+                                                                          "pos_alpha.NS_beta"
+  )))
+  
+  
+  # Reordering based on chromosome order
+  chrom_output_long$scaffold_name <- factor(chrom_output_long$scaffold_name , levels = (chrom_output_long %>% arrange(gtest_statistic) %>% select(scaffold_name) %>% unique() %>% as.matrix())[,1])
+  
+  ggplot(chrom_output_long,aes(scaffold_name)) + geom_col(aes(y=value,fill=name),position="fill",colour="black") +
+    scale_fill_manual(values=point_colours) +
+    theme_bw(base_size = 21) +
+    theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+    scale_y_continuous(name=NULL) +
+    theme(axis.text.x = element_text(angle = 90,hjust=1)) +
+    theme(legend.position = "none") +
+    scale_x_discrete(name=NULL)
+
+  ggsave("FigS10_loci_category_chromosome.png",width=400,height=200,units="mm")
+
+  # Because of our focus on positive beta loci, we want to see what chromosomes these are found on
+  pos_beta_distribution <- chrom_output %>% mutate(total_pos_beta=pos_alpha.pos_beta+neg_alpha.pos_beta+NS_alpha.pos_beta) %>% select(scaffold_name,total_markers,total_pos_beta) 
+  
+  ggplot(data=pos_beta_distribution[-1,]) + geom_point(aes(x=total_pos_beta,y=total_markers),shape = 21, colour = "black",fill="grey",size=7) +
+    theme_bw(base_size=33) +
+    theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+    theme(axis.title=element_text(size=40,face="bold")) +
+    scale_y_continuous(name="Number of SNP markers") +
+    scale_x_continuous(name="Number of positive β outliers") +
+    theme(legend.position = "none") +
+    geom_text_repel(aes(label=scaffold_name,x=total_pos_beta,y=total_markers),point.padding = 0.1,size=10)
+  
+  ggsave("FigS10_positive_beta_by_total_markers.png",width=400,height=400,units="mm")
+  
+  # Finally, we wish to identify "plugs" of consecutive loci that are positive beta outliers
+  # These may be large regions (i.e. inversions) less free to introgress, or involved in 
+  # reproductive isolation
+  
+  total_pos_beta_loci <- length(unique(Pos_Pos$locus_row)) + length(unique(Neg_Pos$locus_row)) + length(unique(Not_outlier_Pos$locus_row))
+  
+  # Want a cut off of finding such "plug" as less than one based on our  total SNP dataset
+  # Play around with x til you get what you want
+  x <- 5
+  ((total_pos_beta_loci/dim(reduced_combined)[1])^x)*(dim(reduced_combined)[1]-x)
+  
+  # Looks like 5 sig positive beta loci in a row is unlikely to happen in our dataset even once by chance
+  # (0.066 to be exact) if there is no underlying relationship between signficance and underlying genomic
+  # architecture (a VERY simplistic assumption!)
+  
+ reduced_combined <- reduced_combined %>% arrange(chromosome,kbp_pos)
+  
+ output <- c("chromosome","scaffold","starting_kbp_pos","ending_kbp_pos","number_of_markers")
+
+for (i in 2:dim(reduced_combined)[1]) {
+    if (reduced_combined$beta[i]=="Pos") {
+      if (reduced_combined$beta[i-1]=="Pos" & reduced_combined$scaffolds[i]==reduced_combined$scaffolds[i-1]) {
+        number_of_markers <- number_of_markers + 1
+      } else {
+        chromosome <- reduced_combined$chromosome[i]
+        scaffold <- reduced_combined$scaffolds[i]
+        starting_kbp_pos <- reduced_combined$kbp_pos[i]
+        number_of_markers <- 1
+      } 
+    } else {
+      if (reduced_combined$beta[i-1]=="Pos") {
+        ending_kbp_pos <- reduced_combined$kbp_pos[i-1]
+        output <- rbind(output,c(chromosome,scaffold,starting_kbp_pos,ending_kbp_pos,number_of_markers)) 
+        chromosome <- NULL
+        scaffold <- NULL
+        starting_kbp_pos <- NULL
+        ending_kbp_pos <- NULL
+        number_of_markers <- NULL
+      }
+    }
+  }  
+
+output <- as_tibble(output[-1,])
+names(output) <- c("chromosome","scaffold","starting_kbp_pos","ending_kbp_pos","number_of_markers")
+output <- output %>%  mutate_at(vars(starting_kbp_pos:number_of_markers),funs(as.numeric))
+
+# Filtering for things equal and above x
+output <- output %>% filter(number_of_markers>=x)
+
+write_delim(output,"FigS10_outlying_marker_blocks.txt")
+
+output <- output %>% mutate(starting_pos=round(starting_kbp_pos*1000-1,1)) %>% mutate(ending_pos=round(ending_kbp_pos*1000,1)) %>% select(-1,-5)
+write_delim(output,"FigS10_outlying_marker_bed_format.bed",col_names = FALSE)
+
+# We now wish to output a similar set of files for all of our positive beta SNPs, adding
+# 5,000 of "buffer" to be compatible with Wagner et al. (2020)
+
+output <- reduced_combined %>% filter(beta=="Pos") %>% select(chromosome,kbp_pos,scaffolds)
+output <- output %>% mutate(starting_pos=round(kbp_pos*1000-5001,1)) %>% mutate(ending_pos=round(kbp_pos*1000+500,1)) %>% select(3,4,5) %>% mutate(starting_pos=ifelse(starting_pos<0,0,starting_pos)) %>% mutate(ending_pos=ifelse(starting_pos==0,10000,ending_pos))
+write_delim(output,"FigS10_positive_beta_SNPs_bed_format.bed",col_names = FALSE)
+
+# We now want compare the location of our positive beta SNPs, to the outliers identified by Wagner et al. (2020) in their Table S3
+Wagner_data <- read_delim("../data/Wagner_et_al_2020_SNPs.txt",col_names = FALSE,delim ="\t")
+# Converting data to kbp and removing duplicate rows (from combining the different columns )
+Wagner_data <- Wagner_data %>% mutate(X2=X2/1000)
+Wagner_data <- Wagner_data %>% distinct()
+output <- reduced_combined %>% filter(beta=="Pos") %>% select(chromosome,kbp_pos,scaffolds)
+
+close_SNPs <- rep(NA,dim(output)[1])
+
+for (i in 1:dim(output)[1]) {
+  SNP_pos <- Wagner_data$X2[which((Wagner_data$X1==output$chromosome[i]) & (Wagner_data$X2 < (output$kbp_pos[i]+5)) & (Wagner_data$X2 > (output$kbp_pos[i]-5)))]
+  if(length(SNP_pos)>0) {
+    close_SNPs[i] <- paste(SNP_pos,collapse=",")
+  }
+}
+
+output <- cbind(output,close_SNPs)
+output <- as_tibble(output)
+names(output) <- c("chromosome","kbp_pos","scaffold","close_Wagner_SNPs")
+
+write_delim(output,"FigS10_positive_beta_SNPs.txt",col_names = TRUE)
+
+# What are the chances of obtaining the level of overlap in loci seen between our studies?
+prop_genome_covered_by_Wagner_outliers <- (dim(Wagner_data)[1]*10000)/(1047.81*1000*1000)
+binom.test(5,671,prop_genome_covered_by_Wagner_outliers,alternative = "less")
 
