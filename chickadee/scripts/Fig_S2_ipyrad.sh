@@ -244,6 +244,9 @@ p, s, l, k, s, v               ## [27] [output_formats]: Output formats (see doc
 
 # unknown:1 blackcapped:1 carolina:1
 
+# Prior to running assembly, make sure ambiguities are masked in reference
+# https://github.com/dereneaton/ipyrad/issues/402
+
 # Sbatch script for running ipyrad
 #!/bin/bash -e
 
@@ -263,9 +266,3 @@ p, s, l, k, s, v               ## [27] [output_formats]: Output formats (see doc
 source /nesi/nobackup/uoo00105/chickadees/bin/miniconda3/bin/activate
 
 ipyrad -p params-chickadee_ref.txt -s 1234567 -c 36
-
-
-# Obtained the following error during step 7
-Encountered an Error.
-Message: KeyError: 86
-
