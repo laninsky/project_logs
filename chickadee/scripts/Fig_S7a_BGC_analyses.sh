@@ -10,11 +10,10 @@ cd bgc
 
 # Following files need to be copied into the bgc folder
 # chickadee_ref.vcf 
-# chromosome_scaffolds.txt
-# popmap_final.txt
 # *.snps.map or *.snpsmap from ipyrad outfiles
 # S7b_generate_bgc_inputs.R
 # S7c_stationarity_convergence_results.R
+# Table_S1.txt
 
 #2. Downloading annotations for black-capped chickadee genome
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/011/421/415/GCA_011421415.1_CUB_Patr_1.0/GCA_011421415.1_CUB_Patr_1.0_genomic.gbff.gz
@@ -49,11 +48,10 @@ grep -F -e "##" chickadee_ref.vcf > header_rows.txt
 # (in order to find which SNP positions correspond to each locus),
 # headerless.vcf (to obtain chromosome, and position along chromosome),
 # chromosome_scaffolds.txt (to find which scaffold corresponds to what chromosome)
-# popmap_final.txt (to divide up birds into "Carolina", "blackcapped", "hybrid"),
 # *.snps.map or *.snpsmap from ipyrad outfiles: in order to find which SNP 
 # positions correspond to each locus (in this case chickadee_ref.snpsmap )
 module load R/3.6.2-gimkl-2020a 
-Rscript S7_generate_bgc_inputs.R
+Rscript Fig_S7b_generate_bgc_inputs.R
 
 # 3. Compiling the bgc software in bin directory
 # Obtaining the bgc tar
