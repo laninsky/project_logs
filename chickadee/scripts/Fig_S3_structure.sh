@@ -1,5 +1,5 @@
 # This code corresponds to Fig. S3 in Alexander et al.
-# It runs the structure through structure threader
+# It runs structure through structure threader
 # on output from the ipyrad pipeline, after first
 # filtering out singletons following Linck and Battey (2019)
 
