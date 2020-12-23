@@ -580,10 +580,6 @@ names(output) <- c("chromosome","kbp_pos","scaffold","close_Wagner_SNPs")
 
 write_delim(output,"Table_S6_positive_beta_SNPs.txt",col_names = TRUE)
 
-# What are the chances of obtaining the level of overlap in loci seen between our studies?
-prop_genome_covered_by_Wagner_outliers <- (dim(Wagner_data)[1]*10000)/(1047.81*1000*1000)
-binom.test(5,671,prop_genome_covered_by_Wagner_outliers,alternative = "less")
-
 sessionInfo()
 #R version 3.6.3 (2020-02-29)
 #Platform: x86_64-apple-darwin15.6.0 (64-bit)
