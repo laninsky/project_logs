@@ -89,7 +89,7 @@ modernsamplelocations + geom_label_repel(modern,mapping=aes(fontface="bold",x=De
   scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) +
   theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
-ggsave(filename="Fig_S2_modern_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
+ggsave(filename="Fig_S1_modern_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
 historicalsamplelocations <- ggmap(sq_map)  + geom_vline(xintercept=-94.63333) + 
   geom_point(data = historical, mapping = aes(x = DecimalLongitude, y = DecimalLatitude,fill = status), shape=21,color = "black",size=12) +
@@ -104,10 +104,10 @@ historicalsamplelocations + geom_label_repel(historical,mapping=aes(fontface="bo
 scale_color_manual(values=c("#CE1B26", "#15326C","#9437FF")) +
   theme(plot.margin=unit(c(1,1,1,1),"cm"))
 
-ggsave(filename="Fig_S2_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
+ggsave(filename="Fig_S1_historical_aggregated_by_site.pdf",plot = last_plot(),width=12.804,height=10.351,units="in")
 
 # 9. Creating the structure plots ordered by location
-# Modern by longitude, export as 1000 pixels wide: FigS2_modern_long.png
+# Modern by longitude, export as 1000 pixels wide: Fig_S1_modern_long.png
 modernindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude) %>% filter(Sampling_period=="MODERN")
 
 modernindividual <- temp %>% filter(Sampling_period=="MODERN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude)
@@ -118,7 +118,7 @@ ggplot(modernindividual, aes(fill=cluster_assignment,y=assignment_value,x=as.fac
   scale_x_discrete(limits=modernindividualnames$Catalog_number) +
   scale_fill_manual(values = (c("#CE1B26","#15326C")))
 
-# Historical by longitude, export as 1000 pixels wide: FigS2_historical_long.png
+# Historical by longitude, export as 1000 pixels wide: Fig_S1_historical_long.png
 historicalindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude) %>% filter(Sampling_period=="SMITHSONIAN")
 
 historicalindividual <- temp %>% filter(Sampling_period=="SMITHSONIAN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLongitude)
@@ -129,7 +129,7 @@ ggplot(historicalindividual, aes(fill=cluster_assignment,y=assignment_value,x=as
   scale_x_discrete(limits=historicalindividualnames$Catalog_number) +
   scale_fill_manual(values = (c("#CE1B26","#15326C")))
 
-# Modern by latitude, export as 1000 pixels height: FigS2_modern_lat.png
+# Modern by latitude, export as 1000 pixels height: Fig_S1_modern_lat.png
 modernindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude) %>% filter(Sampling_period=="MODERN")
 
 modernindividual <- temp %>% filter(Sampling_period=="MODERN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude)
@@ -141,7 +141,7 @@ ggplot(modernindividual, aes(fill=cluster_assignment,y=assignment_value,x=as.fac
   scale_fill_manual(values = (c("#CE1B26","#15326C"))) +
   coord_flip()
 
-# Modern by latitude, export as 1000 pixels height: FigS2_historical_lat.png
+# Modern by latitude, export as 1000 pixels height: Fig_S1_historical_lat.png
 historicalindividualnames <- temp %>% arrange(desc(BC_genetic_cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude) %>% filter(Sampling_period=="SMITHSONIAN")
 
 historicalindividual <- temp %>% filter(Sampling_period=="SMITHSONIAN") %>% gather(cluster_assignment,assignment_value,c(BC_genetic_cluster_assignment,CC_genetic_cluster_assignment)) %>% arrange(desc(cluster_assignment)) %>% arrange(Location_code) %>% arrange(DecimalLatitude)
@@ -231,7 +231,7 @@ for (i in 2:length(labelx)) {
   modernlong <- modernlong + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=12)
 }  
 
-# Exporting as 1500 pixels width, FigS2_modern_long_sites.png
+# Exporting as 1500 pixels width, Fig_S1_modern_long_sites.png
 modernlong + scale_y_reverse() 
 
 # 11. Generating site labels, next historical by longitude (the x-axis for the plot)
@@ -312,7 +312,7 @@ for (i in 2:length(labelx)) {
   historicallong <- historicallong + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=historical$Location_code[length(historical$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=12)
 }  
 
-# Exporting as 1500 pixels width, FigS2_historical_long_sites.png
+# Exporting as 1500 pixels width, Fig_S1_historical_long_sites.png
 historicallong + scale_y_reverse() 
 
 # 12. Generating site labels, next historical by latitude (the y-axis for the plot)
@@ -392,7 +392,7 @@ for (i in 2:length(labelx)) {
   historicallat <- historicallat + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=historical$Location_code[length(historical$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=12)
 }  
 
-# Exporting as 1500 pixels height, FigS2_historical_lat_sites.png
+# Exporting as 1500 pixels height, Fig_S1_historical_lat_sites.png
 historicallat
 
 # 13. Generating site labels, finally modern by latitude (the y-axis for the plot)
@@ -472,5 +472,5 @@ for (i in 2:length(labelx)) {
   modernlat <- modernlat + annotate("label",y=labelx[i],x=labely[i],fontface="bold",label=modern$Location_code[length(modern$Included_in_tess3r)-i+1],fill=fillcolor,color=colorcolor,size=11)
 }  
 
-# Exporting as 1500 pixels height, FigS2_modern_lat_sites.png
+# Exporting as 1500 pixels height, Fig_S1_modern_lat_sites.png
 modernlat
