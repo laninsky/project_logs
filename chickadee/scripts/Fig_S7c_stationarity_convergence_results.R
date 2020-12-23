@@ -239,7 +239,7 @@ ggplot() +
   scale_y_continuous(name="Locus specific ancestry") +
   scale_x_continuous(name="Hybrid index") 
 
-ggsave(paste("FigS11A.png",sep=""),width=400,height=200,units="mm")
+ggsave(paste("Fig_S11A.png",sep=""),width=400,height=200,units="mm")
 
 # Light blue: positive α not overlapping with zero (non-significant β)
 # Increase in the probability of black-capped ancestry from the base
@@ -369,7 +369,7 @@ for (i in unique(reduced_combined$chromosome)) {
       theme(legend.position = "none") +
       facet_wrap (~ scaffolds, scales = "free_x")
   
-    ggsave(paste("FigS11_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("Fig_S11_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
   
     ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=beta_median)) +
       geom_point(aes(x=kbp_pos,y=beta_median, color=alpha_beta), size=7) +
@@ -382,7 +382,7 @@ for (i in unique(reduced_combined$chromosome)) {
       theme(legend.position = "none") +
       facet_wrap (~ scaffolds, scales = "free_x")
   
-    ggsave(paste("FigS11_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("Fig_S11_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
 
   } else {
     ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=alpha_median)) +
@@ -395,7 +395,7 @@ for (i in unique(reduced_combined$chromosome)) {
       scale_x_continuous(name="Distance along chromosome (kbp)")  +
       theme(legend.position = "none") 
     
-    ggsave(paste("FigS11_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("Fig_S11_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
     
     ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=beta_median)) +
       geom_point(aes(x=kbp_pos,y=beta_median, color=alpha_beta), size=7) +
@@ -407,7 +407,7 @@ for (i in unique(reduced_combined$chromosome)) {
       scale_x_continuous(name="Distance along chromosome (kbp)")  +
       theme(legend.position = "none") 
     
-    ggsave(paste("FigS11_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("Fig_S11_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
     
   }
 
@@ -418,30 +418,16 @@ chrom_output <- as_tibble(chrom_output)
 names(chrom_output) <- c("scaffold_name","total_markers","total_outlying_markers","gtest_statistic","gtest_pvalue","pos_alpha.pos_beta","neg_alpha.pos_beta","NS_alpha.pos_beta","pos_alpha.neg_beta","neg_alpha.neg_beta","NS_alpha.neg_beta","pos_alpha.NS_beta","neg_alpha.NS_beta","NS_alpha.NS_beta")
 
 # If the output table is desired, uncomment following line
-# write_csv(chrom_output,"FigS7_outlier_by_chrom.csv")
+# write_csv(chrom_output,"Table_S7_outlier_by_chrom.csv")
 
 # Plotting chromosomes by numbers of markers and gtest statistic
 chrom_output <- chrom_output %>% mutate_at(vars(total_markers:NS_alpha.NS_beta),funs(as.numeric))
-
-chrom_output <- chrom_output %>% mutate(sig=ifelse(gtest_pvalue<(0.05/dim(chrom_output)[1]),"sig","NS"))
-
-ggplot(data=chrom_output[-1,]) + geom_point(aes(x=gtest_statistic,y=total_markers,fill=sig),shape = 21, colour = "black",size=7) +
-  scale_fill_manual(values=c("white","grey")) +
-  theme_bw(base_size=33) +
-  theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
-  theme(axis.title=element_text(size=40,face="bold")) +
-  scale_y_continuous(name="Number of SNP markers") +
-  scale_x_continuous(name="G-test statistic") +
-  theme(legend.position = "none") +
-  geom_text_repel(aes(label=scaffold_name,x=gtest_statistic,y=total_markers),point.padding = 0.1,size=10)
-
-ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")  
   
-  # Pivoting our data so that we can plot by category on each of the chromosomes
-  chrom_output_long <- pivot_longer(data=chrom_output,cols=c(pos_alpha.pos_beta:NS_alpha.NS_beta))
+# Pivoting our data so that we can plot by category on each of the chromosomes
+chrom_output_long <- pivot_longer(data=chrom_output,cols=c(pos_alpha.pos_beta:NS_alpha.NS_beta))
   
-  # Tweaking colours to do so
-  point_colours <- c("grey50",
+# Tweaking colours to do so
+point_colours <- c("grey50",
                        "red",
                        "red4",
                        "purple",
@@ -450,7 +436,7 @@ ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
                        "blue",
                        "magenta")
   
-  names(point_colours) <- c("NS_alpha.NS_beta",
+names(point_colours) <- c("NS_alpha.NS_beta",
                               "NS_alpha.pos_beta",
                               "NS_alpha.neg_beta",
                               "neg_alpha.pos_beta",
@@ -460,8 +446,8 @@ ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
                               "pos_alpha.pos_beta"
                             )
   
-  # Reordering our data based on the order we want "names"
-  point_colours <- point_colours[order(factor(names(point_colours), levels=rev(c("NS_alpha.NS_beta",
+# Reordering our data based on the order we want "names"
+point_colours <- point_colours[order(factor(names(point_colours), levels=rev(c("NS_alpha.NS_beta",
                                                                              "NS_alpha.neg_beta",
                                                                              "pos_alpha.neg_beta",
                                                                              "NS_alpha.pos_beta",
@@ -472,7 +458,7 @@ ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
                                                                              ))))]
   
   
-  chrom_output_long$name <- factor(chrom_output_long$name, levels = rev(c("NS_alpha.NS_beta",
+chrom_output_long$name <- factor(chrom_output_long$name, levels = rev(c("NS_alpha.NS_beta",
                                                                           "NS_alpha.neg_beta",
                                                                           "pos_alpha.neg_beta",
                                                                           "NS_alpha.pos_beta",
@@ -483,10 +469,10 @@ ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
   )))
   
   
-  # Reordering based on chromosome order
-  chrom_output_long$scaffold_name <- factor(chrom_output_long$scaffold_name , levels = (chrom_output_long %>% arrange(gtest_statistic) %>% select(scaffold_name) %>% unique() %>% as.matrix())[,1])
+# Reordering based on chromosome order
+chrom_output_long$scaffold_name <- factor(chrom_output_long$scaffold_name , levels = (chrom_output_long %>% arrange(gtest_statistic) %>% select(scaffold_name) %>% unique() %>% as.matrix())[,1])
   
-  ggplot(chrom_output_long,aes(scaffold_name)) + geom_col(aes(y=value,fill=name),position="fill",colour="black") +
+ggplot(chrom_output_long,aes(scaffold_name)) + geom_col(aes(y=value,fill=name),position="fill",colour="black") +
     scale_fill_manual(values=point_colours) +
     theme_bw(base_size = 21) +
     theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
@@ -495,12 +481,12 @@ ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
     theme(legend.position = "none") +
     scale_x_discrete(name=NULL)
 
-  ggsave("Fig4_loci_category_chromosome.png",width=400,height=200,units="mm")
+ggsave("Fig4_loci_category_chromosome.png",width=400,height=200,units="mm")
 
-  # Because of our focus on positive beta loci, we want to see what chromosomes these are found on
-  pos_beta_distribution <- chrom_output %>% mutate(total_pos_beta=pos_alpha.pos_beta+neg_alpha.pos_beta+NS_alpha.pos_beta) %>% select(scaffold_name,total_markers,total_pos_beta) 
+# Because of our focus on positive beta loci, we want to see what chromosomes these are found on
+pos_beta_distribution <- chrom_output %>% mutate(total_pos_beta=pos_alpha.pos_beta+neg_alpha.pos_beta+NS_alpha.pos_beta) %>% select(scaffold_name,total_markers,total_pos_beta) 
   
-  ggplot(data=pos_beta_distribution[-1,]) + geom_point(aes(x=total_pos_beta,y=total_markers),shape = 21, colour = "black",fill="grey",size=7) +
+ggplot(data=pos_beta_distribution[-1,]) + geom_point(aes(x=total_pos_beta,y=total_markers),shape = 21, colour = "black",fill="grey",size=7) +
     theme_bw(base_size=33) +
     theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
     theme(axis.title=element_text(size=40,face="bold")) +
@@ -509,11 +495,11 @@ ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
     theme(legend.position = "none") +
     geom_text_repel(aes(label=scaffold_name,x=total_pos_beta,y=total_markers),point.padding = 0.1,size=10)
   
-  ggsave("Fig4_positive_beta_by_total_markers.png",width=400,height=400,units="mm")
+ggsave("Fig4_positive_beta_by_total_markers.png",width=400,height=400,units="mm")
   
-  # Finally, we wish to identify "plugs" of consecutive loci that are positive beta outliers
-  # These may be large regions (i.e. inversions) less free to introgress, or involved in 
-  # reproductive isolation
+# Finally, we wish to identify "plugs" of consecutive loci that are positive beta outliers
+# These may be large regions (i.e. inversions) less free to introgress, or involved in 
+# reproductive isolation
   
   total_pos_beta_loci <- length(unique(Pos_Pos$locus_row)) + length(unique(Neg_Pos$locus_row)) + length(unique(Not_outlier_Pos$locus_row))
   
