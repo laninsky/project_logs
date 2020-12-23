@@ -1,6 +1,7 @@
 # This code corresponds to Fig. S7(a) in Alexander et al.
 # It runs programs/scripts to summarize the genic regions covered
-# by the ddRADseq sequencine and generating genomic cline analyses in 
+# by the ddRADseq sequencing and generates genomic cline analyses 
+# via bgc (and outputs Fig 4, Table S6, and Fig S11) in
 # Alexander et al.
 
 # 1. Getting bgc inputs together
@@ -259,12 +260,12 @@ cat *gene_matches.txt
 # Repeating a similar analysis on each of the SNPs. Creating a subfolder to hold all the data
 mkdir positive_beta_SNPs
 cd positive_beta_SNPs
-# Place FigS10_poitive_beta_SNPs_bed_format.bed into this folder
-number_of_matches=`wc -l FigS10_positive_beta_SNPs_bed_format.bed | awk '{print $1}'`
+# Place Table_S6_positive_beta_SNPs_bed_format.bed into this folder
+number_of_matches=`wc -l Table_S6_positive_beta_SNPs_bed_format.bed | awk '{print $1}'`
 
 # Outputting a list of genes found in the regions of interest
 for i in `seq 1 $number_of_matches`;
-  do bedline=`head -n $i FigS10_positive_beta_SNPs_bed_format.bed | tail -n 1`;
+  do bedline=`head -n $i Table_S6_positive_beta_SNPs_bed_format.bed | tail -n 1`;
   echo $bedline > temp.bed;
   seqname=`echo $bedline | awk '{print $1}'`;
   seqtk subseq ../GCA_011421415.1_CUB_Patr_1.0_genomic.fna temp.bed > $seqname.$i.fa;
@@ -281,7 +282,7 @@ cat *gene_matches.txt | sort | uniq
 # Finding the genes that are within 5,000 bp of multiple outlying SNPs
 cat *gene_matches.txt | sort | uniq -c | grep -v "1 "
 
-# Getting a summary of what genes were associated with what SNPs to add to Fig S10
+# Getting a summary of what genes were associated with what SNPs to add to Table S6
 for i in `seq 1 $number_of_matches`; 
   do filename=`echo *.$i.gene_matches.txt`;
   seqs=`cat $filename | tr '\n' '\t'`;

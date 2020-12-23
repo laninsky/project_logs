@@ -1,5 +1,6 @@
 # This code corresponds to Fig S7(c) in Alexander et al.
 # It analyses files from the bgc analysis represented in Fig_S7a_BGC_anslyses.sh
+# (and outputs Fig 4, Table S6, and Fig S11)
 
 # 1. Loading in required libraries
 library(tidyverse)
@@ -238,7 +239,7 @@ ggplot() +
   scale_y_continuous(name="Locus specific ancestry") +
   scale_x_continuous(name="Hybrid index") 
 
-ggsave(paste("FigS10A.png",sep=""),width=400,height=200,units="mm")
+ggsave(paste("FigS11A.png",sep=""),width=400,height=200,units="mm")
 
 # Light blue: positive α not overlapping with zero (non-significant β)
 # Increase in the probability of black-capped ancestry from the base
@@ -368,7 +369,7 @@ for (i in unique(reduced_combined$chromosome)) {
       theme(legend.position = "none") +
       facet_wrap (~ scaffolds, scales = "free_x")
   
-    ggsave(paste("FigS10_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("FigS11_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
   
     ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=beta_median)) +
       geom_point(aes(x=kbp_pos,y=beta_median, color=alpha_beta), size=7) +
@@ -381,7 +382,7 @@ for (i in unique(reduced_combined$chromosome)) {
       theme(legend.position = "none") +
       facet_wrap (~ scaffolds, scales = "free_x")
   
-    ggsave(paste("FigS10_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("FigS11_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
 
   } else {
     ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=alpha_median)) +
@@ -394,7 +395,7 @@ for (i in unique(reduced_combined$chromosome)) {
       scale_x_continuous(name="Distance along chromosome (kbp)")  +
       theme(legend.position = "none") 
     
-    ggsave(paste("FigS10_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("FigS11_alpha_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
     
     ggplot(tempcombined) + geom_line(mapping=aes(x=kbp_pos,y=beta_median)) +
       geom_point(aes(x=kbp_pos,y=beta_median, color=alpha_beta), size=7) +
@@ -406,7 +407,7 @@ for (i in unique(reduced_combined$chromosome)) {
       scale_x_continuous(name="Distance along chromosome (kbp)")  +
       theme(legend.position = "none") 
     
-    ggsave(paste("FigS10_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
+    ggsave(paste("FigS11_beta_chrom_",i,".png",sep=""),width=400,height=200,units="mm")
     
   }
 
@@ -434,7 +435,7 @@ ggplot(data=chrom_output[-1,]) + geom_point(aes(x=gtest_statistic,y=total_marker
   theme(legend.position = "none") +
   geom_text_repel(aes(label=scaffold_name,x=gtest_statistic,y=total_markers),point.padding = 0.1,size=10)
 
-ggsave("FigS10_Gtest_SNP_comparison.png",width=400,height=400,units="mm")  
+ggsave("FigS11_Gtest_SNP_comparison.png",width=400,height=400,units="mm")  
   
   # Pivoting our data so that we can plot by category on each of the chromosomes
   chrom_output_long <- pivot_longer(data=chrom_output,cols=c(pos_alpha.pos_beta:NS_alpha.NS_beta))
@@ -494,7 +495,7 @@ ggsave("FigS10_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
     theme(legend.position = "none") +
     scale_x_discrete(name=NULL)
 
-  ggsave("FigS10_loci_category_chromosome.png",width=400,height=200,units="mm")
+  ggsave("Fig4_loci_category_chromosome.png",width=400,height=200,units="mm")
 
   # Because of our focus on positive beta loci, we want to see what chromosomes these are found on
   pos_beta_distribution <- chrom_output %>% mutate(total_pos_beta=pos_alpha.pos_beta+neg_alpha.pos_beta+NS_alpha.pos_beta) %>% select(scaffold_name,total_markers,total_pos_beta) 
@@ -508,7 +509,7 @@ ggsave("FigS10_Gtest_SNP_comparison.png",width=400,height=400,units="mm")
     theme(legend.position = "none") +
     geom_text_repel(aes(label=scaffold_name,x=total_pos_beta,y=total_markers),point.padding = 0.1,size=10)
   
-  ggsave("FigS10_positive_beta_by_total_markers.png",width=400,height=400,units="mm")
+  ggsave("Fig4_positive_beta_by_total_markers.png",width=400,height=400,units="mm")
   
   # Finally, we wish to identify "plugs" of consecutive loci that are positive beta outliers
   # These may be large regions (i.e. inversions) less free to introgress, or involved in 
@@ -559,7 +560,7 @@ output <- output %>%  mutate_at(vars(starting_kbp_pos:number_of_markers),funs(as
 # Filtering for things equal and above x
 output <- output %>% filter(number_of_markers>=x)
 
-write_delim(output,"FigS10_outlying_marker_blocks.txt")
+write_delim(output,"Table_S6_outlying_marker_blocks.txt")
 
 output <- output %>% mutate(starting_pos=round(starting_kbp_pos*1000-1,1)) %>% mutate(ending_pos=round(ending_kbp_pos*1000,1)) %>% select(-1,-5)
 write_delim(output,"Table_S6_outlying_marker_bed_format.bed",col_names = FALSE)
@@ -569,7 +570,7 @@ write_delim(output,"Table_S6_outlying_marker_bed_format.bed",col_names = FALSE)
 
 output <- reduced_combined %>% filter(beta=="Pos") %>% select(chromosome,kbp_pos,scaffolds)
 output <- output %>% mutate(starting_pos=round(kbp_pos*1000-5001,1)) %>% mutate(ending_pos=round(kbp_pos*1000+500,1)) %>% select(3,4,5) %>% mutate(starting_pos=ifelse(starting_pos<0,0,starting_pos)) %>% mutate(ending_pos=ifelse(starting_pos==0,10000,ending_pos))
-write_delim(output,"FigS10_positive_beta_SNPs_bed_format.bed",col_names = FALSE)
+write_delim(output,"Table_S6_positive_beta_SNPs_bed_format.bed",col_names = FALSE)
 
 # We now want compare the location of our positive beta SNPs, to the outliers identified by Wagner et al. (2020) in their Table S3
 Wagner_data <- read_delim("../data/Wagner_et_al_2020_SNPs.txt",col_names = FALSE,delim ="\t")
@@ -591,7 +592,7 @@ output <- cbind(output,close_SNPs)
 output <- as_tibble(output)
 names(output) <- c("chromosome","kbp_pos","scaffold","close_Wagner_SNPs")
 
-write_delim(output,"FigS10_positive_beta_SNPs.txt",col_names = TRUE)
+write_delim(output,"Table_S6_positive_beta_SNPs.txt",col_names = TRUE)
 
 # What are the chances of obtaining the level of overlap in loci seen between our studies?
 prop_genome_covered_by_Wagner_outliers <- (dim(Wagner_data)[1]*10000)/(1047.81*1000*1000)
