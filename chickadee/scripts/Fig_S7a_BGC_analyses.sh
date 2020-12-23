@@ -220,11 +220,11 @@ wget https://ftp.ncbi.nlm.nih.gov/blast/executables/magicblast/LATEST/ncbi-magic
 tar -zvxf ncbi-magicblast-1.5.0-x64-linux.tar.gz 
 export PATH=/nesi/nobackup/uoo00105/chickadees/bin/ncbi-magicblast-1.5.0/bin:$PATH
 
-number_of_matches=`wc -l FigS10_outlying_marker_bed_format.bed | awk '{print $1}'`
+number_of_matches=`wc -l Table_S6_outlying_marker_bed_format.bed | awk '{print $1}'`
 
 # Outputting a list of genes found in the regions of interest (potential inversions)
 for i in `seq 1 $number_of_matches`;
-  do bedline=`head -n $i FigS10_outlying_marker_bed_format.bed | tail -n 1`;
+  do bedline=`head -n $i Table_S6_outlying_marker_bed_format.bed | tail -n 1`;
   echo $bedline > temp.bed;
   seqname=`echo $bedline | awk '{print $1}'`;
   seqtk subseq GCA_011421415.1_CUB_Patr_1.0_genomic.fna temp.bed > $seqname.$i.fa;

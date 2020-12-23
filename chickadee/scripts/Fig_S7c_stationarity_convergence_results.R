@@ -562,7 +562,7 @@ output <- output %>% filter(number_of_markers>=x)
 write_delim(output,"FigS10_outlying_marker_blocks.txt")
 
 output <- output %>% mutate(starting_pos=round(starting_kbp_pos*1000-1,1)) %>% mutate(ending_pos=round(ending_kbp_pos*1000,1)) %>% select(-1,-5)
-write_delim(output,"FigS10_outlying_marker_bed_format.bed",col_names = FALSE)
+write_delim(output,"Table_S6_outlying_marker_bed_format.bed",col_names = FALSE)
 
 # We now wish to output a similar set of files for all of our positive beta SNPs, adding
 # 5,000 of "buffer" to be compatible with Wagner et al. (2020)
