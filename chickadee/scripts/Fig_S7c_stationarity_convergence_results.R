@@ -481,7 +481,7 @@ ggplot(chrom_output_long,aes(scaffold_name)) + geom_col(aes(y=value,fill=name),p
     theme(legend.position = "none") +
     scale_x_discrete(name=NULL)
 
-ggsave("Fig4_loci_category_chromosome.png",width=400,height=200,units="mm")
+ggsave("Fig_4_loci_category_chromosome.png",width=400,height=200,units="mm")
 
 # Because of our focus on positive beta loci, we want to see what chromosomes these are found on
 pos_beta_distribution <- chrom_output %>% mutate(total_pos_beta=pos_alpha.pos_beta+neg_alpha.pos_beta+NS_alpha.pos_beta) %>% select(scaffold_name,total_markers,total_pos_beta) 
@@ -495,7 +495,7 @@ ggplot(data=pos_beta_distribution[-1,]) + geom_point(aes(x=total_pos_beta,y=tota
     theme(legend.position = "none") +
     geom_text_repel(aes(label=scaffold_name,x=total_pos_beta,y=total_markers),point.padding = 0.1,size=10)
   
-ggsave("Fig4_positive_beta_by_total_markers.png",width=400,height=400,units="mm")
+ggsave("Fig_S11B_positive_beta_by_total_markers.png",width=400,height=400,units="mm")
   
 # Finally, we wish to identify "plugs" of consecutive loci that are positive beta outliers
 # These may be large regions (i.e. inversions) less free to introgress, or involved in 
