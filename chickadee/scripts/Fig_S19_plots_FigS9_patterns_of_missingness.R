@@ -1,4 +1,4 @@
-# This code corresponds to Fig S14 in Alexander et al.
+# This code corresponds to Fig S19 in Alexander et al.
 # It creates Fig. S9 (average number of loci recovered across 
 # the 13,366 pairwise comparisons) in the supplementary materials of 
 # Alexander et al.
