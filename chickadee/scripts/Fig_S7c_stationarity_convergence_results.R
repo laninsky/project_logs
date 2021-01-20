@@ -580,9 +580,35 @@ names(output) <- c("chromosome","kbp_pos","scaffold","close_Wagner_SNPs")
 
 write_delim(output,"Table_S6_positive_beta_SNPs.txt",col_names = TRUE)
 
-# What are the chances of obtaining the level of overlap in loci seen between our studies?	
-prop_genome_covered_by_Wagner_outliers <- (dim(Wagner_data)[1]*10000)/(1047.81*1000*1000)	
-binom.test(5,671,prop_genome_covered_by_Wagner_outliers,alternative = "less")
+# What are the chances of obtaining the level of overlap in loci seen between our studies?
+# Finding the total proportion of the genome covered by the outliers from Wagner
+# Taking into account we search the 5kb on each side of the SNP
+if (Wagner_data$X2[1] < 5) {
+  prop_genome_kb <- Wagner_data$X2[1]
+} else {
+  prop_genome_kb <- 5
+}
+
+for (i in 2:dim(Wagner_data)[1]) {
+  if(Wagner_data$X1[i-1]!=Wagner_data$X1[i]) {
+    if (Wagner_data$X2[i] < 5) {
+      prop_genome_kb <- prop_genome_kb + 5 + Wagner_data$X2[i]
+    } else {
+      prop_genome_kb <-  prop_genome_kb + 5
+    }
+  } else {
+    if ((Wagner_data$X2[i] - Wagner_data$X2[i-1]) < 10) {
+      prop_genome_kb <-  prop_genome_kb + Wagner_data$X2[i] - Wagner_data$X2[i-1]
+    } else {
+      prop_genome_kb <-  prop_genome_kb + 10
+    }  
+  }
+}
+
+prop_genome_covered_by_Wagner_outliers <- (prop_genome_kb*1000)/(1047.81*1000*1000)
+print(paste("Approximately ",prop_genome_covered_by_Wagner_outliers," of the chickadee genome",sep=""))
+print("is 'covered' by outliers from Wagner and their 5kbp flanking region")
+binom.test(5,671,prop_genome_covered_by_Wagner_outliers)
 
 sessionInfo()
 #R version 3.6.3 (2020-02-29)
