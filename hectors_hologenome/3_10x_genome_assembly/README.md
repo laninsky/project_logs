@@ -4,4 +4,4 @@ We got bcl data back from the sequencer, so first needed to generate the fastq f
 tar -zvxf 200702_A00488_0073_BHTL7YDMXX-lane1.tar.gz
 tar -zvxf 200702_A00488_0073_BHTL7YDMXX-lane2.tar.gz
 ```
-The "make fastq" scripts are (makefastq.sh)[https://github.com/laninsky/project_logs/blob/master/hectors_hologenome/3_10x_genome_assembly/makefastq.sh] and (makefastq_L2.sh)[https://github.com/laninsky/project_logs/blob/master/hectors_hologenome/3_10x_genome_assembly/makefastq_L2.sh]
+The "make fastq" scripts are [makefastq.sh](https://github.com/laninsky/project_logs/blob/master/hectors_hologenome/3_10x_genome_assembly/makefastq.sh) and [makefastq_L2.sh](https://github.com/laninsky/project_logs/blob/master/hectors_hologenome/3_10x_genome_assembly/makefastq_L2.sh)
