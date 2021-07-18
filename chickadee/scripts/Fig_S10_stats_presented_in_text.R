@@ -18,12 +18,17 @@ temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filter(grepl("Appleton",Spec
 # Modern percentages
 temp %>% filter(Sampling_period=="MODERN") %>% filter(grepl("Appleton",Specific_locality)) %>% mutate(status=ifelse(BC_genetic_cluster_assignment>=0.95,"BC",ifelse(CC_genetic_cluster_assignment>=0.95,"CC","hybrid"))) %>% group_by(status) %>% tally() %>% mutate(perc=n/sum(n)*100)
 
-# t-test
+# Mann-Whitney U-test
 smithsonian <- as.matrix(temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filter(grepl("Appleton",Specific_locality)) %>% select(BC_genetic_cluster_assignment))[,1]
+smithsonian <- cbind(smithsonian,0)
 
 modern <- as.matrix(temp %>% filter(Sampling_period=="MODERN") %>% filter(grepl("Appleton",Specific_locality)) %>% select(BC_genetic_cluster_assignment))[,1]
+modern <- cbind(modern,1)
 
-t.test(smithsonian,modern)
+data <- rbind(smithsonian,modern)
+data <- as.data.frame(data)
+names(data) <- c("structure","population")
+wilcox.test(data$structure~data$population)
 
 #4. Rockville genetic cluster temporal comparisons
 # Smithsonian percentages
@@ -32,12 +37,17 @@ temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filter(grepl("Rockville",Spe
 # Modern percentages
 temp %>% filter(Sampling_period=="MODERN") %>% filter(grepl("Rockville",Specific_locality)) %>% mutate(status=ifelse(BC_genetic_cluster_assignment>=0.95,"BC",ifelse(CC_genetic_cluster_assignment>=0.95,"CC","hybrid"))) %>% group_by(status) %>% tally() %>% mutate(perc=n/sum(n)*100)
 
-# t-test
+# Mann-Whitney U-test
 smithsonian <- as.matrix(temp %>% filter(Sampling_period=="SMITHSONIAN") %>% filter(grepl("Rockville",Specific_locality)) %>% select(BC_genetic_cluster_assignment))[,1]
+smithsonian <- cbind(smithsonian,0)
 
 modern <- as.matrix(temp %>% filter(Sampling_period=="MODERN") %>% filter(grepl("Rockville",Specific_locality)) %>% select(BC_genetic_cluster_assignment))[,1]
+modern <- cbind(modern,1)
 
-t.test(smithsonian,modern)
+data <- rbind(smithsonian,modern)
+data <- as.data.frame(data)
+names(data) <- c("structure","population")
+wilcox.test(data$structure~data$population)
 
 #5. Song genetic cluster comparisons
 BCsong <- as.matrix(temp %>% filter(Song_summary=="PUREBC") %>% select(BC_genetic_cluster_assignment))[,1]
