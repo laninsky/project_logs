@@ -23,7 +23,7 @@ conda env create --prefix /nesi/nobackup/uoo02423/bin/ORTHOSKIM --file orthoskim
 conda activate /nesi/nobackup/uoo02423/bin/ORTHOSKIM
 ```
 ### Getting input files together following instructions at https://github.com/cpouchon/ORTHOSKIM
-Modified [../config_orthoskim.txt] following instructions
+Modified [../config_orthoskim.txt](config_orthoskim.txt) following instructions
 
 ```
 /nesi/nobackup/uoo02423/bin/ORTHOSKIM-master/orthoskim
