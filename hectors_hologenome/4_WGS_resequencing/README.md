@@ -6,7 +6,7 @@ tar -zvxf 201126_FD09251656.tar.gz
 ```
 
 ## Using ORTHOSKIM to extract mtDNA contigs from the WGS data
-#### Installation following instructions at https://github.com/cpouchon/ORTHOSKIM
+### Installation following instructions at https://github.com/cpouchon/ORTHOSKIM
 ```
 # Loading conda for the conda install
 module load Miniconda3/4.10.3
@@ -22,8 +22,8 @@ cd ./ORTHOSKIM-master/
 conda env create --prefix /nesi/nobackup/uoo02423/bin/ORTHOSKIM --file orthoskim-env.yml
 conda activate /nesi/nobackup/uoo02423/bin/ORTHOSKIM
 ```
-#### Getting input files together following instructions at https://github.com/cpouchon/ORTHOSKIM
-Modified ../config_orthoskim.txt following instructions
+### Getting input files together following instructions at https://github.com/cpouchon/ORTHOSKIM
+Modified [../config_orthoskim.txt] following instructions
 
 ```
 /nesi/nobackup/uoo02423/bin/ORTHOSKIM-master/orthoskim
