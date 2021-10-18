@@ -1,10 +1,11 @@
+### Extracting and cleaning data
+
 ```
 # Extracting the data
 tar -zvxf 201126_FD09251656.tar.gz
-
-
 ```
 
+### Using ORTHOSKIM to extract mtDNA
 ```
 # Loading conda for the conda install
 module load Miniconda3/4.10.3
