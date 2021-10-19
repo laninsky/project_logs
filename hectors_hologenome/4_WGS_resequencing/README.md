@@ -1,8 +1,26 @@
 ## Extracting and cleaning data
-
+Barcode file available at [../barcode_file.txt](barcode_file.txt)
 ```
 # Extracting the data
 tar -zvxf 201126_FD09251656.tar.gz
+
+# Trimming adaptors and poly-G with fastp
+
+#!/bin/bash -e 
+#SBATCH -A uoo02423
+#SBATCH -J fastp
+#SBATCH -n 1
+#SBATCH -c 36 
+#SBATCH -t 5:00:00
+#SBATCH --mem=105G
+#SBATCH -D /nesi/nobackup/uoo02423/WGS/201126_FD09251656/inputFastq
+#SBATCH -N 1
+
+module load fastp/0.20.0-GCCcore-7.4.0
+
+fastp 
+
+
 ```
 
 ## Using ORTHOSKIM to extract mtDNA contigs from the WGS data
