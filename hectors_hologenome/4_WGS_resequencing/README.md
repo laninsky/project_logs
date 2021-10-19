@@ -22,7 +22,12 @@ module load fastp/0.20.0-GCCcore-7.4.0
 lineno=`wc -l barcode_file.txt | awk '{print $1}'`
 
 for i in `seq 2 $lineno`;
-  do echo $i;
+  do line_contents=`head -n $i barcode_file.txt | tail -n 1`;
+  F_barcode=`echo $line_contents | awk '{print $3}'`;
+  R_barcode=`echo $line_contents | awk '{print $5}'`;
+  sample_name=`echo $line_contents | awk '{print $1}'`;
+  fastp -i *_1_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_1_trimmed_R1.fastq.gz -I *_1_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_1_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
 done
 
 fastp 
