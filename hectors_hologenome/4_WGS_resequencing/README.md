@@ -18,6 +18,13 @@ tar -zvxf 201126_FD09251656.tar.gz
 
 module load fastp/0.20.0-GCCcore-7.4.0
 
+# line numbers in barcode file
+lineno=`wc -l barcode_file.txt | awk '{print $1}'`
+
+for i in `seq 2 $lineno`;
+  do echo $i;
+done
+
 fastp 
 
 
