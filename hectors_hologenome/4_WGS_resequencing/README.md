@@ -10,9 +10,9 @@ tar -zvxf 201126_FD09251656.tar.gz
 #SBATCH -A uoo02423
 #SBATCH -J fastp
 #SBATCH -n 1
-#SBATCH -c 36 
+#SBATCH -c 8 
 #SBATCH -t 5:00:00
-#SBATCH --mem=105G
+#SBATCH --mem=10G
 #SBATCH -D /nesi/nobackup/uoo02423/WGS/201126_FD09251656/inputFastq
 #SBATCH -N 1
 
@@ -26,8 +26,8 @@ for i in `seq 2 $lineno`;
   F_barcode=`echo $line_contents | awk '{print $3}'`;
   R_barcode=`echo $line_contents | awk '{print $5}'`;
   sample_name=`echo $line_contents | awk '{print $1}'`;
-  fastp -i *_1_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_1_trimmed_R1.fastq.gz -I *_1_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_1_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
-
+  fastp -i *_1_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_1_trimmed_R1.fastq.gz -I *_1_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_1_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT --trim_poly_g --thread 16
+  fastp -i *_2_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_2_trimmed_R1.fastq.gz -I *_2_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_2_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT --trim_poly_g --thread 16
 done
 
 fastp 
