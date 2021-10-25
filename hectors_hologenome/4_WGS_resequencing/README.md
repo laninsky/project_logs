@@ -15,24 +15,23 @@ tar -zvxf 201126_FD09251656.tar.gz
 #SBATCH --mem=10G
 #SBATCH -D /nesi/nobackup/uoo02423/WGS/201126_FD09251656/inputFastq
 #SBATCH -N 1
+#SBATCH --array=2-55
+
+# The dimension of the array is the length of the barcode file
+# Excluding the first header line
+# lineno=`wc -l $barcode_file_path | awk '{print $1}'`
 
 module load fastp/0.20.0-GCCcore-7.4.0
+barcode_file_path=/nesi/nobackup/uoo02423/WGS/barcode_file.txt
 
-# line numbers in barcode file
-lineno=`wc -l barcode_file.txt | awk '{print $1}'`
-
-for i in `seq 2 $lineno`;
-  do line_contents=`head -n $i barcode_file.txt | tail -n 1`;
-  F_barcode=`echo $line_contents | awk '{print $3}'`;
-  R_barcode=`echo $line_contents | awk '{print $5}'`;
-  sample_name=`echo $line_contents | awk '{print $1}'`;
-  fastp -i *_1_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_1_trimmed_R1.fastq.gz -I *_1_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_1_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT --trim_poly_g --thread 16
-  fastp -i *_2_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_2_trimmed_R1.fastq.gz -I *_2_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_2_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT --trim_poly_g --thread 16
-done
-
-fastp 
-
-
+line_contents=`head -n ${SLURM_ARRAY_TASK_ID} $barcode_file_path | tail -n 1`;
+F_barcode=`echo $line_contents | awk '{print $3}'`;
+R_barcode=`echo $line_contents | awk '{print $5}'`;
+sample_name=`echo $line_contents | awk '{print $1}'`;
+fastp -i *_1_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_1_trimmed_R1.fastq.gz -I *_1_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_1_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT --trim_poly_g --thread 16;
+fastp -i *_2_*${F_barcode}-${R_barcode}*R1.fastq.gz -o ${sample_name}_2_trimmed_R1.fastq.gz -I *_2_*${F_barcode}-${R_barcode}*R2.fastq.gz -O ${sample_name}_2_trimmed_R2.fastq.gz -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_sequence_r2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT --trim_poly_g --thread 16;
+cat ${sample_name}_1_trimmed_R1.fastq.gz ${sample_name}_2_trimmed_R1.fastq.gz >> ${sample_name}_combined_trimmed_R1.fastq.gz;
+cat ${sample_name}_1_trimmed_R2.fastq.gz ${sample_name}_2_trimmed_R2.fastq.gz >> ${sample_name}_combined_trimmed_R2.fastq.gz;
 ```
 
 ## Using ORTHOSKIM to extract mtDNA contigs from the WGS data
