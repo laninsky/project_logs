@@ -126,13 +126,12 @@ qiime tools export \
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/demux-summary-figures ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/demux-summary-figures ./narrow-single-end
 
-
 # After checking them out we keep going on our analyses
 qiime dada2 denoise-paired \
 --i-demultiplexed-seqs broad-single-end/demultiplexed-seqs-trimmed.qza \
 --p-trunc-len-f 0 \
 --p-trunc-len-r 0 \
---o-table feature-data.qza \
+--o-table broad-single-end/feature-data.qza \
 --o-representative-sequences broad-single-end/representative-sequences.qza \
 --o-denoising-stats broad-single-end/denoising-stats.qza
 
@@ -140,8 +139,19 @@ qiime dada2 denoise-paired \
 --i-demultiplexed-seqs narrow-single-end/demultiplexed-seqs-trimmed.qza \
 --p-trunc-len-f 0 \
 --p-trunc-len-r 0 \
---o-table feature-data.qza \
+--o-table narrow-single-end/feature-data.qza \
 --o-representative-sequences narrow-single-end/representative-sequences.qza \
 --o-denoising-stats narrow-single-end/denoising-stats.qza
+
+# summarizing the feaure table data
+qiime feature-table summarize \
+  --i-table broad-single-end/feature-data.qza \
+  --o-visualization broad-single-end/feature-data-vis.qzv \
+  --m-sample-metadata-file barcodes.tsv 
+
+qiime feature-table summarize \
+  --i-table narrow-single-end/feature-data.qza \
+  --o-visualization narrow-single-end/feature-data-vis.qzv \
+  --m-sample-metadata-file barcodes.tsv 
 
 ```
