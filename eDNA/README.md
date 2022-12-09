@@ -28,5 +28,14 @@ qiime tools import \
   --input-path broad-single-end/fastq \
   --output-path broad-single-end/multiplexed-seqs.qza
 
-
+qiime tools import \
+  --type MultiplexedPairedEndBarcodeInSequence \
+  --input-path narrow-single-end/fastq \
+  --output-path narrow-single-end/multiplexed-seqs.qza
+  
+ qiime tools import \
+  --type MultiplexedPairedEndBarcodeInSequence \
+  --input-path paired-end-sequences/fastq \
+  --output-path paired-end-sequences/multiplexed-seqs.qza
+  
 ```
