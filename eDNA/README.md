@@ -96,4 +96,36 @@ qiime cutadapt trim-paired \
 --p-discard-untrimmed \
 --o-trimmed-sequences paired-end-sequences/demultiplexed-seqs-trimmed.qza
 
+# For data off the iseq, the reads will not overlap
+# so we will go with single-end for the rest
+# of the pipeline
+
+# First, we'll have a look at the quality of the
+# data
+qiime demux summarize \
+  --i-data broad-single-end/demultiplexed-seqs-trimmed.qza  \
+  --o-visualization broad-single-end/demux-summary.qzv
+
+qiime demux summarize \
+  --i-data narrow-single-end/demultiplexed-seqs-trimmed.qza  \
+  --o-visualization narrow-single-end/demux-summary.qzv
+
+# This 'extracts' the visualisation so we can
+# look at it
+qiime tools export \
+  --input-path broad-single-end/demux-summary.qzv \
+  --output-path broad-single-end/demux-summary-figures
+
+qiime tools export \
+  --input-path narrow-single-end/demux-summary.qzv \
+  --output-path narrow-single-end/demux-summary-figures
+
+# We then download it to our computer so we can look
+# at the outputs (remember scp commands have to run
+# from your computer i.e. push/pull from there)
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/demux-summary-figures ./broad-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/demux-summary-figures ./narrow-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/demux-summary-figures ./paired-end-sequences
+
+
 ```
