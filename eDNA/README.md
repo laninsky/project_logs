@@ -11,4 +11,22 @@ module load QIIME2/2022.2
 # Enabling tab completion
 source tab-qiime
 
+# QIIME expects data to be called "forward.fastq.gz" 
+# and "reverse.fastq.gz", therefore files need to be renamed e.g.
+mv Undetermined_S0_L001_R1_001.fastq.gz fastq/forward.fastq.gz
+mv Undetermined_S0_L001_R2_001.fastq.gz fastq/reverse.fastq.gz
+
+# Our files are from paired end sequencing, whether or not they 
+# are sequenced in a way the reads overlap (e.g. for our frag, miseq 
+# PE 250 is needed), so this is the initial pipeline followed for QCing
+# the reads. fastq for each run is in its own parent folder 
+# e.g. broad-single-end  narrow-single-end  paired-end-sequences
+
+# Importing the data into QIIME
+qiime tools import \
+  --type MultiplexedPairedEndBarcodeInSequence \
+  --input-path broad-single-end/fastq \
+  --output-path broad-single-end/multiplexed-seqs.qza
+
+
 ```
