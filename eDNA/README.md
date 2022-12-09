@@ -37,5 +37,63 @@ qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path paired-end-sequences/fastq \
   --output-path paired-end-sequences/multiplexed-seqs.qza
-  
+
+# Getting a barcodes file together (barcodes.tsv)
+# (ditch comments at beginning)
+#sampleid        forwardindex    reverseindex
+#BP_S_BD01       AACAAGCC        GAGCTTAC
+#BP_S_HD_021     GGAATGAG        GAGCTTAC
+#BP_N_HD_027     AACAAGCC        TTACCGCT
+#TIM_HD_043      GGAATGAG        TTACCGCT
+
+# Demultiplexing the data
+qiime cutadapt demux-paired \
+--i-seqs broad-single-end/multiplexed-seqs.qza \
+--m-forward-barcodes-file barcodes.tsv \
+--m-forward-barcodes-column forwardindex \
+--m-reverse-barcodes-file barcodes.tsv \
+--m-reverse-barcodes-column reverseindex \
+--o-per-sample-sequences broad-single-end/demultiplexed-seqs.qza \
+--o-untrimmed-sequences broad-single-end/untrimmed-seqs.qza
+
+qiime cutadapt demux-paired \
+--i-seqs narrow-single-end/multiplexed-seqs.qza \
+--m-forward-barcodes-file barcodes.tsv \
+--m-forward-barcodes-column forwardindex \
+--m-reverse-barcodes-file barcodes.tsv \
+--m-reverse-barcodes-column reverseindex \
+--o-per-sample-sequences narrow-single-end/demultiplexed-seqs.qza \
+--o-untrimmed-sequences narrow-single-end/untrimmed-seqs.qza
+
+qiime cutadapt demux-paired \
+--i-seqs paired-end-sequences/multiplexed-seqs.qza \
+--m-forward-barcodes-file barcodes.tsv \
+--m-forward-barcodes-column forwardindex \
+--m-reverse-barcodes-file barcodes.tsv \
+--m-reverse-barcodes-column reverseindex \
+--o-per-sample-sequences paired-end-sequences/demultiplexed-seqs.qza \
+--o-untrimmed-sequences paired-end-sequences/untrimmed-seqs.qza
+
+# Removing primers and discarding reads where no primer was found
+qiime cutadapt trim-paired \
+--i-demultiplexed-sequences broad-single-end/demultiplexed-seqs.qza \
+--p-front-f ^TCACCCAAAGCTGRARTTCTA \
+--p-front-r ^CGGGTTGCTGGTTTCACG \
+--p-discard-untrimmed \
+--o-trimmed-sequences broad-single-end/demultiplexed-seqs-trimmed.qza
+
+qiime cutadapt trim-paired \
+--i-demultiplexed-sequences narrow-single-end/demultiplexed-seqs.qza \
+--p-front-f ^TCACCCAAAGCTGRARTTCTA \
+--p-front-r ^CGGGTTGCTGGTTTCACG \
+--p-discard-untrimmed \
+--o-trimmed-sequences narrow-single-end/demultiplexed-seqs-trimmed.qza
+
+qiime cutadapt trim-paired \
+--i-demultiplexed-sequences paired-end-sequences/demultiplexed-seqs.qza \
+--p-front-f ^TCACCCAAAGCTGRARTTCTA \
+--p-front-r ^CGGGTTGCTGGTTTCACG \
+--p-discard-untrimmed \
+--o-trimmed-sequences paired-end-sequences/demultiplexed-seqs-trimmed.qza
+
 ```
