@@ -117,11 +117,10 @@ qiime cutadapt trim-paired \
 --p-front-r ^CGGGTTGCTGGTTTCACG \
 --p-discard-untrimmed \
 --o-trimmed-sequences paired-end-sequences/demultiplexed-seqs-trimmed.qza
+```
 
-# For data off the iseq, the reads will not overlap
-# so we will go with single-end for the rest
-# of the pipeline
-
+For data off the iseq, the reads will not overlap so we will go with single-end for the rest of the pipeline for these runs:
+```
 # First, we'll have a look at the quality of the
 # data
 qiime demux summarize \
@@ -131,6 +130,10 @@ qiime demux summarize \
 qiime demux summarize \
   --i-data narrow-single-end/demultiplexed-seqs-trimmed.qza  \
   --o-visualization narrow-single-end/demux-summary.qzv
+  
+qiime demux summarize \
+  --i-data paired-end-sequences/demultiplexed-seqs-trimmed.qza  \
+  --o-visualization paired-end-sequences/demux-summary.qzv
 
 # This 'extracts' the visualisation so we can
 # look at it
@@ -141,12 +144,19 @@ qiime tools export \
 qiime tools export \
   --input-path narrow-single-end/demux-summary.qzv \
   --output-path narrow-single-end/demux-summary-figures
+  
+qiime tools export \
+  --input-path paired-end-sequences/demux-summary.qzv \
+  --output-path paired-end-sequences/demux-summary-figures
 
 # We then download it to our computer so we can look
 # at the outputs (remember scp commands have to run
-# from your computer i.e. push/pull from there)
+# from your computer i.e. push/pull from there - need
+# to have the broad-single-end, narrow-single-end and 
+# paired-end-sequences folders set up before downloading
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/demux-summary-figures ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/demux-summary-figures ./narrow-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/demux-summary-figures ./paired-end-sequences
 
 # After checking them out we keep going on our analyses
 qiime dada2 denoise-paired \
@@ -165,6 +175,14 @@ qiime dada2 denoise-paired \
 --o-representative-sequences narrow-single-end/representative-sequences.qza \
 --o-denoising-stats narrow-single-end/denoising-stats.qza
 
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs paired-end-sequences/demultiplexed-seqs-trimmed.qza \
+--p-trunc-len-f 0 \
+--p-trunc-len-r 0 \
+--o-table paired-end-sequences/feature-data.qza \
+--o-representative-sequences paired-end-sequences/representative-sequences.qza \
+--o-denoising-stats paired-end-sequences/denoising-stats.qza
+
 # summarizing the feaure table data
 qiime feature-table summarize \
   --i-table broad-single-end/feature-data.qza \
@@ -175,5 +193,10 @@ qiime feature-table summarize \
   --i-table narrow-single-end/feature-data.qza \
   --o-visualization narrow-single-end/feature-data-vis.qzv \
   --m-sample-metadata-file barcodes.tsv 
+  
+qiime feature-table summarize \
+  --i-table paired-end-sequences/feature-data.qza \
+  --o-visualization paired-end-sequences/feature-data-vis.qzv \
+  --m-sample-metadata-file barcodes.tsv   
 
 ```
