@@ -242,7 +242,10 @@ qiime feature-table tabulate-seqs \
 qiime feature-table tabulate-seqs \
   --i-data paired-end-sequences/representative-sequences.qza \
   --o-visualization paired-end-sequences/representative-sequences.qzv  
+```
 
+This gives us the fasta sequences
+```
 qiime tools export \
   --input-path broad-single-end/representative-sequences.qzv \
   --output-path broad-single-end/representative-sequences
@@ -262,3 +265,39 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/representative-sequ
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-sequences ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
 ```
+
+Final step is to get the frequency of each of these sequences
+```
+qiime metadata tabulate \
+  --m-input-file broad-single-end/denoising-stats.qza \
+  --o-visualization broad-single-end/denoising-stats.qzv
+  
+qiime metadata tabulate \
+  --m-input-file narrow-single-end/denoising-stats.qza \
+  --o-visualization narrow-single-end/denoising-stats.qzv
+  
+qiime metadata tabulate \
+  --m-input-file paired-end-sequences/denoising-stats.qza \
+  --o-visualization paired-end-sequences/denoising-stats.qzv
+
+qiime tools export \
+  --input-path broad-single-end/denoising-stats.qzv \
+  --output-path broad-single-end/denoising-stats
+  
+qiime tools export \
+  --input-path narrow-single-end/denoising-stats.qzv \
+  --output-path narrow-single-end/denoising-stats
+
+qiime tools export \
+  --input-path paired-end-sequences/denoising-stats.qzv \
+  --output-path paired-end-sequences/denoising-stats
+
+```
+
+And then, you guessed it, downloading these outputs
+```
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/representative-sequences ./broad-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-sequences ./narrow-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
+```
+
