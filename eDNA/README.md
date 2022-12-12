@@ -266,7 +266,7 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-seq
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
 ```
 
-Final step is to get the frequency of each of these sequences
+Final step is to get some QC on the whole process
 ```
 qiime metadata tabulate \
   --m-input-file broad-single-end/denoising-stats.qza \
