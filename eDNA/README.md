@@ -255,3 +255,10 @@ qiime tools export \
   --input-path paired-end-sequences/representative-sequences.qzv \
   --output-path paired-end-sequences/representative-sequences
 ```
+
+We then download it to our computer so we can look at the outputs
+```
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/representative-sequences ./broad-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-sequences ./narrow-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
+```
