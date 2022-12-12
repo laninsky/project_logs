@@ -11,6 +11,9 @@ module load QIIME2/2022.2
 
 # Enabling tab completion
 source tab-qiime
+
+# Loading BLAST
+module load BLAST/2.13.0-GCC-11.3.0
 ```
 
 Upload files to the appropriate directory (fastq) using scp:
