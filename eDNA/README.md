@@ -266,6 +266,39 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-seq
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
 ```
 
+To get the counts of each ASV per sample, need to tabulate the feature 
+```
+qiime metadata tabulate \
+  --m-input-file broad-single-end/feature-data.qza  \
+  --o-visualization broad-single-end/tabulate-feature.qzv
+  
+qiime tools export \
+  --input-path broad-single-end/tabulate-feature.qzv \
+  --output-path broad-single-end/tabulate-feature
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/tabulate-feature ./broad-single-end
+
+qiime metadata tabulate \
+  --m-input-file narrow-single-end/feature-data.qza  \
+  --o-visualization narrow-single-end/tabulate-feature.qzv
+  
+qiime tools export \
+  --input-path narrow-single-end/tabulate-feature.qzv \
+  --output-path narrow-single-end/tabulate-feature
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/tabulate-feature ./narrow-single-end
+
+qiime metadata tabulate \
+  --m-input-file paired-end-sequences/feature-data.qza  \
+  --o-visualization paired-end-sequences/tabulate-feature.qzv
+  
+qiime tools export \
+  --input-path paired-end-sequences/tabulate-feature.qzv \
+  --output-path paired-end-sequences/tabulate-feature
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/tabulate-feature ./paired-end-sequences
+```
+
 Final step is to get some QC on the whole process
 ```
 qiime metadata tabulate \
