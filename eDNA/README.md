@@ -299,7 +299,7 @@ qiime tools export \
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/tabulate-feature ./paired-end-sequences
 ```
 
-Final step is to get some QC on the whole process
+Final step within qiime is to get some QC on the whole process
 ```
 qiime metadata tabulate \
   --m-input-file broad-single-end/denoising-stats.qza \
@@ -332,4 +332,9 @@ And then, you guessed it, downloading these outputs
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/denoising-stats ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/denoising-stats ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/denoising-stats ./paired-end-sequences
+```
+
+Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/mouse. Downloaded all complete cetacean refseq mitogeomes from NCBI, and added to this the refseq for humans, pigs, cows, and mice.
+```
+scp -r cetacean_refseq_mitogenome.fasta mahuika:/nesi/nobackup/uoo02423/eDNA/
 ```
