@@ -25,8 +25,19 @@ mv Undetermined_S0_L001_R2_001.fastq.gz fastq/reverse.fastq.gz
 # PE 250 is needed), so this is the initial pipeline followed for QCing
 # the reads. fastq for each run is in its own parent folder 
 # e.g. broad-single-end  narrow-single-end  paired-end-sequences
+```
 
-# File directory
+Getting a barcodes file together (barcodes.tsv)
+```
+sampleid        forwardindex    reverseindex
+BP_S_BD01       AACAAGCC        GAGCTTAC
+BP_S_HD_021     GGAATGAG        GAGCTTAC
+BP_N_HD_027     AACAAGCC        TTACCGCT
+TIM_HD_043      GGAATGAG        TTACCGCT
+```
+
+File directory
+```
 barcodes.tsv
 broad-single-end/
    |--fastq/
@@ -42,9 +53,8 @@ paired-end-sequences/
       |--forward.fastq.gz
 ```
 
-Following commands are run from the top level directory (i.e. the one containing barcodes.tsv and the broad-single-end, narrow-single-end, and paired-end-sequences folders:
+Following commands are run from the top level directory (i.e. the one containing barcodes.tsv and the broad-single-end, narrow-single-end, and paired-end-sequences folders. First off, importing the data into QIIME:
 ```
-# Importing the data into QIIME
 qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path broad-single-end/fastq \
@@ -59,16 +69,10 @@ qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path paired-end-sequences/fastq \
   --output-path paired-end-sequences/multiplexed-seqs.qza
+```
 
-# Getting a barcodes file together (barcodes.tsv)
-# (ditch comments at beginning)
-#sampleid        forwardindex    reverseindex
-#BP_S_BD01       AACAAGCC        GAGCTTAC
-#BP_S_HD_021     GGAATGAG        GAGCTTAC
-#BP_N_HD_027     AACAAGCC        TTACCGCT
-#TIM_HD_043      GGAATGAG        TTACCGCT
-
-# Demultiplexing the data
+Demultiplexing the data
+```
 qiime cutadapt demux-paired \
 --i-seqs broad-single-end/multiplexed-seqs.qza \
 --m-forward-barcodes-file barcodes.tsv \
@@ -95,8 +99,10 @@ qiime cutadapt demux-paired \
 --m-reverse-barcodes-column reverseindex \
 --o-per-sample-sequences paired-end-sequences/demultiplexed-seqs.qza \
 --o-untrimmed-sequences paired-end-sequences/untrimmed-seqs.qza
+```
 
-# Removing primers and discarding reads where no primer was found
+Removing primers and discarding reads where no primer was found
+```
 qiime cutadapt trim-paired \
 --i-demultiplexed-sequences broad-single-end/demultiplexed-seqs.qza \
 --p-front-f ^TCACCCAAAGCTGRARTTCTA \
@@ -119,10 +125,8 @@ qiime cutadapt trim-paired \
 --o-trimmed-sequences paired-end-sequences/demultiplexed-seqs-trimmed.qza
 ```
 
-For data off the iseq, the reads will not overlap so we will go with single-end for the rest of the pipeline for these runs:
+First, we'll have a look at the quality of the data
 ```
-# First, we'll have a look at the quality of the
-# data
 qiime demux summarize \
   --i-data broad-single-end/demultiplexed-seqs-trimmed.qza  \
   --o-visualization broad-single-end/demux-summary.qzv
@@ -134,9 +138,10 @@ qiime demux summarize \
 qiime demux summarize \
   --i-data paired-end-sequences/demultiplexed-seqs-trimmed.qza  \
   --o-visualization paired-end-sequences/demux-summary.qzv
+```
 
-# This 'extracts' the visualisation so we can
-# look at it
+This 'extracts' the visualisation so we can look at it
+```
 qiime tools export \
   --input-path broad-single-end/demux-summary.qzv \
   --output-path broad-single-end/demux-summary-figures
@@ -148,17 +153,17 @@ qiime tools export \
 qiime tools export \
   --input-path paired-end-sequences/demux-summary.qzv \
   --output-path paired-end-sequences/demux-summary-figures
+```
 
-# We then download it to our computer so we can look
-# at the outputs (remember scp commands have to run
-# from your computer i.e. push/pull from there - need
-# to have the broad-single-end, narrow-single-end and 
-# paired-end-sequences folders set up before downloading
+We then download it to our computer so we can look at the outputs (remember scp commands have to run from your computer i.e. push/pull from there - need to have the broad-single-end, narrow-single-end and  paired-end-sequences folders set up before downloading
+```
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/demux-summary-figures ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/demux-summary-figures ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/demux-summary-figures ./paired-end-sequences
+```
 
-# After checking them out we keep going on our analyses
+After checking them out we keep going on our analyses
+```
 qiime dada2 denoise-paired \
 --i-demultiplexed-seqs broad-single-end/demultiplexed-seqs-trimmed.qza \
 --p-trunc-len-f 0 \
@@ -182,8 +187,10 @@ qiime dada2 denoise-paired \
 --o-table paired-end-sequences/feature-data.qza \
 --o-representative-sequences paired-end-sequences/representative-sequences.qza \
 --o-denoising-stats paired-end-sequences/denoising-stats.qza
+```
 
-# summarizing the feaure table data
+Summarizing the feaure table data
+```
 qiime feature-table summarize \
   --i-table broad-single-end/feature-data.qza \
   --o-visualization broad-single-end/feature-data-vis.qzv \
@@ -198,5 +205,4 @@ qiime feature-table summarize \
   --i-table paired-end-sequences/feature-data.qza \
   --o-visualization paired-end-sequences/feature-data-vis.qzv \
   --m-sample-metadata-file barcodes.tsv   
-
 ```
