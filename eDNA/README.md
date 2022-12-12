@@ -1,5 +1,6 @@
-Based on Debbie's protocol, the basic steps (following amplification with the control region primers) are to denoise/demultiplex with dada2 in qiime, with no filtering other than to trim primers. Debbie then does a blast search and extracts the top 5 hits, and pulls the cetaceans from that, as well as the humans/pigs/cow/mouse to see what those are doing. This ends up giving a table of ASV counts, a fasta file of all ASVs, a blast output, and a cetacean-only top hit only blast summary.
+Based on Debbie's protocol, the basic steps (following amplification with the control region primers) are to denoise/demultiplex with dada2 in qiime, with no filtering other than to trim primers. Debbie then does a blast search and extracts the top 5 hits, and pulls the cetaceans from that, as well as the humans/pigs/cow/mouse to see what those are doing. This ends up giving a table of ASV counts, a fasta file of all ASVs, a blast output, and a cetacean-only top hit only blast summary.  
 
+These steps need to be completed every time you log in to NeSI:
 ```
 # Need to load Python/3.10.5 otherwise QIIME2 errors
 # because of numpy errors
@@ -10,7 +11,10 @@ module load QIIME2/2022.2
 
 # Enabling tab completion
 source tab-qiime
+```
 
+Upload files to the appropriate directory (fastq) using scp:
+```
 # QIIME expects data to be called "forward.fastq.gz" 
 # and "reverse.fastq.gz", therefore files need to be renamed e.g.
 mv Undetermined_S0_L001_R1_001.fastq.gz fastq/forward.fastq.gz
@@ -22,6 +26,24 @@ mv Undetermined_S0_L001_R2_001.fastq.gz fastq/reverse.fastq.gz
 # the reads. fastq for each run is in its own parent folder 
 # e.g. broad-single-end  narrow-single-end  paired-end-sequences
 
+# File directory
+barcodes.tsv
+broad-single-end/
+   |--fastq/
+      |--forward.fastq.gz
+      |--forward.fastq.gz
+narrow-single-end/
+   |--fastq/
+      |--forward.fastq.gz
+      |--forward.fastq.gz
+paired-end-sequences/
+   |--fastq/
+      |--forward.fastq.gz
+      |--forward.fastq.gz
+```
+
+Following commands are run from the top level directory (i.e. the one containing barcodes.tsv and the broad-single-end, narrow-single-end, and paired-end-sequences folders:
+```
 # Importing the data into QIIME
 qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
