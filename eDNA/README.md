@@ -206,3 +206,52 @@ qiime feature-table summarize \
   --o-visualization paired-end-sequences/feature-data-vis.qzv \
   --m-sample-metadata-file barcodes.tsv   
 ```
+
+Exporting all of this to have a look
+```
+qiime tools export \
+  --input-path broad-single-end/feature-data-vis.qzv \
+  --output-path broad-single-end/feature-data-vis
+
+qiime tools export \
+  --input-path narrow-single-end/feature-data-vis.qzv \
+  --output-path narrow-single-end/feature-data-vis
+  
+qiime tools export \
+  --input-path paired-end-sequences/feature-data-vis.qzv \
+  --output-path paired-end-sequences/feature-data-vis
+```
+
+We then download it to our computer so we can look at the outputs
+```
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/feature-data-vis ./broad-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/feature-data-vis ./narrow-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/feature-data-vis ./paired-end-sequences
+```
+
+Next step is to tabulate the sequences
+```
+qiime feature-table tabulate-seqs \
+  --i-data broad-single-end/representative-sequences.qza \
+  --o-visualization broad-single-end/representative-sequences.qzv
+  
+qiime feature-table tabulate-seqs \
+  --i-data narrow-single-end/representative-sequences.qza \
+  --o-visualization narrow-single-end/representative-sequences.qzv  
+  
+qiime feature-table tabulate-seqs \
+  --i-data paired-end-sequences/representative-sequences.qza \
+  --o-visualization paired-end-sequences/representative-sequences.qzv  
+
+qiime tools export \
+  --input-path broad-single-end/representative-sequences.qzv \
+  --output-path broad-single-end/representative-sequences
+  
+qiime tools export \
+  --input-path narrow-single-end/representative-sequences.qzv \
+  --output-path narrow-single-end/representative-sequences
+
+qiime tools export \
+  --input-path paired-end-sequences/representative-sequences.qzv \
+  --output-path paired-end-sequences/representative-sequences
+```
