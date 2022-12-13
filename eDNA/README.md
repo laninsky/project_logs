@@ -340,4 +340,23 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/denoising-stats
 Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/mouse. Downloaded all complete cetacean refseq mitogeomes from NCBI, and added to this the refseq for humans, pigs, cows, and mice.
 ```
 scp -r cetacean_refseq_mitogenome.fasta mahuika:/nesi/nobackup/uoo02423/eDNA/
+makeblastdb -in cetacean_refseq_mitogenome.fasta -dbtype nucl
+
+no_lines=`wc -l paired-end-sequences/representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+#225
+
+# qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i paired-end-sequences/representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j paired-end-sequences/representative-sequences/sequences.fasta | tail -n 1 > tempseq
+   blastn -task megablast -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 > temp.blast
+done 
+
+for 
+
+
+
 ```
