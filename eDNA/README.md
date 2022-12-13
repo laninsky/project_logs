@@ -337,26 +337,49 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/denoising-stats ./
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/denoising-stats ./paired-end-sequences
 ```
 
-Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/mouse. Downloaded all complete cetacean refseq mitogeomes from NCBI, and added to this the refseq for humans, pigs, cows, and mice.
+Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/mouse. Downloaded all complete cetacean refseq mitogeomes from NCBI, and added to this the refseq for humans, pigs, cows, and mice. Uploaded these to mahuika and indexed them (only need to do this the first time)
 ```
 scp -r cetacean_refseq_mitogenome.fasta mahuika:/nesi/nobackup/uoo02423/eDNA/
 makeblastdb -in cetacean_refseq_mitogenome.fasta -dbtype nucl
+```
+no_lines=`wc -l broad-single-end/representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i broad-single-end/representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j broad-single-end/representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> broad-single-end/blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
+
+no_lines=`wc -l narrow-single-end/representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i narrow-single-end/representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j narrow-single-end/representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> narrow-single-end/blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
 
 no_lines=`wc -l paired-end-sequences/representative-sequences/sequences.fasta | awk '{ print $1 }'`
-
-#225
-
-# qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
 
 for i in `seq 1 2 $no_lines`; 
    do j=$((i+1));
    seqname=`head -n $i paired-end-sequences/representative-sequences/sequences.fasta | tail -n 1`;
-   head -n $j paired-end-sequences/representative-sequences/sequences.fasta | tail -n 1 > tempseq
-   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 > temp.blast
+   head -n $j paired-end-sequences/representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> paired-end-sequences/blast_results.txt;
+   rm tempseq;
+   rm tempblast;
 done 
 
-for 
-
-
-
 ```
+Next step, pull into R and compare proportion of cetacean reads between different runs across the different samples and in total
+# qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
