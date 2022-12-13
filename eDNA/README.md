@@ -354,6 +354,8 @@ for i in `seq 1 2 $no_lines`;
    rm tempblast;
 done 
 
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/blast_results.txt broad-single-end/blast_results.txt
+
 
 no_lines=`wc -l narrow-single-end/representative-sequences/sequences.fasta | awk '{ print $1 }'`
 
@@ -367,6 +369,8 @@ for i in `seq 1 2 $no_lines`;
    rm tempblast;
 done 
 
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/blast_results.txt narrow-single-end/blast_results.txt
+
 
 no_lines=`wc -l paired-end-sequences/representative-sequences/sequences.fasta | awk '{ print $1 }'`
 
@@ -379,6 +383,8 @@ for i in `seq 1 2 $no_lines`;
    rm tempseq;
    rm tempblast;
 done 
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/blast_results.txt paired-end-sequences/blast_results.txt
 
 ```
 Next step, pull into R and compare proportion of cetacean reads between different runs across the different samples and in total
