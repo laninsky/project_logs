@@ -352,7 +352,7 @@ for i in `seq 1 2 $no_lines`;
    do j=$((i+1));
    seqname=`head -n $i paired-end-sequences/representative-sequences/sequences.fasta | tail -n 1`;
    head -n $j paired-end-sequences/representative-sequences/sequences.fasta | tail -n 1 > tempseq
-   blastn -task megablast -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 > temp.blast
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 > temp.blast
 done 
 
 for 
