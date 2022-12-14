@@ -342,6 +342,9 @@ Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/m
 scp -r cetacean_refseq_mitogenome.fasta mahuika:/nesi/nobackup/uoo02423/eDNA/
 makeblastdb -in cetacean_refseq_mitogenome.fasta -dbtype nucl
 ```
+
+After this, carrying out BLAST search for each of the sequences identified in sequences.fasta:
+```
 no_lines=`wc -l broad-single-end/representative-sequences/sequences.fasta | awk '{ print $1 }'`
 
 for i in `seq 1 2 $no_lines`; 
