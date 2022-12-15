@@ -391,4 +391,96 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/blast_results.t
 
 ```
 Next step, pull into R and compare proportion of cetacean reads between different runs across the different samples and in total
+```
 # qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
+```
+Because the iseq runs are not long enough to span the expected fragment, the results from the iseq are a little difficult to interpret, so going back and denoising based on single end
+```
+qiime dada2 denoise-single \
+--i-demultiplexed-seqs broad-single-end/demultiplexed-seqs-trimmed.qza \
+--p-trunc-len 0 \
+--o-table broad-single-end/single-end-feature-data.qza \
+--o-representative-sequences broad-single-end/single-end-representative-sequences.qza \
+--o-denoising-stats broad-single-end/single-end-denoising-stats.qza
+
+qiime dada2 denoise-single \
+--i-demultiplexed-seqs narrow-single-end/demultiplexed-seqs-trimmed.qza \
+--p-trunc-len 0 \
+--o-table narrow-single-end/single-end-feature-data.qza \
+--o-representative-sequences narrow-single-end/single-end-representative-sequences.qza \
+--o-denoising-stats narrow-single-end/single-end-denoising-stats.qza
+
+qiime feature-table tabulate-seqs \
+  --i-data broad-single-end/single-end-representative-sequences.qza \
+  --o-visualization broad-single-end/single-end-representative-sequences.qzv
+
+qiime feature-table tabulate-seqs \
+  --i-data narrow-single-end/single-end-representative-sequences.qza \
+  --o-visualization narrow-single-end/single-end-representative-sequences.qzv  
+
+qiime tools export \
+  --input-path broad-single-end/single-end-representative-sequences.qzv \
+  --output-path broad-single-end/single-end-representative-sequences
+
+qiime tools export \
+  --input-path narrow-single-end/single-end-representative-sequences.qzv \
+  --output-path narrow-single-end/single-end-representative-sequencesv
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/single-end-representative-sequences ./broad-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-representative-sequences ./narrow-single-end
+
+qiime metadata tabulate \
+  --m-input-file broad-single-end/single-end-feature-data.qza  \
+  --o-visualization broad-single-end/single-end-tabulate-feature.qzv
+  
+qiime tools export \
+  --input-path broad-single-end/single-end-tabulate-feature.qzv \
+  --output-path broad-single-end/single-end-tabulate-feature
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/single-end-tabulate-feature ./broad-single-end
+  
+qiime metadata tabulate \
+  --m-input-file narrow-single-end/single-end-feature-data.qza  \
+  --o-visualization narrow-single-end/single-end-tabulate-feature.qzv
+
+qiime tools export \
+  --input-path narrow-single-end/single-end-tabulate-feature.qzv \
+  --output-path narrow-single-end/single-end-tabulate-feature  
+  
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-tabulate-feature ./narrow-single-end
+
+no_lines=`wc -l broad-single-end/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i broad-single-end/single-end-representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j broad-single-end/single-end-representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> broad-single-end/single-end-blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
+
+
+
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/single-end-blast_results.txt broad-single-end/single-end-blast_results.txt
+
+
+no_lines=`wc -l narrow-single-end/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i narrow-single-end/single-end-representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j narrow-single-end/single-end-representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> narrow-single-end/single-end-blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-blast_results.txt narrow-single-end/single-end-blast_results.txt
+
+
+```
