@@ -461,10 +461,6 @@ for i in `seq 1 2 $no_lines`;
    rm tempblast;
 done 
 
-
-
-
-
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/single-end-blast_results.txt broad-single-end/single-end-blast_results.txt
 
 
