@@ -504,4 +504,4 @@ paired-end-sequences/
       |--sequences.fasta
 ```
 
-I then used the R-code at the following locations to look at the proportion of reads assigned as cetacean instead of other gunk. Using the sequence identfiers, the cetacean sequences could be extracted and manually blasted through the Web to more accurately assign them to species (instead of the limited mitogenome dataset we utilised).
+I then used the R-code in this folder to look at the proportion of reads assigned as cetacean instead of other gunk. Using the sequence identfiers, the cetacean sequences could be extracted and manually blasted through the Web to more accurately assign them to species (instead of the limited mitogenome dataset we utilised).
