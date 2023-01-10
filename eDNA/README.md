@@ -480,3 +480,28 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-blast_r
 
 
 ```
+
+Once downloaded on to my local computer, the file directory looked like the following (this is not a comprehensive list of the files, just where the ones we need for the following R-code were sitting):
+```
+cetacean_refseq_mitogenome.fasta
+broad-single-end/
+   |--blast_results.txt
+   |--tabulate-feature
+      |--metadata.tsv
+   |--representative-sequences
+      |--sequences.fasta
+narrow-single-end/
+   |--blast_results.txt
+   |--tabulate-feature
+      |--metadata.tsv
+   |--representative-sequences
+      |--sequences.fasta
+paired-end-sequences/
+   |--blast_results.txt
+   |--tabulate-feature
+      |--metadata.tsv
+   |--representative-sequences
+      |--sequences.fasta
+```
+
+I then used the R-code at the following locations to look at the proportion of reads assigned as cetacean instead of other gunk. Using the sequence identfiers, the cetacean sequences could be extracted and manually blasted through the Web to more accurately assign them to species (instead of the limited mitogenome dataset we utilised).
