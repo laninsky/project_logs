@@ -1,5 +1,5 @@
 ## Obtaining georeferenced data
-### Loading SRAtoolkit
+Loading SRAtoolkit
 ```
 # Load required module
 module load sratoolkit/3.0.2
@@ -7,7 +7,8 @@ module load sratoolkit/3.0.2
 vdb-config.3.0.2 -i
 ```
 
-Fetching data from 
+Fetching data:
 ```
+# From Violi et al. (2023)
 prefetch -v SRP423249
 ```
