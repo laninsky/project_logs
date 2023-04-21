@@ -18,5 +18,7 @@ prefetch -v SRR11679510
 # From Li et al. (2019)
 prefetch -v SRR6192927 --max-size 100000000
 prefetch -v SRR6192932 --max-size 100000000
+prefetch -v SRR6192933 --max-size 100000000
+
 
 ```
