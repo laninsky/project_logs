@@ -76,6 +76,11 @@ qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path paired-end-sequences/fastq \
   --output-path paired-end-sequences/multiplexed-seqs.qza
+  
+ qiime tools import \
+  --type MultiplexedPairedEndBarcodeInSequence \
+  --input-path 4Apr2023_post_size/fastq \
+  --output-path 4Apr2023_post_size/multiplexed-seqs.qza
 ```
 
 Demultiplexing the data
