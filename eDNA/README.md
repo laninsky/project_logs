@@ -4,7 +4,7 @@ These steps need to be completed every time you log in to NeSI:
 ```
 # Need to load Python/3.10.5 otherwise QIIME2 errors
 # because of numpy errors
-module load Python/3.10.5-gimkl-2022a
+module load Python/3.11.3-gimkl-2022a
 
 # Loading QIIME2
 module load QIIME2/2022.2
@@ -51,6 +51,10 @@ narrow-single-end/
       |--forward.fastq.gz
       |--forward.fastq.gz
 paired-end-sequences/
+   |--fastq/
+      |--forward.fastq.gz
+      |--forward.fastq.gz
+4Apr2023_post_size
    |--fastq/
       |--forward.fastq.gz
       |--forward.fastq.gz
