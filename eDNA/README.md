@@ -38,6 +38,7 @@ BP_S_HD_021     GGAATGAG        GAGCTTAC
 BP_N_HD_027     AACAAGCC        TTACCGCT
 TIM_HD_043      GGAATGAG        TTACCGCT
 
+# When duplicate samples are present with different indices
 sampleid        forwardindex    reverseindex    individualid
 BP_S_HD01A      AACAAGCC        GAGCTTAC        BP_S_HD01
 BP_S_HD01B      GGAATGAG        GAGCTTAC        BP_S_HD01
@@ -86,7 +87,7 @@ qiime tools import \
  qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path 4Apr2023_post_size/fastq \
-  --output-path 4Apr2023_post_size/multiplexed-seqs-firstbarcode.qza
+  --output-path 4Apr2023_post_size/multiplexed-seqs.qza
 ```
 
 Demultiplexing the data
@@ -118,15 +119,14 @@ qiime cutadapt demux-paired \
 --o-per-sample-sequences paired-end-sequences/demultiplexed-seqs.qza \
 --o-untrimmed-sequences paired-end-sequences/untrimmed-seqs.qza
 
-# Duplicates of samples with different barcode sequences, so separately processed
 qiime cutadapt demux-paired \
---i-seqs 4Apr2023_post_size/multiplexed-seqs-firstbarcode.qza \
+--i-seqs 4Apr2023_post_size/multiplexed-seqs.qza \
 --m-forward-barcodes-file barcodes.tsv \
 --m-forward-barcodes-column forwardindex \
 --m-reverse-barcodes-file barcodes.tsv \
 --m-reverse-barcodes-column reverseindex \
---o-per-sample-sequences 4Apr2023_post_size/demultiplexed-seqs-firstbarcode.qza \
---o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs-firstbarcode.qza
+--o-per-sample-sequences 4Apr2023_post_size/demultiplexed-seqs.qza \
+--o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs.qza
 ```
 
 Removing primers and discarding reads where no primer was found
