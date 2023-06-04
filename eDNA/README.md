@@ -77,10 +77,11 @@ qiime tools import \
   --input-path paired-end-sequences/fastq \
   --output-path paired-end-sequences/multiplexed-seqs.qza
   
+ # Duplicates of samples with different barcode sequences, so separately processed
  qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path 4Apr2023_post_size/fastq \
-  --output-path 4Apr2023_post_size/multiplexed-seqs.qza
+  --output-path 4Apr2023_post_size/multiplexed-seqs-firstbarcode.qza
 ```
 
 Demultiplexing the data
@@ -112,14 +113,15 @@ qiime cutadapt demux-paired \
 --o-per-sample-sequences paired-end-sequences/demultiplexed-seqs.qza \
 --o-untrimmed-sequences paired-end-sequences/untrimmed-seqs.qza
 
+# Duplicates of samples with different barcode sequences, so separately processed
 qiime cutadapt demux-paired \
---i-seqs 4Apr2023_post_size/multiplexed-seqs.qza \
+--i-seqs 4Apr2023_post_size/multiplexed-seqs-firstbarcode.qza \
 --m-forward-barcodes-file barcodes.tsv \
 --m-forward-barcodes-column forwardindex \
 --m-reverse-barcodes-file barcodes.tsv \
 --m-reverse-barcodes-column reverseindex \
---o-per-sample-sequences 4Apr2023_post_size/demultiplexed-seqs.qza \
---o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs.qza
+--o-per-sample-sequences 4Apr2023_post_size/demultiplexed-seqs-firstbarcode.qza \
+--o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs-firstbarcode.qza
 ```
 
 Removing primers and discarding reads where no primer was found
