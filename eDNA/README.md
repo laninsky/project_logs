@@ -111,6 +111,15 @@ qiime cutadapt demux-paired \
 --m-reverse-barcodes-column reverseindex \
 --o-per-sample-sequences paired-end-sequences/demultiplexed-seqs.qza \
 --o-untrimmed-sequences paired-end-sequences/untrimmed-seqs.qza
+
+qiime cutadapt demux-paired \
+--i-seqs 4Apr2023_post_size/multiplexed-seqs.qza \
+--m-forward-barcodes-file barcodes.tsv \
+--m-forward-barcodes-column forwardindex \
+--m-reverse-barcodes-file barcodes.tsv \
+--m-reverse-barcodes-column reverseindex \
+--o-per-sample-sequences 4Apr2023_post_size/demultiplexed-seqs.qza \
+--o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs.qza
 ```
 
 Removing primers and discarding reads where no primer was found
