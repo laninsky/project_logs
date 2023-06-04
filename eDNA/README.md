@@ -37,6 +37,12 @@ BP_S_BD01       AACAAGCC        GAGCTTAC
 BP_S_HD_021     GGAATGAG        GAGCTTAC
 BP_N_HD_027     AACAAGCC        TTACCGCT
 TIM_HD_043      GGAATGAG        TTACCGCT
+
+sampleid        forwardindex    reverseindex    individualid
+BP_S_HD01A      AACAAGCC        GAGCTTAC        BP_S_HD01
+BP_S_HD01B      GGAATGAG        GAGCTTAC        BP_S_HD01
+BP_N_HD02A      TTACCAGG        GAGCTTAC        BP_N_HD02
+BP_N_HD03B      CTGACCTT        GAGCTTAC        BP_N_HD03
 ```
 
 File directory
@@ -77,7 +83,6 @@ qiime tools import \
   --input-path paired-end-sequences/fastq \
   --output-path paired-end-sequences/multiplexed-seqs.qza
   
- # Duplicates of samples with different barcode sequences, so separately processed
  qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path 4Apr2023_post_size/fastq \
