@@ -166,17 +166,17 @@ data_transposed %>% group_by(cetacean_data) %>% summarise(n())
 #1 NO               88
 #2 YES               8
 
-
-                      
-BP_N_HD_027 <- cbind(aggregate(x=data$BP_N_HD_027, by=list(data$species_id), FUN=sum),"BP_N_HD_027")
-BP_S_BD01 <- cbind(aggregate(x=data$BP_S_BD01, by=list(data$species_id), FUN=sum),"BP_S_BD01")
-BP_S_HD_021 <- cbind(aggregate(x=data$BP_S_HD_021, by=list(data$species_id), FUN=sum),"BP_S_HD_021")
-TIM_HD_043 <- cbind(aggregate(x=data$TIM_HD_043, by=list(data$species_id), FUN=sum),"TIM_HD_043")
-
-BP_N_HD_027[,2] <- BP_N_HD_027[,2]/sum(BP_N_HD_027[,2])
-BP_S_BD01[,2] <- BP_S_BD01[,2]/sum(BP_S_BD01[,2])
-BP_S_HD_021[,2] <- BP_S_HD_021[,2]/sum(BP_S_HD_021[,2])
-TIM_HD_043[,2] <- TIM_HD_043[,2]/sum(TIM_HD_043[,2])
+# Which samples?
+data_transposed %>% filter(cetacean_data=="YES") %>% select(sites)
+# 1 BP_AKH_HD_030B
+# 2 BP_AKH_HD014A 
+# 3 BP_AKH_HD015A 
+# 4 BP_N_HD_028B  
+# 5 BP_N_HD_029A  
+# 6 BP_N_HD11A    
+# 7 BP_S_HD_024B  
+# 8 BP_S_HD01D 
+# Interestingly no A and B - suggests perhaps our coverage isn't high enough                      
 
 names(BP_N_HD_027) <- c("species","read_count","sample")
 names(BP_S_BD01) <- c("species","read_count","sample")
