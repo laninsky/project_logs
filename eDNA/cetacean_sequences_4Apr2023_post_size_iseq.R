@@ -8,7 +8,7 @@ library(tidyverse)
 ## 2. SETTING THE DIRECTORY ##
 ##############################
 
-setwd("/Users/aleal62p/Dropbox (Otago University)/eDNA/qiime_output/narrow-single-end/")
+setwd("/Users/aleal62p/Dropbox (Otago University)/eDNA/4Apr2023_post_size/")
 
 #########################
 ## 3. READING IN FILES ##
@@ -28,6 +28,9 @@ names(data) <- col_names
 data <- as_tibble(cbind(seq_names[-1],data))
 # Adding a more informative name
 names(data)[1] <- "sequence_names"
+
+# WILL NEED CODE TO CONVERT EVERY SAMPLE TO NUMERIC
+
 # Convering to numeric
 data$BP_N_HD_027 <- as.numeric(data$BP_N_HD_027)
 data$BP_S_BD01 <- as.numeric(data$BP_S_BD01)
@@ -35,7 +38,7 @@ data$BP_S_HD_021 <- as.numeric(data$BP_S_HD_021)
 data$TIM_HD_043 <- as.numeric(data$TIM_HD_043)
 
 # Reading in sequences to get species ID
-references <- readLines("../cetacean_refseq_mitogenome.fasta")[grep(">",readLines("../cetacean_refseq_mitogenome.fasta"))]
+references <- readLines("../qiime_output/cetacean_refseq_mitogenome.fasta")[grep(">",readLines("../qiime_output/cetacean_refseq_mitogenome.fasta"))]
 reference_names <- str_sub(references,1,12)
 description <- sapply((strsplit(str_sub(references,14,1000),split = " ")), function(x) paste(x[1],x[2],sep=" "))
 references <- as_tibble(cbind(reference_names,description))
@@ -86,6 +89,8 @@ blast_results <- blast_results %>% mutate(`1_pident`=as.numeric(`1_pident`),
 
 # Very strong difference between cetacean and "junk" based on length. 
 blast_results %>% arrange(desc(`1_length`))
+
+# THE FOLLOWING WILL ALL NEED TO BE UPDATED #
 
 #Top 6 results seem to be cetacean based on this
 blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sseqid`)
