@@ -141,11 +141,26 @@ references %>% filter(reference_names %in% c(">NC_005276.1",">NC_006929.1")) # B
 ## 4. ASSIGNING SEQUENCES AS CETACEAN ##
 ########################################
 
+# Pulling out site names and feature names                      
+sample_names <- names(data)[-1]
+feature_names <- c(data[,1])$sequence_names
+
+# Tranposing the data and adding site/feature names back in                      
+data_transposed <- as_tibble(cbind(sample_names,t(data[,-1])))
+names(data_transposed) <- c("sites",feature_names)
+
+# Changing to as_numeric                      
+data_transposed[,-1] <- data_transposed[,-1] %>% mutate_if(is.character,as.numeric)
+
+                      
+                      
 data <- data %>% mutate(species_id=ifelse(sequence_names=="b9b4cc338ab6d82ecec7f071c6c86a99","Cephalorhynchus hectori",
                                           ifelse(sequence_names=="00d3eb5ff7626e23a0ec71b1d3047897","Cephalorhynchus hectori",
                                                  ifelse(sequence_names=="dd91af9ec9aa7d6e9ee6c5ddce2527b5","Cephalorhynchus hectori",
                                                         ifelse(sequence_names=="919ea08296903bdd02ec62c8947496b6","Cephalorhynchus hectori", "Not cetacean")))))
 
+
+                      
 BP_N_HD_027 <- cbind(aggregate(x=data$BP_N_HD_027, by=list(data$species_id), FUN=sum),"BP_N_HD_027")
 BP_S_BD01 <- cbind(aggregate(x=data$BP_S_BD01, by=list(data$species_id), FUN=sum),"BP_S_BD01")
 BP_S_HD_021 <- cbind(aggregate(x=data$BP_S_HD_021, by=list(data$species_id), FUN=sum),"BP_S_HD_021")
