@@ -82,65 +82,69 @@ blast_results <- blast_results %>% mutate(`1_pident`=as.numeric(`1_pident`),
                          `2_evalue`=as.numeric(`2_evalue`),
                          `2_bitscore`=as.numeric(`2_bitscore`))
 
-# Very strong difference between cetacean and "junk" based on length. 
+# Differences between cetacean and "junk" based on length. 
 blast_results %>% arrange(desc(`1_length`))
 
-# THE FOLLOWING WILL ALL NEED TO BE UPDATED #
-
-#Top 6 results seem to be cetacean based on this
+#Checking top 7 results, but suspect only top 5 are cetacean
 blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sseqid`)
 
-#seqname                           `1_sseqid`  `2_sseqid` 
-#<chr>                             <chr>       <chr>      
-#1 >a31e5fa2eeac02d42249625b69fe5c7f NC_012053.1 NC_012061.1
-#2 >3d9ff2222c918ac289b6597e534864e1 NC_012059.1 NC_012053.1
-#3 >c49b0051f3157b4bcb824c0778598f5e NC_012053.1 NC_012061.1
-#4 >5c75dbc6dd3f5a597d86193aa64d9918 NC_012059.1 NC_012053.1
-#5 >b9b4cc338ab6d82ecec7f071c6c86a99 NC_060610.1 NC_019577.1
-#6 >8a899ba27137c3e8d2e2d9d3b534eeba NC_012059.1 NC_012053.1
+# A tibble: 2,132 × 3
+#   seqname                           `1_sseqid`  `2_sseqid` 
+#   <chr>                             <chr>       <chr>      
+# 1 >b9b4cc338ab6d82ecec7f071c6c86a99 NC_060610.1 NC_019577.1
+# 2 >00d3eb5ff7626e23a0ec71b1d3047897 NC_060610.1 NC_019577.1
+# 3 >dd91af9ec9aa7d6e9ee6c5ddce2527b5 NC_060610.1 NC_020696.1
+# 4 >b384b5ab4f1e192b560b931ab1f7b131 NC_034236.1 NC_000845.1
+# 5 >919ea08296903bdd02ec62c8947496b6 NC_060610.1 NC_020696.1
+# 6 >e771ef3766302ac749199f5003f93d04 NC_005274.1 NC_000845.1
+# 7 >ccafaff50690f085397dca8e8feda43b NC_005276.1 NC_006929.1
 
 # These cetacean matches are...
-references %>% filter(reference_names %in% c(">NC_012053.1",">NC_012061.1")) # Delphinus capensis, Stenella coeruleoalba
-references %>% filter(reference_names %in% c(">NC_012059.1",">NC_012053.1")) # Tursiops truncatus, Stenella coeruleoalba
-references %>% filter(reference_names %in% c(">NC_012053.1",">NC_012061.1")) # Delphinus capensis, Stenella coeruleoalba
-references %>% filter(reference_names %in% c(">NC_012059.1",">NC_012053.1")) # Tursiops truncatus, Stenella coeruleoalba
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii
-references %>% filter(reference_names %in% c(">NC_012059.1",">NC_012053.1")) # Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii  
+references %>% filter(reference_names %in% c(">NC_034236.1",">NC_000845.1")) # Sus scrofa, Delphinapterus leucas
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii 
+references %>% filter(reference_names %in% c(">NC_005274.1",">NC_000845.1")) # Sus scrofa, Berardius bairdii 
+references %>% filter(reference_names %in% c(">NC_005276.1",">NC_006929.1")) # Balaenoptera borealis, Inia geoffrensis 
 
-#>a31e5fa2eeac02d42249625b69fe5c7f
-#CATAAACTATTCCTTGAAAAAGCTTATTGTACAGTTACCACAACACCACAGTACTACGTCAGTATTAAAAGTAATTTGTTTTAAAAACATTTTACTGTACACATTACATATACATACACATC
-# Web-blast search: Select seq JN944261.1	Tursiops truncatus haplotype 8Tt069hpl tRNA-Pro gene and control region, partial sequence; mitochondrial	Tursiops truncatus	224	224	99%	2e-54	100.00%	430	JN944261.1
-
-#>3d9ff2222c918ac289b6597e534864e1
-#CATAAACTATTCCTTGAAAAAAGCTTATTGTACAGTTACCACAACATCACAGTACTACGTCAGTATTAAAAGTAATTTGTTTTAAAAACATTTTACTGTACACATTACATATACATACACAT
-# Web-blast search: Tursiops truncatus gephyreus voucher SEFSC:MMMGL:41Tt216 tRNA-Pro gene, complete sequence; and control region, partial sequence; mitochondrial	Tursiops truncatus gephyreus	226	226	100%	6e-55	100.00%	489	MK105886.1
-
-#>c49b0051f3157b4bcb824c0778598f5e
-#CATAAACTATTCCTTGAAAAAGCTTATTGTACAGTTACCACAACACCACAGTACTACGTCAGTATTAAAAGTAATTTGTATTAAAAACATTTTACTGTACACATTACATATACATACACATC
-# Web-blast search: Tursiops truncatus haplotype 8Tt069hpl tRNA-Pro gene and control region, partial sequence; mitochondrial	Tursiops truncatus	219	219	99%	1e-52	99.17%	430	JN944261.1
-
-#>5c75dbc6dd3f5a597d86193aa64d9918
-#CATAAACTATTCCTTGAAAAAAGCTTATTGTACAGTTACCACAACATCACGGTACTACGTCAGTATTAAAAGTAATTTGTTTTAAAAACATTTTACTGTACACATTACATATACATACACAT
-# Web-blast search: Select seq MK105886.1	Tursiops truncatus gephyreus voucher SEFSC:MMMGL:41Tt216 tRNA-Pro gene, complete sequence; and control region, partial sequence; mitochondrial	Tursiops truncatus gephyreus	220	220	100%	3e-53	99.18%	489	MK105886.1
-
-#>b9b4cc338ab6d82ecec7f071c6c86a99
-#CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
+# >b9b4cc338ab6d82ecec7f071c6c86a99
+# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
 # Web-blast search: Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	200	200	90%	4e-47	99.10%	16374	NC_060610.1
 
-#>8a899ba27137c3e8d2e2d9d3b534eeba
-#CATCAGTATTAAAAGTAATTTGTTTTAAAAACATTTTACTGTACACATTACATATACATACACATGCGCATGCTAATATTTAGTCTCTCCTTGTAAATATTCATATATACATGCTATGTATT
-# Web-blast search: Tursiops truncatus haplotype OTtr63 tRNA-Pro gene and control region, partial sequence; mitochondrial	Tursiops truncatus	226	226	100%	6e-55	100.00%	488	JN944223.1
+# >00d3eb5ff7626e23a0ec71b1d3047897
+# CATAAACTATTCCTTGAAAAAAGCTTATTGTACAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
+# Web-blast search: Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	206	206	90%	9e-49	100.00%	16374	NC_060610.1
 
+# >dd91af9ec9aa7d6e9ee6c5ddce2527b5
+# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAT
+# Web-blast search: Select seq NC_060610.1	Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	200	200	90%	4e-47	99.10%	16374	NC_060610.1
+
+# >b384b5ab4f1e192b560b931ab1f7b131
+# TTCAAAATTATATATCAAAACTCGTTTTTCCCCCAACATTGTGTGTGCGCTCCATACGAACACTGTTCCAGAGATGTCCCGTGAAACCAGCAACCCGTTCACCTCAGATCGGAAGAGCGGTT
+# Web-blast search: NO SIGNIFICANT SIMILARITY FOUND [AKA NOT CETACEAN]
+
+# >919ea08296903bdd02ec62c8947496b6
+# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCCGTATTAATTGTCATTAATTTTACATATTACATAATATGTATGATCTTACATATTATACAT
+# Web-blast search: Select seq NC_060610.1	Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	122	122	68%	1e-23	92.86%	16374	NC_060610.1
+                                            
+# >e771ef3766302ac749199f5003f93d04
+# ACATTTGAATGACAAGTAATAACAAATGGCGTGAAACCAGCAACCCGTTGGAGCAAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTGAAAAAA
+# Web-blast search: [NOT CETACEAN] Select seq LN590717.1	Cyprinus carpio genome assembly common carp genome, scaffold: LG12, chromosome: 12	Cyprinus carpio	126	126	55%	8e-25	100.00%	12725232	LN590717.1
+
+# >ccafaff50690f085397dca8e8feda43b
+# ACTCCATCACGAGTCTTGGCCTCCACGGTTGTTGCGTGAAACCAGCAACCCGTTGGAGCAAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTGA
+# Web-blast search: [NOT CETACEAN] Cyprinus carpio genome assembly common carp genome, scaffold: LG12, chromosome: 12	Cyprinus carpio	117	117	51%	5e-22	100.00%	12725232	LN590717.1
+
+                      
 ########################################
 ## 4. ASSIGNING SEQUENCES AS CETACEAN ##
 ########################################
 
-data <- data %>% mutate(species_id=ifelse(sequence_names=="a31e5fa2eeac02d42249625b69fe5c7f","Tursiops truncatus",
-                                          ifelse(sequence_names=="3d9ff2222c918ac289b6597e534864e1","Tursiops truncatus",
-                                                 ifelse(sequence_names=="c49b0051f3157b4bcb824c0778598f5e","Tursiops truncatus",
-                                                        ifelse(sequence_names=="5c75dbc6dd3f5a597d86193aa64d9918","Tursiops truncatus",
-                                                               ifelse(sequence_names=="b9b4cc338ab6d82ecec7f071c6c86a99","Cephalorhynchus hectori",
-                                                                    ifelse(sequence_names=="dd91af9ec9aa7d6e9ee6c5ddce2527b5", "Tursiops truncatus", "Not cetacean")))))))
+data <- data %>% mutate(species_id=ifelse(sequence_names=="b9b4cc338ab6d82ecec7f071c6c86a99","Cephalorhynchus hectori",
+                                          ifelse(sequence_names=="00d3eb5ff7626e23a0ec71b1d3047897","Cephalorhynchus hectori",
+                                                 ifelse(sequence_names=="dd91af9ec9aa7d6e9ee6c5ddce2527b5","Cephalorhynchus hectori",
+                                                        ifelse(sequence_names=="919ea08296903bdd02ec62c8947496b6","Cephalorhynchus hectori", "Not cetacean")))))
 
 BP_N_HD_027 <- cbind(aggregate(x=data$BP_N_HD_027, by=list(data$species_id), FUN=sum),"BP_N_HD_027")
 BP_S_BD01 <- cbind(aggregate(x=data$BP_S_BD01, by=list(data$species_id), FUN=sum),"BP_S_BD01")
