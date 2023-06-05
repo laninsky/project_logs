@@ -151,6 +151,13 @@ qiime cutadapt trim-paired \
 --p-front-r ^CGGGTTGCTGGTTTCACG \
 --p-discard-untrimmed \
 --o-trimmed-sequences paired-end-sequences/demultiplexed-seqs-trimmed.qza
+
+qiime cutadapt trim-paired \
+--i-demultiplexed-sequences 4Apr2023_post_size/demultiplexed-seqs.qza \
+--p-front-f ^TCACCCAAAGCTGRARTTCTA \
+--p-front-r ^CGGGTTGCTGGTTTCACG \
+--p-discard-untrimmed \
+--o-trimmed-sequences 4Apr2023_post_size/demultiplexed-seqs-trimmed.qza
 ```
 
 First, we'll have a look at the quality of the data
