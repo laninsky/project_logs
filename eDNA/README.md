@@ -173,6 +173,10 @@ qiime demux summarize \
 qiime demux summarize \
   --i-data paired-end-sequences/demultiplexed-seqs-trimmed.qza  \
   --o-visualization paired-end-sequences/demux-summary.qzv
+  
+ qiime demux summarize \
+  --i-data 4Apr2023_post_size/demultiplexed-seqs-trimmed.qza  \
+  --o-visualization 4Apr2023_post_size/demux-summary.qzv
 ```
 
 This 'extracts' the visualisation so we can look at it
