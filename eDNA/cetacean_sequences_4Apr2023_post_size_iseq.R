@@ -178,6 +178,32 @@ data_transposed %>% filter(cetacean_data=="YES") %>% select(sites)
 # 8 BP_S_HD01D 
 # Interestingly no A and B - suggests perhaps our coverage isn't high enough                      
 
+# Verifying negatives/blanks have low coverage
+data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in% c("BLANK_03.17A","BLANK_03.17B","NegativeA","NegativeB","NegativeC","NegativeD","BP_E_CNTRL_02A","BP_E_CNTRL_02B",
+                                                                                   "BP_S_CTRL_01A","BP_S_CTRL_01B","TIM_CNTRL_01A","TIM_CNTRL_01B"),"YES","NO"))
+
+# Some have pretty high coverage, however none have dolphin DNA
+ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
+
+
+data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_count)
+## A tibble: 12 × 2
+#   sites          total_read_count
+#   <chr>                     <dbl>
+# 1 BLANK_03.17A                  1
+# 2 BLANK_03.17B                  6
+# 3 BP_E_CNTRL_02A             1480
+# 4 BP_E_CNTRL_02B             3694
+# 5 BP_S_CTRL_01A              1532
+# 6 BP_S_CTRL_01B              2777
+# 7 NegativeA                   154
+# 8 NegativeB                   290
+# 9 NegativeC                   751
+#10 NegativeD                    53
+#11 TIM_CNTRL_01A              2423
+#12 TIM_CNTRL_01B              1861
+
+                      
 names(BP_N_HD_027) <- c("species","read_count","sample")
 names(BP_S_BD01) <- c("species","read_count","sample")
 names(BP_S_HD_021) <- c("species","read_count","sample")
