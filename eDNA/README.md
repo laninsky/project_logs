@@ -649,6 +649,13 @@ paired-end-sequences/
       |--metadata.tsv
    |--representative-sequences
       |--sequences.fasta
+4Apr2023_post_size/
+   |--blast_results.txt
+   |--tabulate-feature
+      |--metadata.tsv
+   |--representative-sequences
+      |--sequences.fasta
+
 ```
 
 I then used the R-code in this folder to look at the proportion of reads assigned as cetacean instead of other gunk. Using the sequence identfiers, the cetacean sequences could be extracted and manually blasted through the Web to more accurately assign them to species (instead of the limited mitogenome dataset we utilised).
