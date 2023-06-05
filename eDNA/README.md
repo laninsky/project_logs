@@ -236,6 +236,14 @@ qiime dada2 denoise-paired \
 --o-table paired-end-sequences/feature-data.qza \
 --o-representative-sequences paired-end-sequences/representative-sequences.qza \
 --o-denoising-stats paired-end-sequences/denoising-stats.qza
+
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs 4Apr2023_post_size/demultiplexed-seqs-trimmed.qza \
+--p-trunc-len-f 0 \
+--p-trunc-len-r 0 \
+--o-table 4Apr2023_post_size/feature-data.qza \
+--o-representative-sequences 4Apr2023_post_size/representative-sequences.qza \
+--o-denoising-stats 4Apr2023_post_size/denoising-stats.qza
 ```
 
 Summarizing the feaure table data
