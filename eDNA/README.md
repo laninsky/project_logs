@@ -192,6 +192,10 @@ qiime tools export \
 qiime tools export \
   --input-path paired-end-sequences/demux-summary.qzv \
   --output-path paired-end-sequences/demux-summary-figures
+  
+qiime tools export \
+ --input-path 4Apr2023_post_size/demux-summary.qzv \
+ --output-path 4Apr2023_post_size/demux-summary-figures
 ```
 
 We then download it to our computer so we can look at the outputs (remember scp commands have to run from your computer i.e. push/pull from there - need to have the broad-single-end, narrow-single-end and  paired-end-sequences folders set up before downloading
