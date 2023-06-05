@@ -152,6 +152,9 @@ names(data_transposed) <- c("sites",feature_names)
 # Changing to as_numeric                      
 data_transposed[,-1] <- data_transposed[,-1] %>% mutate_if(is.character,as.numeric)
 
+# Adding column for total read count, cetacean read count, non-cetacean read count
+data_transposed <- data_transposed %>% mutate(total_read_count = rowSums(across(where(is.numeric))))
+
                       
                       
 data <- data %>% mutate(species_id=ifelse(sequence_names=="b9b4cc338ab6d82ecec7f071c6c86a99","Cephalorhynchus hectori",
