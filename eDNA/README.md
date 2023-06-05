@@ -207,6 +207,8 @@ We then download it to our computer so we can look at the outputs (remember scp 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/demux-summary-figures ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/demux-summary-figures ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/demux-summary-figures ./paired-end-sequences
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/demux-summary-figures ./4Apr2023_post_size
+
 ```
 
 After checking them out we keep going on our analyses
