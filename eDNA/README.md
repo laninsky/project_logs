@@ -308,7 +308,11 @@ qiime feature-table tabulate-seqs \
   
 qiime feature-table tabulate-seqs \
   --i-data paired-end-sequences/representative-sequences.qza \
-  --o-visualization paired-end-sequences/representative-sequences.qzv  
+  --o-visualization paired-end-sequences/representative-sequences.qzv
+
+qiime feature-table tabulate-seqs \
+  --i-data 4Apr2023_post_size/representative-sequences.qza \
+  --o-visualization 4Apr2023_post_size/representative-sequences.qzv
 ```
 
 This gives us the fasta sequences
@@ -324,6 +328,10 @@ qiime tools export \
 qiime tools export \
   --input-path paired-end-sequences/representative-sequences.qzv \
   --output-path paired-end-sequences/representative-sequences
+
+qiime tools export \
+  --input-path 4Apr2023_post_size/representative-sequences.qzv \
+  --output-path 4Apr2023_post_size/representative-sequences
 ```
 
 We then download it to our computer so we can look at the outputs
@@ -331,6 +339,7 @@ We then download it to our computer so we can look at the outputs
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/representative-sequences ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-sequences ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/representative-sequences ./4Apr2023_post_size
 ```
 
 To get the counts of each ASV per sample, need to tabulate the feature 
@@ -364,6 +373,16 @@ qiime tools export \
   --output-path paired-end-sequences/tabulate-feature
 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/tabulate-feature ./paired-end-sequences
+
+qiime metadata tabulate \
+  --m-input-file 4Apr2023_post_size/feature-data.qza  \
+  --o-visualization 4Apr2023_post_size/tabulate-feature.qzv
+  
+qiime tools export \
+  --input-path 4Apr2023_post_size/tabulate-feature.qzv \
+  --output-path 4Apr2023_post_size/tabulate-feature
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/tabulate-feature ./4Apr2023_post_size
 ```
 
 Final step within qiime is to get some QC on the whole process
@@ -379,6 +398,10 @@ qiime metadata tabulate \
 qiime metadata tabulate \
   --m-input-file paired-end-sequences/denoising-stats.qza \
   --o-visualization paired-end-sequences/denoising-stats.qzv
+  
+qiime metadata tabulate \
+  --m-input-file 4Apr2023_post_size/denoising-stats.qza \
+  --o-visualization 4Apr2023_post_size/denoising-stats.qzv
 
 qiime tools export \
   --input-path broad-single-end/denoising-stats.qzv \
@@ -392,6 +415,10 @@ qiime tools export \
   --input-path paired-end-sequences/denoising-stats.qzv \
   --output-path paired-end-sequences/denoising-stats
 
+qiime tools export \
+  --input-path 4Apr2023_post_size/denoising-stats.qzv \
+  --output-path 4Apr2023_post_size/denoising-stats
+
 ```
 
 And then, you guessed it, downloading these outputs
@@ -399,6 +426,7 @@ And then, you guessed it, downloading these outputs
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/denoising-stats ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/denoising-stats ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/denoising-stats ./paired-end-sequences
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/denoising-stats ./4Apr2023_post_size
 ```
 
 Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/mouse. Downloaded all complete cetacean refseq mitogeomes from NCBI, and added to this the refseq for humans, pigs, cows, and mice. Uploaded these to mahuika and indexed them (only need to do this the first time)
@@ -452,6 +480,21 @@ for i in `seq 1 2 $no_lines`;
 done 
 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/blast_results.txt paired-end-sequences/blast_results.txt
+
+
+no_lines=`wc -l 4Apr2023_post_size/representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i 4Apr2023_post_size/representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j 4Apr2023_post_size/representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 4Apr2023_post_size/blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/blast_results.txt 4Apr2023_post_size/blast_results.txt
 
 ```
 Next step, pull into R and compare proportion of cetacean reads between different runs across the different samples and in total
