@@ -27,7 +27,7 @@ mv Undetermined_S0_L001_R2_001.fastq.gz fastq/reverse.fastq.gz
 # are sequenced in a way the reads overlap (e.g. for our frag, miseq 
 # PE 250 is needed), so this is the initial pipeline followed for QCing
 # the reads. fastq for each run is in its own parent folder 
-# e.g. broad-single-end  narrow-single-end  paired-end-sequences
+# e.g. broad-single-end  narrow-single-end  paired-end-sequences 4Apr2023_post_size
 ```
 
 Getting a barcodes file together (barcodes.tsv)
@@ -38,12 +38,12 @@ BP_S_HD_021     GGAATGAG        GAGCTTAC
 BP_N_HD_027     AACAAGCC        TTACCGCT
 TIM_HD_043      GGAATGAG        TTACCGCT
 
-# When duplicate samples are present with different indices
-sampleid        forwardindex    reverseindex    individualid
-BP_S_HD01A      AACAAGCC        GAGCTTAC        BP_S_HD01
-BP_S_HD01B      GGAATGAG        GAGCTTAC        BP_S_HD01
-BP_N_HD02A      TTACCAGG        GAGCTTAC        BP_N_HD02
-BP_N_HD03B      CTGACCTT        GAGCTTAC        BP_N_HD03
+# When duplicate samples are present with different indices give unique suffix to sampleid
+sampleid        forwardindex    reverseindex
+BP_S_HD01A      AACAAGCC        GAGCTTAC
+BP_S_HD01B      GGAATGAG        GAGCTTAC
+BP_N_HD02A      TTACCAGG        GAGCTTAC
+BP_N_HD03B      CTGACCTT        GAGCTTAC
 ```
 
 File directory
