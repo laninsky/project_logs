@@ -212,4 +212,4 @@ dolphin_only <- data_transposed %>% filter(cetacean_data=="YES") %>%
 ggplot(dolphin_only, aes(x=sites,y=read_count,fill=species)) +
   geom_bar(stat="identity")
 
-
+# Looks like the overrepresentation of the non-target sequence has still occured in this run. Will double cbeck by searching for the "trouble child" from last time
