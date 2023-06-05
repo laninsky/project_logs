@@ -659,3 +659,21 @@ paired-end-sequences/
 ```
 
 I then used the R-code in this folder to look at the proportion of reads assigned as cetacean instead of other gunk. Using the sequence identfiers, the cetacean sequences could be extracted and manually blasted through the Web to more accurately assign them to species (instead of the limited mitogenome dataset we utilised).
+
+### Seeing if planktonic samples have been eliminated by size selection
+```
+makeblastdb -in planktonic_contam.fasta -dbtype nucl
+
+no_lines=`wc -l 4Apr2023_post_size/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i 4Apr2023_post_size/single-end-representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j 4Apr2023_post_size/single-end-representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db planktonic_contam.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 4Apr2023_post_size/single-end-plankton_blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+```
+Then this is downloaded and analysed through `plankdon_sequences_4Apr2023_post_size_iseq.R`
