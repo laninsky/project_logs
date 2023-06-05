@@ -261,7 +261,12 @@ qiime feature-table summarize \
 qiime feature-table summarize \
   --i-table paired-end-sequences/feature-data.qza \
   --o-visualization paired-end-sequences/feature-data-vis.qzv \
-  --m-sample-metadata-file barcodes.tsv   
+  --m-sample-metadata-file barcodes.tsv
+
+qiime feature-table summarize \
+  --i-table 4Apr2023_post_sizefeature-data.qza \
+  --o-visualization 4Apr2023_post_size/feature-data-vis.qzv \
+  --m-sample-metadata-file barcodes.tsv  
 ```
 
 Exporting all of this to have a look
