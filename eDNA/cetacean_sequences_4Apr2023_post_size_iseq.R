@@ -29,13 +29,8 @@ data <- as_tibble(cbind(seq_names[-1],data))
 # Adding a more informative name
 names(data)[1] <- "sequence_names"
 
-# WILL NEED CODE TO CONVERT EVERY SAMPLE TO NUMERIC
-
 # Convering to numeric
-data$BP_N_HD_027 <- as.numeric(data$BP_N_HD_027)
-data$BP_S_BD01 <- as.numeric(data$BP_S_BD01)
-data$BP_S_HD_021 <- as.numeric(data$BP_S_HD_021)
-data$TIM_HD_043 <- as.numeric(data$TIM_HD_043)
+data[,-1] <- data[,-1] %>% mutate_if(is.character,as.numeric)
 
 # Reading in sequences to get species ID
 references <- readLines("../qiime_output/cetacean_refseq_mitogenome.fasta")[grep(">",readLines("../qiime_output/cetacean_refseq_mitogenome.fasta"))]
