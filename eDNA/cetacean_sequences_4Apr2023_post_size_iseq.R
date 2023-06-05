@@ -185,7 +185,7 @@ data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in%
 # Some have pretty high coverage, however none have dolphin DNA
 ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
 
-
+# The controls have high read counts, but given these are likely plankton without dolphin, that makes sense!
 data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_count)
 ## A tibble: 12 × 2
 #   sites          total_read_count
@@ -203,13 +203,13 @@ data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_co
 #11 TIM_CNTRL_01A              2423
 #12 TIM_CNTRL_01B              1861
 
-                      
-names(BP_N_HD_027) <- c("species","read_count","sample")
-names(BP_S_BD01) <- c("species","read_count","sample")
-names(BP_S_HD_021) <- c("species","read_count","sample")
-names(TIM_HD_043) <- c("species","read_count","sample")
+# Plotting just the samples with dolphin
+dolphin_only <- data_transposed %>% filter(cetacean_data=="YES") %>% 
+                      mutate(cetacean_read_count=cetacean_read_count/total_read_count,notcetacean_read_count=notcetacean_read_count/total_read_count) %>% 
+                      select(sites,cetacean_read_count,notcetacean_read_count) %>% 
+                      pivot_longer(!sites,names_to="species",values_to="read_count")
 
-summarised_counts <- rbind(BP_N_HD_027,BP_S_BD01,BP_S_HD_021,TIM_HD_043)
-
-ggplot(summarised_counts, aes(x=sample,y=read_count,fill=species)) +
+ggplot(dolphin_only, aes(x=sites,y=read_count,fill=species)) +
   geom_bar(stat="identity")
+
+
