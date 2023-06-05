@@ -33,7 +33,7 @@ names(data)[1] <- "sequence_names"
 data[,-1] <- data[,-1] %>% mutate_if(is.character,as.numeric)
 
 # Reading in sequences to get species ID
-references <- readLines("../qiime_output/cetacean_refseq_mitogenome.fasta")[grep(">",readLines("../qiime_output/cetacean_refseq_mitogenome.fasta"))]
+references <- readLines("../planktonic_contam.fasta")[grep(">",readLines("../planktonic_contam.fasta"))]
 reference_names <- str_sub(references,1,12)
 description <- sapply((strsplit(str_sub(references,14,1000),split = " ")), function(x) paste(x[1],x[2],sep=" "))
 references <- as_tibble(cbind(reference_names,description))
