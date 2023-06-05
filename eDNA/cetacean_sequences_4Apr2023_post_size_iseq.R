@@ -158,6 +158,14 @@ data_transposed <- data_transposed %>% mutate(cetacean_read_count = `b9b4cc338ab
 data_transposed <- data_transposed %>% mutate(notcetacean_read_count = total_read_count-cetacean_read_count)
 data_transposed <- data_transposed %>% mutate(cetacean_data = ifelse(cetacean_read_count>0, "YES", "NO"))
 
+# How many samples have cetacean DNA?
+data_transposed %>% group_by(cetacean_data) %>% summarise(n())
+## A tibble: 2 × 2
+#  cetacean_data `n()`
+#  <chr>         <int>
+#1 NO               88
+#2 YES               8
+
 
                       
 BP_N_HD_027 <- cbind(aggregate(x=data$BP_N_HD_027, by=list(data$species_id), FUN=sum),"BP_N_HD_027")
