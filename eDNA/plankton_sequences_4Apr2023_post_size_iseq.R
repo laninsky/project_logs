@@ -97,47 +97,9 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 # 6 >e771ef3766302ac749199f5003f93d04 NC_005274.1 NC_000845.1
 # 7 >ccafaff50690f085397dca8e8feda43b NC_005276.1 NC_006929.1
 
-# These cetacean matches are...
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii  
-references %>% filter(reference_names %in% c(">NC_034236.1",">NC_000845.1")) # Sus scrofa, Delphinapterus leucas
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii 
-references %>% filter(reference_names %in% c(">NC_005274.1",">NC_000845.1")) # Sus scrofa, Berardius bairdii 
-references %>% filter(reference_names %in% c(">NC_005276.1",">NC_006929.1")) # Balaenoptera borealis, Inia geoffrensis 
-
-# >b9b4cc338ab6d82ecec7f071c6c86a99
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
-# Web-blast search: Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	200	200	90%	4e-47	99.10%	16374	NC_060610.1
-
-# >00d3eb5ff7626e23a0ec71b1d3047897
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTACAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
-# Web-blast search: Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	206	206	90%	9e-49	100.00%	16374	NC_060610.1
-
-# >dd91af9ec9aa7d6e9ee6c5ddce2527b5
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAT
-# Web-blast search: Select seq NC_060610.1	Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	200	200	90%	4e-47	99.10%	16374	NC_060610.1
-
-# >b384b5ab4f1e192b560b931ab1f7b131
-# TTCAAAATTATATATCAAAACTCGTTTTTCCCCCAACATTGTGTGTGCGCTCCATACGAACACTGTTCCAGAGATGTCCCGTGAAACCAGCAACCCGTTCACCTCAGATCGGAAGAGCGGTT
-# Web-blast search: NO SIGNIFICANT SIMILARITY FOUND [AKA NOT CETACEAN]
-
-# >919ea08296903bdd02ec62c8947496b6
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCCGTATTAATTGTCATTAATTTTACATATTACATAATATGTATGATCTTACATATTATACAT
-# Web-blast search: Select seq NC_060610.1	Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	122	122	68%	1e-23	92.86%	16374	NC_060610.1
-                                            
-# >e771ef3766302ac749199f5003f93d04
-# ACATTTGAATGACAAGTAATAACAAATGGCGTGAAACCAGCAACCCGTTGGAGCAAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTGAAAAAA
-# Web-blast search: [NOT CETACEAN] Select seq LN590717.1	Cyprinus carpio genome assembly common carp genome, scaffold: LG12, chromosome: 12	Cyprinus carpio	126	126	55%	8e-25	100.00%	12725232	LN590717.1
-
-# >ccafaff50690f085397dca8e8feda43b
-# ACTCCATCACGAGTCTTGGCCTCCACGGTTGTTGCGTGAAACCAGCAACCCGTTGGAGCAAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTGA
-# Web-blast search: [NOT CETACEAN] Cyprinus carpio genome assembly common carp genome, scaffold: LG12, chromosome: 12	Cyprinus carpio	117	117	51%	5e-22	100.00%	12725232	LN590717.1
-
-                      
-########################################
-## 4. ASSIGNING SEQUENCES AS CETACEAN ##
-########################################
+################################################
+## 4. ASSIGNING SEQUENCES AS PROBLEM PLANKTON ##
+################################################
 
 # Pulling out site names and feature names                      
 sample_names <- names(data)[-1]
