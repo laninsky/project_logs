@@ -517,6 +517,13 @@ qiime dada2 denoise-single \
 --o-representative-sequences narrow-single-end/single-end-representative-sequences.qza \
 --o-denoising-stats narrow-single-end/single-end-denoising-stats.qza
 
+qiime dada2 denoise-single \
+--i-demultiplexed-seqs 4Apr2023_post_size/demultiplexed-seqs-trimmed.qza \
+--p-trunc-len 0 \
+--o-table 4Apr2023_post_size/single-end-feature-data.qza \
+--o-representative-sequences 4Apr2023_post_size/single-end-representative-sequences.qza \
+--o-denoising-stats 4Apr2023_post_size/single-end-denoising-stats.qza
+
 qiime feature-table tabulate-seqs \
   --i-data broad-single-end/single-end-representative-sequences.qza \
   --o-visualization broad-single-end/single-end-representative-sequences.qzv
@@ -525,16 +532,25 @@ qiime feature-table tabulate-seqs \
   --i-data narrow-single-end/single-end-representative-sequences.qza \
   --o-visualization narrow-single-end/single-end-representative-sequences.qzv  
 
+qiime feature-table tabulate-seqs \
+  --i-data 4Apr2023_post_size/single-end-representative-sequences.qza \
+  --o-visualization 4Apr2023_post_size/single-end-representative-sequences.qzv  
+
 qiime tools export \
   --input-path broad-single-end/single-end-representative-sequences.qzv \
   --output-path broad-single-end/single-end-representative-sequences
 
 qiime tools export \
   --input-path narrow-single-end/single-end-representative-sequences.qzv \
-  --output-path narrow-single-end/single-end-representative-sequencesv
+  --output-path narrow-single-end/single-end-representative-sequences
+  
+qiime tools export \
+  --input-path 4Apr2023_post_size/single-end-representative-sequences.qzv \
+  --output-path 4Apr2023_post_size/single-end-representative-sequences
 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/single-end-representative-sequences ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-representative-sequences ./narrow-single-end
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/single-end-representative-sequences ./4Apr2023_post_size
 
 qiime metadata tabulate \
   --m-input-file broad-single-end/single-end-feature-data.qza  \
@@ -543,7 +559,7 @@ qiime metadata tabulate \
 qiime tools export \
   --input-path broad-single-end/single-end-tabulate-feature.qzv \
   --output-path broad-single-end/single-end-tabulate-feature
-
+  
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/single-end-tabulate-feature ./broad-single-end
   
 qiime metadata tabulate \
@@ -555,6 +571,16 @@ qiime tools export \
   --output-path narrow-single-end/single-end-tabulate-feature  
   
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-tabulate-feature ./narrow-single-end
+
+qiime metadata tabulate \
+  --m-input-file 4Apr2023_post_size/single-end-feature-data.qza  \
+  --o-visualization 4Apr2023_post_size/single-end-tabulate-feature.qzv
+
+qiime tools export \
+  --input-path 4Apr2023_post_size/single-end-tabulate-feature.qzv \
+  --output-path 4Apr2023_post_size/single-end-tabulate-feature  
+  
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/single-end-tabulate-feature ./4Apr2023_post_size
 
 no_lines=`wc -l broad-single-end/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
 
@@ -585,6 +611,20 @@ done
 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-blast_results.txt narrow-single-end/single-end-blast_results.txt
 
+
+no_lines=`wc -l 4Apr2023_post_size/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i 4Apr2023_post_size/single-end-representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j 4Apr2023_post_size/single-end-representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 4Apr2023_post_size/single-end-blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/single-end-blast_results.txt 4Apr2023_post_size/single-end-blast_results.txt
 
 ```
 
