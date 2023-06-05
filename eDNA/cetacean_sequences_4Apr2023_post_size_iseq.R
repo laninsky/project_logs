@@ -156,6 +156,8 @@ data_transposed[,-1] <- data_transposed[,-1] %>% mutate_if(is.character,as.numer
 data_transposed <- data_transposed %>% mutate(total_read_count = rowSums(across(where(is.numeric))))
 data_transposed <- data_transposed %>% mutate(cetacean_read_count = `b9b4cc338ab6d82ecec7f071c6c86a99`+`00d3eb5ff7626e23a0ec71b1d3047897`+`dd91af9ec9aa7d6e9ee6c5ddce2527b5`+`919ea08296903bdd02ec62c8947496b6`)
 data_transposed <- data_transposed %>% mutate(notcetacean_read_count = total_read_count-cetacean_read_count)
+data_transposed <- data_transposed %>% mutate(cetacean_data = ifelse(cetacean_read_count>0, "YES", "NO"))
+
 
                       
 BP_N_HD_027 <- cbind(aggregate(x=data$BP_N_HD_027, by=list(data$species_id), FUN=sum),"BP_N_HD_027")
