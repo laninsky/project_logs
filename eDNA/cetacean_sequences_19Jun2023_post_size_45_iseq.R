@@ -113,14 +113,6 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 #20 >98c6ff9abcb46484595276c5d6a3672f NC_019591.1 NC_020696.1
 
 # These cetacean matches are...
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii  
-references %>% filter(reference_names %in% c(">NC_034236.1",">NC_000845.1")) # Sus scrofa, Delphinapterus leucas
-references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii 
-references %>% filter(reference_names %in% c(">NC_005274.1",">NC_000845.1")) # Sus scrofa, Berardius bairdii 
-references %>% filter(reference_names %in% c(">NC_005276.1",">NC_006929.1")) # Balaenoptera borealis, Inia geoffrensis 
-
 references %>% filter(reference_names %in% c(">NC_019441.1",">NC_019590.1")) # Orcaella brevirostris, Globicephala melas 
 references %>% filter(reference_names %in% c(">NC_019441.1",">NC_019590.1")) # Orcaella brevirostris, Globicephala melas 
 references %>% filter(reference_names %in% c(">NC_060612.1",">NC_012061.1")) # Stenella frontalis, Delphinus capensis
@@ -142,34 +134,26 @@ references %>% filter(reference_names %in% c(">NC_034236.1",">NC_000845.1")) # S
 references %>% filter(reference_names %in% c(">NC_006853.1",">NC_019441.1")) # Bos taurus, Globicephala melas
 references %>% filter(reference_names %in% c(">NC_019591.1",">NC_020696.1")) # Cephalorhynchus heavisidii, Orcaella heinsohni 
 
-# >b9b4cc338ab6d82ecec7f071c6c86a99
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
-# Web-blast search: Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	200	200	90%	4e-47	99.10%	16374	NC_060610.1
-
-# >00d3eb5ff7626e23a0ec71b1d3047897
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTACAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
-# Web-blast search: Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	206	206	90%	9e-49	100.00%	16374	NC_060610.1
-
-# >dd91af9ec9aa7d6e9ee6c5ddce2527b5
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAT
-# Web-blast search: Select seq NC_060610.1	Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	200	200	90%	4e-47	99.10%	16374	NC_060610.1
-
-# >b384b5ab4f1e192b560b931ab1f7b131
-# TTCAAAATTATATATCAAAACTCGTTTTTCCCCCAACATTGTGTGTGCGCTCCATACGAACACTGTTCCAGAGATGTCCCGTGAAACCAGCAACCCGTTCACCTCAGATCGGAAGAGCGGTT
-# Web-blast search: NO SIGNIFICANT SIMILARITY FOUND [AKA NOT CETACEAN]
-
-# >919ea08296903bdd02ec62c8947496b6
-# CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCCGTATTAATTGTCATTAATTTTACATATTACATAATATGTATGATCTTACATATTATACAT
-# Web-blast search: Select seq NC_060610.1	Cephalorhynchus commersonii isolate SRR12437578 mitochondrion, complete genome	Cephalorhynchus commersonii	122	122	68%	1e-23	92.86%	16374	NC_060610.1
-                                            
-# >e771ef3766302ac749199f5003f93d04
-# ACATTTGAATGACAAGTAATAACAAATGGCGTGAAACCAGCAACCCGTTGGAGCAAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTGAAAAAA
-# Web-blast search: [NOT CETACEAN] Select seq LN590717.1	Cyprinus carpio genome assembly common carp genome, scaffold: LG12, chromosome: 12	Cyprinus carpio	126	126	55%	8e-25	100.00%	12725232	LN590717.1
-
-# >ccafaff50690f085397dca8e8feda43b
-# ACTCCATCACGAGTCTTGGCCTCCACGGTTGTTGCGTGAAACCAGCAACCCGTTGGAGCAAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATCTCGTATGCCGTCTTCTGCTTGA
-# Web-blast search: [NOT CETACEAN] Cyprinus carpio genome assembly common carp genome, scaffold: LG12, chromosome: 12	Cyprinus carpio	117	117	51%	5e-22	100.00%	12725232	LN590717.1
-
+>c56aeaa2e20146e2b600719a8636b8ca
+>6fb709e98fed8e24c76527b3543266a5
+>dc2362156d12f6395f1cac37a46394c4
+>b9b4cc338ab6d82ecec7f071c6c86a99
+>00d3eb5ff7626e23a0ec71b1d3047897
+>a9efc975a214150079b7a53dddc66341
+>2af1040b6f0ab4aa22a5c5bed20b4a5e
+>7cd3f01672548ce22287163eae26764a
+>64e01782c07ab080afcbd732aec0ea6f
+>3eeab7673e92d88a4db910bf24ba0b18
+>b3b59906612af3bd9bbb17ab1f6e3eff
+>d3b6c31a9253146da682e1562425081c
+>0f8f54b8998d0491a2d8bbddd3cc8593
+>1802c9d7430c86b30ea549cf6db935a5
+>096d8c95e394208836d5d1644d94436a
+>a6b5c8e92f36ebf590a9be762f5f7734
+>a92428e781bce1d985ffda1e0b33420f
+>b384b5ab4f1e192b560b931ab1f7b131
+>4e23ccc8fe9ff89db8896f0f0a8bb7e2
+>98c6ff9abcb46484595276c5d6a3672f
                       
 ########################################
 ## 4. ASSIGNING SEQUENCES AS CETACEAN ##
