@@ -294,14 +294,16 @@ data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in%
 # Some have pretty high coverage, and one appears to have dolphin DNA
 ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
 
-# Looking at who has dolphin                      
-data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES") %>% select(sites)
-## A tibble: 3 × 1
-#  sites         
-#  <chr>         
-#1 BP_E_CNTRL_02A
-#2 BP_E_CNTRL_02B
-#3 TIM_CNTRL_01A 
+# Looking at who has dolphin (didn't bother showing the columns with no counts)                     
+data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES") %>% select(sites,`b9b4cc338ab6d82ecec7f071c6c86a99`,`d3b6c31a9253146da682e1562425081c`)
+## A tibble: 3 × 3
+#  sites          b9b4cc338ab6d82ecec7f071c6c86a99 d3b6c31a9253146da682e156…¹
+#  <chr>                                     <dbl>                      <dbl>
+#1 BP_E_CNTRL_02A                                3                          0
+#2 BP_E_CNTRL_02B                                0                         12
+#3 TIM_CNTRL_01A                                52                          0
+## … with abbreviated variable name ¹​d3b6c31a9253146da682e1562425081c
+# Both sequences are likely Hector's 
 
 # To compare control coverage to previous size selection
 data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_count)
@@ -324,10 +326,12 @@ data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_co
 # Plotting just the samples with dolphin
 dolphin_only <- data_transposed %>% filter(cetacean_data=="YES") %>% 
                       mutate(cetacean_read_count=cetacean_read_count/total_read_count,notcetacean_read_count=notcetacean_read_count/total_read_count) %>% 
-                      select(sites,cetacean_read_count,notcetacean_read_count) %>% 
+                      select(sites,cetacean_read_count,notcetacean_read_count,total_read_count) %>% 
                       pivot_longer(!sites,names_to="species",values_to="read_count")
 
 ggplot(dolphin_only, aes(x=sites,y=read_count,fill=species)) +
   geom_bar(stat="identity")
 
-# Looks like the overrepresentation of the non-target sequence has still occured in this run. Will double cbeck by searching for the "trouble child" from last time
+# Based both on the increased number of sites with cetacean sequences and the increase % mapping as cetacean, things look a lot better!
+dolphin_only_pivot_wider <- dolphin_only %>% pivot_wider(names_from = species, values_from = read_count)
+ggplot(dolphin_only) + geom_point(mapping=aes(x=total_count,y=cetacean_read_count)
