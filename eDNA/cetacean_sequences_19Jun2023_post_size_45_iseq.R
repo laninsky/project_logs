@@ -333,5 +333,7 @@ ggplot(dolphin_only, aes(x=sites,y=read_count,fill=species)) +
   geom_bar(stat="identity")
 
 # Based both on the increased number of sites with cetacean sequences and the increase % mapping as cetacean, things look a lot better!
+
 dolphin_only_pivot_wider <- dolphin_only %>% pivot_wider(names_from = species, values_from = read_count)
-ggplot(dolphin_only) + geom_point(mapping=aes(x=total_count,y=cetacean_read_count)
+ggplot(dolphin_only_pivot_wider) + geom_point(mapping=aes(x=total_read_count,y=cetacean_read_count))
+# Mild relationship between read depth and amount of cetacean
