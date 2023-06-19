@@ -65,7 +65,7 @@ paired-end-sequences/
    |--fastq/
       |--forward.fastq.gz
       |--reverse.fastq.gz
-19Jun2023_post_size_45
+19Jun2023_post_size_45 # Had to edit forward.fastq.gz because one sample had broken across line for title line
    |--fastq/
       |--forward.fastq.gz
       |--reverse.fastq.gz
@@ -145,7 +145,7 @@ qiime cutadapt demux-paired \
 --m-reverse-barcodes-file barcodes.tsv \
 --m-reverse-barcodes-column reverseindex \
 --o-per-sample-sequences 19Jun2023_post_size_45/demultiplexed-seqs.qza \
---o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs.qza
+--o-untrimmed-sequences 19Jun2023_post_size_45/untrimmed-seqs.qza
 
 ```
 
@@ -178,6 +178,14 @@ qiime cutadapt trim-paired \
 --p-front-r ^CGGGTTGCTGGTTTCACG \
 --p-discard-untrimmed \
 --o-trimmed-sequences 4Apr2023_post_size/demultiplexed-seqs-trimmed.qza
+
+qiime cutadapt trim-paired \
+--i-demultiplexed-sequences 19Jun2023_post_size_45/demultiplexed-seqs.qza \
+--p-front-f ^TCACCCAAAGCTGRARTTCTA \
+--p-front-r ^CGGGTTGCTGGTTTCACG \
+--p-discard-untrimmed \
+--o-trimmed-sequences 19Jun2023_post_size_45/demultiplexed-seqs-trimmed.qza
+
 ```
 
 First, we'll have a look at the quality of the data
@@ -201,6 +209,10 @@ qiime demux summarize \
 qiime demux summarize \
  --i-data 4Apr2023_post_size/demultiplexed-seqs-trimmed.qza  \
  --o-visualization 4Apr2023_post_size/demux-summary.qzv
+
+qiime demux summarize \
+ --i-data 19Jun2023_post_size_45/demultiplexed-seqs-trimmed.qza  \
+ --o-visualization 19Jun2023_post_size_45/demux-summary.qzv
 ```
 
 This 'extracts' the visualisation so we can look at it
@@ -220,6 +232,11 @@ qiime tools export \
 qiime tools export \
  --input-path 4Apr2023_post_size/demux-summary.qzv \
  --output-path 4Apr2023_post_size/demux-summary-figures
+
+qiime tools export \
+ --input-path 19Jun2023_post_size_45/demux-summary.qzv \
+ --output-path 19Jun2023_post_size_45/demux-summary-figures
+
 ```
 
 We then download it to our computer so we can look at the outputs (remember scp commands have to run from your computer i.e. push/pull from there - need to have the broad-single-end, narrow-single-end and  paired-end-sequences folders set up before downloading
@@ -228,7 +245,7 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/demux-summary-figur
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/demux-summary-figures ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/demux-summary-figures ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/demux-summary-figures ./4Apr2023_post_size
-
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/19Jun2023_post_size_45/demux-summary-figures ./19Jun2023_post_size_45
 ```
 
 After checking them out we keep going on our analyses
