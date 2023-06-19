@@ -52,23 +52,23 @@ barcodes.tsv
 broad-single-end/
    |--fastq/
       |--forward.fastq.gz
-      |--forward.fastq.gz
+      |--reverse.fastq.gz
 narrow-single-end/
    |--fastq/
       |--forward.fastq.gz
-      |--forward.fastq.gz
+      |--reverse.fastq.gz
 paired-end-sequences/
    |--fastq/
       |--forward.fastq.gz
-      |--forward.fastq.gz
+      |--reverse.fastq.gz
 4Apr2023_post_size
    |--fastq/
       |--forward.fastq.gz
-      |--forward.fastq.gz
+      |--reverse.fastq.gz
 19Jun2023_post_size_45
    |--fastq/
       |--forward.fastq.gz
-      |--forward.fastq.gz
+      |--reverse.fastq.gz
 
 ```
 
@@ -93,6 +93,11 @@ qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path 4Apr2023_post_size/fastq \
   --output-path 4Apr2023_post_size/multiplexed-seqs.qza
+
+ qiime tools import \
+  --type MultiplexedPairedEndBarcodeInSequence \
+  --input-path 19Jun2023_post_size_45/fastq \
+  --output-path 19Jun2023_post_size_45/multiplexed-seqs.qza
 ```
 
 Demultiplexing the data
@@ -132,6 +137,16 @@ qiime cutadapt demux-paired \
 --m-reverse-barcodes-column reverseindex \
 --o-per-sample-sequences 4Apr2023_post_size/demultiplexed-seqs.qza \
 --o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs.qza
+
+qiime cutadapt demux-paired \
+--i-seqs 19Jun2023_post_size_45/multiplexed-seqs.qza \
+--m-forward-barcodes-file barcodes.tsv \
+--m-forward-barcodes-column forwardindex \
+--m-reverse-barcodes-file barcodes.tsv \
+--m-reverse-barcodes-column reverseindex \
+--o-per-sample-sequences 19Jun2023_post_size_45/demultiplexed-seqs.qza \
+--o-untrimmed-sequences 4Apr2023_post_size/untrimmed-seqs.qza
+
 ```
 
 Removing primers and discarding reads where no primer was found
