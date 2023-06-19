@@ -295,9 +295,15 @@ data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in%
 ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
 
 # Looking at who has dolphin                      
-data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES")
+data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES") %>% select(sites)
+## A tibble: 3 × 1
+#  sites         
+#  <chr>         
+#1 BP_E_CNTRL_02A
+#2 BP_E_CNTRL_02B
+#3 TIM_CNTRL_01A 
 
-# The controls have high read counts, but given these are likely plankton without dolphin, that makes sense!
+# To compare control coverage to previous size selection
 data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_count)
 ## A tibble: 12 × 2
 #   sites          total_read_count
