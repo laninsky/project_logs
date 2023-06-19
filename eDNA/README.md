@@ -281,6 +281,8 @@ qiime dada2 denoise-paired \
 --o-table 4Apr2023_post_size/feature-data.qza \
 --o-representative-sequences 4Apr2023_post_size/representative-sequences.qza \
 --o-denoising-stats 4Apr2023_post_size/denoising-stats.qza
+
+# Skipping the 19Jun2023_post_size_45 run because only single end
 ```
 
 Summarizing the feaure table data
@@ -303,7 +305,10 @@ qiime feature-table summarize \
 qiime feature-table summarize \
   --i-table 4Apr2023_post_size/feature-data.qza \
   --o-visualization 4Apr2023_post_size/feature-data-vis.qzv \
-  --m-sample-metadata-file barcodes.tsv  
+  --m-sample-metadata-file barcodes.tsv
+
+# Skipping the 19Jun2023_post_size_45 run because only single end
+  
 ```
 
 Exporting all of this to have a look
@@ -323,6 +328,9 @@ qiime tools export \
 qiime tools export \
   --input-path 4Apr2023_post_size/feature-data-vis.qzv \
   --output-path 4Apr2023_post_size/feature-data-vis
+
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 We then download it to our computer so we can look at the outputs
@@ -331,6 +339,8 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/feature-data-vis ./
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/feature-data-vis ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/feature-data-vis ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/feature-data-vis ./4Apr2023_post_size
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 Next step is to tabulate the sequences
@@ -350,6 +360,9 @@ qiime feature-table tabulate-seqs \
 qiime feature-table tabulate-seqs \
   --i-data 4Apr2023_post_size/representative-sequences.qza \
   --o-visualization 4Apr2023_post_size/representative-sequences.qzv
+
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 This gives us the fasta sequences
@@ -369,6 +382,9 @@ qiime tools export \
 qiime tools export \
   --input-path 4Apr2023_post_size/representative-sequences.qzv \
   --output-path 4Apr2023_post_size/representative-sequences
+
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 We then download it to our computer so we can look at the outputs
@@ -377,6 +393,8 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/representative-sequ
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-sequences ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/representative-sequences ./4Apr2023_post_size
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 To get the counts of each ASV per sample, need to tabulate the feature 
@@ -420,6 +438,9 @@ qiime tools export \
   --output-path 4Apr2023_post_size/tabulate-feature
 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/tabulate-feature ./4Apr2023_post_size
+
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 Final step within qiime is to get some QC on the whole process
@@ -440,6 +461,8 @@ qiime metadata tabulate \
   --m-input-file 4Apr2023_post_size/denoising-stats.qza \
   --o-visualization 4Apr2023_post_size/denoising-stats.qzv
 
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 qiime tools export \
   --input-path broad-single-end/denoising-stats.qzv \
   --output-path broad-single-end/denoising-stats
@@ -456,6 +479,8 @@ qiime tools export \
   --input-path 4Apr2023_post_size/denoising-stats.qzv \
   --output-path 4Apr2023_post_size/denoising-stats
 
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 And then, you guessed it, downloading these outputs
@@ -464,6 +489,8 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/denoising-stats ./b
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/denoising-stats ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/denoising-stats ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/denoising-stats ./4Apr2023_post_size
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 
 Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/mouse. Downloaded all complete cetacean refseq mitogeomes from NCBI, and added to this the refseq for humans, pigs, cows, and mice. Uploaded these to mahuika and indexed them (only need to do this the first time)
@@ -533,6 +560,8 @@ done
 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/blast_results.txt 4Apr2023_post_size/blast_results.txt
 
+# Skipping the 19Jun2023_post_size_45 run because only single end
+
 ```
 Next step, pull into R and compare proportion of cetacean reads between different runs across the different samples and in total
 ```
@@ -561,6 +590,13 @@ qiime dada2 denoise-single \
 --o-representative-sequences 4Apr2023_post_size/single-end-representative-sequences.qza \
 --o-denoising-stats 4Apr2023_post_size/single-end-denoising-stats.qza
 
+qiime dada2 denoise-single \
+--i-demultiplexed-seqs 19Jun2023_post_size_45/demultiplexed-seqs-trimmed.qza \
+--p-trunc-len 0 \
+--o-table 19Jun2023_post_size_45/single-end-feature-data.qza \
+--o-representative-sequences 19Jun2023_post_size_45/single-end-representative-sequences.qza \
+--o-denoising-stats 19Jun2023_post_size_45/single-end-denoising-stats.qza
+
 qiime feature-table tabulate-seqs \
   --i-data broad-single-end/single-end-representative-sequences.qza \
   --o-visualization broad-single-end/single-end-representative-sequences.qzv
@@ -572,6 +608,10 @@ qiime feature-table tabulate-seqs \
 qiime feature-table tabulate-seqs \
   --i-data 4Apr2023_post_size/single-end-representative-sequences.qza \
   --o-visualization 4Apr2023_post_size/single-end-representative-sequences.qzv  
+
+qiime feature-table tabulate-seqs \
+  --i-data 19Jun2023_post_size_45/single-end-representative-sequences.qza \
+  --o-visualization 19Jun2023_post_size_45/single-end-representative-sequences.qzv  
 
 qiime tools export \
   --input-path broad-single-end/single-end-representative-sequences.qzv \
@@ -585,9 +625,14 @@ qiime tools export \
   --input-path 4Apr2023_post_size/single-end-representative-sequences.qzv \
   --output-path 4Apr2023_post_size/single-end-representative-sequences
 
+qiime tools export \
+  --input-path 19Jun2023_post_size_45/single-end-representative-sequences.qzv \
+  --output-path 19Jun2023_post_size_45/single-end-representative-sequences
+
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/single-end-representative-sequences ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/single-end-representative-sequences ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/single-end-representative-sequences ./4Apr2023_post_size
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/19Jun2023_post_size_45/single-end-representative-sequences ./19Jun2023_post_size_45
 
 qiime metadata tabulate \
   --m-input-file broad-single-end/single-end-feature-data.qza  \
@@ -618,6 +663,16 @@ qiime tools export \
   --output-path 4Apr2023_post_size/single-end-tabulate-feature  
   
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/single-end-tabulate-feature ./4Apr2023_post_size
+
+qiime metadata tabulate \
+  --m-input-file 19Jun2023_post_size_45/single-end-feature-data.qza  \
+  --o-visualization 19Jun2023_post_size_45/single-end-tabulate-feature.qzv
+
+qiime tools export \
+  --input-path 19Jun2023_post_size_45/single-end-tabulate-feature.qzv \
+  --output-path 19Jun2023_post_size_45/single-end-tabulate-feature  
+  
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/19Jun2023_post_size_45/single-end-tabulate-feature ./19Jun2023_post_size_45
 
 no_lines=`wc -l broad-single-end/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
 
@@ -663,6 +718,20 @@ done
 
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/single-end-blast_results.txt 4Apr2023_post_size/single-end-blast_results.txt
 
+
+no_lines=`wc -l 19Jun2023_post_size_45/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i 19Jun2023_post_size_45/single-end-representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j 19Jun2023_post_size_45/single-end-representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 19Jun2023_post_size_45/single-end-blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/19Jun2023_post_size_45/single-end-blast_results.txt 19Jun2023_post_size_45/single-end-blast_results.txt
 ```
 
 Once downloaded on to my local computer, the file directory looked like the following (this is not a comprehensive list of the files, just where the ones we need for the following R-code were sitting):
@@ -699,7 +768,8 @@ I then used the R-code in this folder to look at the proportion of reads assigne
 
 ### Seeing if planktonic samples have been eliminated by size selection
 ```
-makeblastdb -in planktonic_contam.fasta -dbtype nucl
+# Only neeed to do this first step once
+# makeblastdb -in planktonic_contam.fasta -dbtype nucl
 
 no_lines=`wc -l 4Apr2023_post_size/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
 
@@ -711,6 +781,23 @@ for i in `seq 1 2 $no_lines`;
    echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 4Apr2023_post_size/single-end-plankton_blast_results.txt;
    rm tempseq;
    rm tempblast;
-done 
+done
+
 ```
-Then this is downloaded and analysed through `plankdon_sequences_4Apr2023_post_size_iseq.R`
+Then this is downloaded and analysed through `plankton_sequences_4Apr2023_post_size_iseq.R`
+
+```
+no_lines=`wc -l 19Jun2023_post_size_45/single-end-representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i 19Jun2023_post_size_45/single-end-representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j 19Jun2023_post_size_45/single-end-representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db planktonic_contam.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 19Jun2023_post_size_45/single-end-plankton_blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done
+
+```
+Then this is downloaded and analysed through `plankton_sequences_19Jun2023_post_size_45_iseq.R`
