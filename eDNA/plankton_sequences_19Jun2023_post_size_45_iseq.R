@@ -80,5 +80,12 @@ blast_results <- blast_results %>% mutate(`1_pident`=as.numeric(`1_pident`),
                          `2_evalue`=as.numeric(`2_evalue`),
                          `2_bitscore`=as.numeric(`2_bitscore`))
 
-# Differences between cetacean and "plankton" based on length. 
+# Matches to plankton?
 blast_results %>% arrange(desc(`1_length`)) %>% filter(`1_pident`==100,`1_length`>120)
+# A tibble: 0 × 25
+# … with 25 variables: seqname <chr>, 1_qseqid <chr>, 1_sseqid <chr>, 1_pident <dbl>, 1_length <dbl>, 1_mismatch <dbl>, 1_gapopen <dbl>, 1_qstart <dbl>, 1_qend <dbl>,
+#   1_sstart <dbl>, 1_send <dbl>, 1_evalue <dbl>, 1_bitscore <dbl>, 2_qseqid <chr>, 2_sseqid <chr>, 2_pident <dbl>, 2_length <dbl>, 2_mismatch <dbl>, 2_gapopen <dbl>,
+#   2_qstart <dbl>, 2_qend <dbl>, 2_sstart <dbl>, 2_send <dbl>, 2_evalue <dbl>, 2_bitscore <dbl>
+# ℹ Use `colnames()` to see all variable names
+
+# None of the previously super problematic plankton present
