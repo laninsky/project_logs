@@ -249,26 +249,49 @@ data_transposed %>% group_by(cetacean_data) %>% summarise(n())
 ## A tibble: 2 × 2
 #  cetacean_data `n()`
 #  <chr>         <int>
-#1 NO               88
-#2 YES               8
+#1 NO               28
+#2 YES              68
 
-# Which samples?
-data_transposed %>% filter(cetacean_data=="YES") %>% select(sites)
-# 1 BP_AKH_HD_030B
-# 2 BP_AKH_HD014A 
-# 3 BP_AKH_HD015A 
-# 4 BP_N_HD_028B  
-# 5 BP_N_HD_029A  
-# 6 BP_N_HD11A    
-# 7 BP_S_HD_024B  
-# 8 BP_S_HD01D 
-# Interestingly no A and B - suggests perhaps our coverage isn't high enough                      
+# Which samples DON'T?
+data_transposed %>% filter(cetacean_data=="NO") %>% select(sites)
+# A tibble: 28 × 1
+#   sites             
+#   <chr>             
+# 1 BLANK_03.17A      
+# 2 BLANK_03.17B      
+# 3 BP_AKH_HD_036B    
+# 4 BP_AKH_HD_037A    
+# 5 BP_AKH_HD06A      
+# 6 BP_AKH_HD06B      
+# 7 BP_E_HD05B        
+# 8 BP_N_HD02B        
+# 9 BP_N_HD03B        
+#10 BP_N_HD10B        
+#11 BP_S_CTRL_01A     
+#12 BP_S_CTRL_01B     
+#13 BP_S_HD_020A      
+#14 BP_S_HD_022B      
+#15 DroguetestDunedinA
+#16 DroguetestDunedinB
+#17 NegativeA         
+#18 NegativeB         
+#19 NegativeC         
+#20 NegativeD         
+#21 TIM_CNTRL_01B     
+#22 TIM_HD_039A       
+#23 TIM_HD_040A       
+#24 TIM_HD_041A       
+#25 TIM_HD_041B       
+#26 TIM_HD_042A       
+#27 TIM_HD_044A       
+#28 TIM_HD_044B  
+# Interestingly, again not every A and B - suggests perhaps our coverage isn't high enough                      
 
 # Verifying negatives/blanks have low coverage
 data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in% c("BLANK_03.17A","BLANK_03.17B","NegativeA","NegativeB","NegativeC","NegativeD","BP_E_CNTRL_02A","BP_E_CNTRL_02B",
                                                                                    "BP_S_CTRL_01A","BP_S_CTRL_01B","TIM_CNTRL_01A","TIM_CNTRL_01B"),"YES","NO"))
 
-# Some have pretty high coverage, however none have dolphin DNA
+# Some have pretty high coverage, and one appears to have dolphin DNA
 ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
 
 # The controls have high read counts, but given these are likely plankton without dolphin, that makes sense!
@@ -276,18 +299,18 @@ data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_co
 ## A tibble: 12 × 2
 #   sites          total_read_count
 #   <chr>                     <dbl>
-# 1 BLANK_03.17A                  1
-# 2 BLANK_03.17B                  6
-# 3 BP_E_CNTRL_02A             1480
-# 4 BP_E_CNTRL_02B             3694
-# 5 BP_S_CTRL_01A              1532
-# 6 BP_S_CTRL_01B              2777
-# 7 NegativeA                   154
-# 8 NegativeB                   290
-# 9 NegativeC                   751
-#10 NegativeD                    53
-#11 TIM_CNTRL_01A              2423
-#12 TIM_CNTRL_01B              1861
+# 1 BLANK_03.17A                  2
+# 2 BLANK_03.17B                  2
+# 3 BP_E_CNTRL_02A              351
+# 4 BP_E_CNTRL_02B             1375
+# 5 BP_S_CTRL_01A               522
+# 6 BP_S_CTRL_01B               877
+# 7 NegativeA                     9
+# 8 NegativeB                    76
+# 9 NegativeC                   103
+#10 NegativeD                     5
+#11 TIM_CNTRL_01A               903
+#12 TIM_CNTRL_01B               732
 
 # Plotting just the samples with dolphin
 dolphin_only <- data_transposed %>% filter(cetacean_data=="YES") %>% 
