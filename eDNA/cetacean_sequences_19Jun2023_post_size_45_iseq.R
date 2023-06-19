@@ -329,7 +329,7 @@ dolphin_only <- data_transposed %>% filter(cetacean_data=="YES") %>%
                       select(sites,cetacean_read_count,notcetacean_read_count,total_read_count) %>% 
                       pivot_longer(!sites,names_to="species",values_to="read_count")
 
-ggplot(dolphin_only, aes(x=sites,y=read_count,fill=species)) +
+ggplot((dolphin_only %>% filter(species!="total_read_count")), aes(x=sites,y=read_count,fill=species)) +
   geom_bar(stat="identity")
 
 # Based both on the increased number of sites with cetacean sequences and the increase % mapping as cetacean, things look a lot better!
