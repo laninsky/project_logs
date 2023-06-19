@@ -85,19 +85,32 @@ blast_results <- blast_results %>% mutate(`1_pident`=as.numeric(`1_pident`),
 # Differences between cetacean and "junk" based on length. 
 blast_results %>% arrange(desc(`1_length`))
 
-#Checking top 7 results, but suspect only top 5 are cetacean
+#Checking top 20 results, but suspect only top 14 are cetacean
 blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sseqid`)
 
-# A tibble: 2,132 × 3
+## A tibble: 1,490 × 3
 #   seqname                           `1_sseqid`  `2_sseqid` 
 #   <chr>                             <chr>       <chr>      
-# 1 >b9b4cc338ab6d82ecec7f071c6c86a99 NC_060610.1 NC_019577.1
-# 2 >00d3eb5ff7626e23a0ec71b1d3047897 NC_060610.1 NC_019577.1
-# 3 >dd91af9ec9aa7d6e9ee6c5ddce2527b5 NC_060610.1 NC_020696.1
-# 4 >b384b5ab4f1e192b560b931ab1f7b131 NC_034236.1 NC_000845.1
-# 5 >919ea08296903bdd02ec62c8947496b6 NC_060610.1 NC_020696.1
-# 6 >e771ef3766302ac749199f5003f93d04 NC_005274.1 NC_000845.1
-# 7 >ccafaff50690f085397dca8e8feda43b NC_005276.1 NC_006929.1
+# 1 >c56aeaa2e20146e2b600719a8636b8ca NC_019441.1 NC_019590.1
+# 2 >6fb709e98fed8e24c76527b3543266a5 NC_019441.1 NC_019590.1
+# 3 >dc2362156d12f6395f1cac37a46394c4 NC_060612.1 NC_012061.1
+# 4 >b9b4cc338ab6d82ecec7f071c6c86a99 NC_060610.1 NC_019577.1
+# 5 >00d3eb5ff7626e23a0ec71b1d3047897 NC_060610.1 NC_019577.1
+# 6 >a9efc975a214150079b7a53dddc66341 NC_060610.1 NC_019577.1
+# 7 >2af1040b6f0ab4aa22a5c5bed20b4a5e NC_060610.1 NC_035426.1
+# 8 >7cd3f01672548ce22287163eae26764a NC_060610.1 NC_020696.1
+# 9 >64e01782c07ab080afcbd732aec0ea6f NC_060610.1 NC_019577.1
+#10 >3eeab7673e92d88a4db910bf24ba0b18 NC_060610.1 NC_019577.1
+#11 >b3b59906612af3bd9bbb17ab1f6e3eff NC_060610.1 NC_019577.1
+#12 >d3b6c31a9253146da682e1562425081c NC_060610.1 NC_019577.1
+#13 >0f8f54b8998d0491a2d8bbddd3cc8593 NC_060610.1 NC_019577.1
+#14 >1802c9d7430c86b30ea549cf6db935a5 NC_060610.1 NC_019577.1
+#15 >096d8c95e394208836d5d1644d94436a NC_000845.1 NC_005277.1
+#16 >a6b5c8e92f36ebf590a9be762f5f7734 NC_000845.1 NC_005277.1
+#17 >a92428e781bce1d985ffda1e0b33420f NC_005269.1 NC_006927.1
+#18 >b384b5ab4f1e192b560b931ab1f7b131 NC_034236.1 NC_000845.1
+#19 >4e23ccc8fe9ff89db8896f0f0a8bb7e2 NC_006853.1 NC_019441.1
+#20 >98c6ff9abcb46484595276c5d6a3672f NC_019591.1 NC_020696.1
 
 # These cetacean matches are...
 references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
@@ -107,6 +120,27 @@ references %>% filter(reference_names %in% c(">NC_034236.1",">NC_000845.1")) # S
 references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii 
 references %>% filter(reference_names %in% c(">NC_005274.1",">NC_000845.1")) # Sus scrofa, Berardius bairdii 
 references %>% filter(reference_names %in% c(">NC_005276.1",">NC_006929.1")) # Balaenoptera borealis, Inia geoffrensis 
+
+references %>% filter(reference_names %in% c(">NC_019441.1",">NC_019590.1")) # Orcaella brevirostris, Globicephala melas 
+references %>% filter(reference_names %in% c(">NC_019441.1",">NC_019590.1")) # Orcaella brevirostris, Globicephala melas 
+references %>% filter(reference_names %in% c(">NC_060612.1",">NC_012061.1")) # Stenella frontalis, Delphinus capensis
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_035426.1")) # Cephalorhynchus commersonii, Lagenorhynchus obliquidens
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_020696.1")) # Cephalorhynchus commersonii, Cephalorhynchus heavisidii 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_060610.1",">NC_019577.1")) # Cephalorhynchus commersonii, Pseudorca crassidens 
+references %>% filter(reference_names %in% c(">NC_000845.1",">NC_005277.1")) # Sus scrofa, Pontoporia blainvillei
+references %>% filter(reference_names %in% c(">NC_000845.1",">NC_005277.1")) # Sus scrofa, Pontoporia blainvillei
+references %>% filter(reference_names %in% c(">NC_005269.1",">NC_006927.1")) # Megaptera novaeangliae, Caperea marginata 
+references %>% filter(reference_names %in% c(">NC_034236.1",">NC_000845.1")) # Sus scrofa, Delphinapterus leucas
+references %>% filter(reference_names %in% c(">NC_006853.1",">NC_019441.1")) # Bos taurus, Globicephala melas
+references %>% filter(reference_names %in% c(">NC_019591.1",">NC_020696.1")) # Cephalorhynchus heavisidii, Orcaella heinsohni 
 
 # >b9b4cc338ab6d82ecec7f071c6c86a99
 # CATAAACTATTCCTTGAAAAAAGCTTATTGTATAATTACCACAACCCCACAGTGCCACGTCAGTATTAAAAGTAATTTATTTTAAAAACATTTTACTGTACACATTACATATACACATACAC
