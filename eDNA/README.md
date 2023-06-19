@@ -27,7 +27,7 @@ mv Undetermined_S0_L001_R2_001.fastq.gz fastq/reverse.fastq.gz
 # are sequenced in a way the reads overlap (e.g. for our frag, miseq 
 # PE 250 is needed), so this is the initial pipeline followed for QCing
 # the reads. fastq for each run is in its own parent folder 
-# e.g. broad-single-end  narrow-single-end  paired-end-sequences 4Apr2023_post_size
+# e.g. broad-single-end  narrow-single-end  paired-end-sequences 4Apr2023_post_size 19Jun2023_post_size_45
 ```
 
 Getting a barcodes file together (barcodes.tsv)
@@ -65,6 +65,11 @@ paired-end-sequences/
    |--fastq/
       |--forward.fastq.gz
       |--forward.fastq.gz
+19Jun2023_post_size_45
+   |--fastq/
+      |--forward.fastq.gz
+      |--forward.fastq.gz
+
 ```
 
 Following commands are run from the top level directory (i.e. the one containing barcodes.tsv and the broad-single-end, narrow-single-end, and paired-end-sequences folders. First off, importing the data into QIIME:
