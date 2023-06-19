@@ -238,7 +238,9 @@ data_transposed[,-1] <- data_transposed[,-1] %>% mutate_if(is.character,as.numer
 
 # Adding column for total read count, cetacean read count, non-cetacean read count
 data_transposed <- data_transposed %>% mutate(total_read_count = rowSums(across(where(is.numeric))))
-data_transposed <- data_transposed %>% mutate(cetacean_read_count = `b9b4cc338ab6d82ecec7f071c6c86a99`+`00d3eb5ff7626e23a0ec71b1d3047897`+`dd91af9ec9aa7d6e9ee6c5ddce2527b5`+`919ea08296903bdd02ec62c8947496b6`)
+data_transposed <- data_transposed %>% mutate(cetacean_read_count = `c56aeaa2e20146e2b600719a8636b8ca` + `6fb709e98fed8e24c76527b3543266a5` + `dc2362156d12f6395f1cac37a46394c4` + `b9b4cc338ab6d82ecec7f071c6c86a99` + `00d3eb5ff7626e23a0ec71b1d3047897` + `a9efc975a214150079b7a53dddc66341` + `2af1040b6f0ab4aa22a5c5bed20b4a5e` + 
+                                             `7cd3f01672548ce22287163eae26764a` + `64e01782c07ab080afcbd732aec0ea6f` + `3eeab7673e92d88a4db910bf24ba0b18` + `b3b59906612af3bd9bbb17ab1f6e3eff` + `d3b6c31a9253146da682e1562425081c` + 
+                                             `0f8f54b8998d0491a2d8bbddd3cc8593` + `1802c9d7430c86b30ea549cf6db935a5`)
 data_transposed <- data_transposed %>% mutate(notcetacean_read_count = total_read_count-cetacean_read_count)
 data_transposed <- data_transposed %>% mutate(cetacean_data = ifelse(cetacean_read_count>0, "YES", "NO"))
 
