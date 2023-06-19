@@ -294,6 +294,9 @@ data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in%
 # Some have pretty high coverage, and one appears to have dolphin DNA
 ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
 
+# Looking at who has dolphin                      
+data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES")
+
 # The controls have high read counts, but given these are likely plankton without dolphin, that makes sense!
 data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_count)
 ## A tibble: 12 × 2
