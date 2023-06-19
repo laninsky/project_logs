@@ -80,6 +80,7 @@ blast_results <- blast_results %>% mutate(`1_pident`=as.numeric(`1_pident`),
                          `2_evalue`=as.numeric(`2_evalue`),
                          `2_bitscore`=as.numeric(`2_bitscore`))
 
+# Matches to plankton?
 blast_results %>% arrange(desc(`1_length`)) %>% filter(`1_pident`==100,`1_length`>120)
 ## A tibble: 11 × 25
 #   seqname     1_qse…¹ 1_sse…² 1_pid…³ 1_len…⁴ 1_mis…⁵ 1_gap…⁶ 1_qst…⁷ 1_qen…⁸ 1_sst…⁹ 1_sen…˟ 1_eval…˟ 1_bit…˟ 2_qse…˟ 2_sse…˟ 2_pid…˟ 2_len…˟ 2_mis…˟ 2_gap…˟ 2_qst…˟ 2_qen…˟
