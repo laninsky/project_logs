@@ -203,6 +203,12 @@ qiime cutadapt trim-paired \
 --p-discard-untrimmed \
 --o-trimmed-sequences 19Jun2023_post_size_45/demultiplexed-seqs-trimmed.qza
 
+qiime cutadapt trim-paired \
+--i-demultiplexed-sequences 10Jul2023_miseq_46/demultiplexed-seqs.qza \
+--p-front-f ^TCACCCAAAGCTGRARTTCTA \
+--p-front-r ^CGGGTTGCTGGTTTCACG \
+--p-discard-untrimmed \
+--o-trimmed-sequences 10Jul2023_miseq_46/demultiplexed-seqs-trimmed.qza
 ```
 
 First, we'll have a look at the quality of the data
