@@ -69,7 +69,10 @@ paired-end-sequences/
    |--fastq/
       |--forward.fastq.gz
       |--reverse.fastq.gz
-
+10Jul2023_miseq_46
+   |--fastq/
+      |--forward.fastq.gz
+      |--reverse.fastq.gz
 ```
 
 Following commands are run from the top level directory (i.e. the one containing barcodes.tsv and the broad-single-end, narrow-single-end, and paired-end-sequences folders. First off, importing the data into QIIME:
@@ -98,6 +101,11 @@ qiime tools import \
   --type MultiplexedPairedEndBarcodeInSequence \
   --input-path 19Jun2023_post_size_45/fastq \
   --output-path 19Jun2023_post_size_45/multiplexed-seqs.qza
+
+qiime tools import \
+  --type MultiplexedPairedEndBarcodeInSequence \
+  --input-path 10Jul2023_miseq_46/fastq \
+  --output-path 10Jul2023_miseq_46/multiplexed-seqs.qza
 ```
 
 Demultiplexing the data
