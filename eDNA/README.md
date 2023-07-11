@@ -268,15 +268,20 @@ qiime tools export \
  --input-path 19Jun2023_post_size_45/demux-summary.qzv \
  --output-path 19Jun2023_post_size_45/demux-summary-figures
 
+qiime tools export \
+ --input-path 10Jul2023_miseq_46/demux-summary.qzv \
+ --output-path 10Jul2023_miseq_46/demux-summary-figures
+
 ```
 
-We then download it to our computer so we can look at the outputs (remember scp commands have to run from your computer i.e. push/pull from there - need to have the broad-single-end, narrow-single-end and  paired-end-sequences folders set up before downloading
+We then download it to our computer so we can look at the outputs (remember scp commands have to run from your computer i.e. push/pull from there - need to have the broad-single-end, narrow-single-end etc folders set up before downloading
 ```
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/broad-single-end/demux-summary-figures ./broad-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/demux-summary-figures ./narrow-single-end
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/demux-summary-figures ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/demux-summary-figures ./4Apr2023_post_size
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/19Jun2023_post_size_45/demux-summary-figures ./19Jun2023_post_size_45
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/demux-summary-figures ./10Jul2023_miseq_46
 ```
 
 After checking them out we keep going on our analyses
