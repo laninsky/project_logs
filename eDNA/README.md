@@ -319,6 +319,14 @@ qiime dada2 denoise-paired \
 --o-denoising-stats 4Apr2023_post_size/denoising-stats.qza
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
+
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs 10Jul2023_miseq_46/demultiplexed-seqs-trimmed.qza \
+--p-trunc-len-f 0 \
+--p-trunc-len-r 0 \
+--o-table 10Jul2023_miseq_46/feature-data.qza \
+--o-representative-sequences 10Jul2023_miseq_46/representative-sequences.qza \
+--o-denoising-stats 10Jul2023_miseq_46/denoising-stats.qza
 ```
 
 Summarizing the feaure table data
