@@ -157,7 +157,7 @@ qiime cutadapt demux-paired \
 
 # Whilst running the cutadapt step on the July_46 data got the error described below
 # This appears to be because of entire sequences being removed (no data left)
-# and then causing issues. Instead, trying again using cutadapt
+# and then causing issues. Instead, trying again using cutadapt directly:
 
 #qiime cutadapt demux-paired \
 #--i-seqs 10Jul2023_miseq_46/multiplexed-seqs.qza \
@@ -171,6 +171,9 @@ qiime cutadapt demux-paired \
 #Plugin error from cutadapt:
 #
 #  Command '['cutadapt', '--front', 'file:/dev/shm/jobs/37667711/tmpsnxusflk', '--error-rate', '0.1', '--minimum-length', '1', '-o', '/dev/shm/jobs/37667711/q2-#CasavaOneEightSingleLanePerSampleDirFmt-g79dfgyb/{name}.1.fastq.gz', '--untrimmed-output', '/dev/shm/jobs/37667711/q2-MultiplexedPairedEndBarcodeInSequenceDirFmt-#8y4ih_z_/forward.fastq.gz', '--pair-adapters', '-G', 'file:/dev/shm/jobs/37667711/tmpuohwb4qw', '-p', '/dev/shm/jobs/37667711/q2-CasavaOneEightSingleLanePerSampleDirFmt-#g79dfgyb/{name}.2.fastq.gz', '--untrimmed-paired-output', '/dev/shm/jobs/37667711/q2-MultiplexedPairedEndBarcodeInSequenceDirFmt-8y4ih_z_/reverse.fastq.gz', '/dev/shm/jobs/37667711/qiime2-#archive-r_7vw_9w/7a623ab0-1c49-4578-8c89-e1025aacb993/data/forward.fastq.gz', '/dev/shm/jobs/37667711/qiime2-archive-r_7vw_9w/7a623ab0-1c49-4578-8c89-e1025aacb993/data/reverse.fastq.gz']' #died with <Signals.SIGBUS: 7>.
+
+
+
 
 ```
 
