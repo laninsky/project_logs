@@ -531,6 +531,10 @@ qiime metadata tabulate \
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
 
+qiime metadata tabulate \
+  --m-input-file 10Jul2023_miseq_46/denoising-stats.qza \
+  --o-visualization 10Jul2023_miseq_46/denoising-stats.qzv
+
 qiime tools export \
   --input-path broad-single-end/denoising-stats.qzv \
   --output-path broad-single-end/denoising-stats
@@ -549,6 +553,10 @@ qiime tools export \
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
 
+qiime tools export \
+  --input-path 10Jul2023_miseq_46/denoising-stats.qzv \
+  --output-path 10Jul2023_miseq_46/denoising-stats
+
 ```
 
 And then, you guessed it, downloading these outputs
@@ -558,7 +566,7 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/denoising-stats ./
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/denoising-stats ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/denoising-stats ./4Apr2023_post_size
 # Skipping the 19Jun2023_post_size_45 run because only single end
-
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/denoising-stats ./10Jul2023_miseq_46
 ```
 
 Using BLAST, checking for similarity of sequences and cetacean/humans/pigs/cow/mouse. Downloaded all complete cetacean refseq mitogeomes from NCBI, and added to this the refseq for humans, pigs, cows, and mice. Uploaded these to mahuika and indexed them (only need to do this the first time)
