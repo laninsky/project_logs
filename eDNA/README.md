@@ -441,6 +441,9 @@ qiime tools export \
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
 
+qiime tools export \
+  --input-path 10Jul2023_miseq_46/representative-sequences.qzv \
+  --output-path 10Jul2023_miseq_46/representative-sequences
 ```
 
 We then download it to our computer so we can look at the outputs
