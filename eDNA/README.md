@@ -645,7 +645,7 @@ for i in `seq 1 2 $no_lines`;
    seqname=`head -n $i 10Jul2023_miseq_46/representative-sequences/sequences.fasta | tail -n 1`;
    head -n $j 10Jul2023_miseq_46/representative-sequences/sequences.fasta | tail -n 1 > tempseq;
    blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
-   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 410Jul2023_miseq_46/blast_results.txt;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 10Jul2023_miseq_46/blast_results.txt;
    rm tempseq;
    rm tempblast;
 done 
