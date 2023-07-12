@@ -650,7 +650,7 @@ for i in `seq 1 2 $no_lines`;
    rm tempblast;
 done 
 
-scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/blast_results.txt 4Apr2023_post_size/blast_results.txt
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/blast_results.txt 10Jul2023_miseq_46/blast_results.txt
 
 
 
