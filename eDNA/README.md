@@ -453,7 +453,7 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/representative-seq
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/representative-sequences ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/representative-sequences ./4Apr2023_post_size
 # Skipping the 19Jun2023_post_size_45 run because only single end
-
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/representative-sequences ./10Jul2023_miseq_46
 ```
 
 To get the counts of each ASV per sample, need to tabulate the feature 
