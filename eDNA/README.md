@@ -638,6 +638,22 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/blast_results.txt
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
 
+no_lines=`wc -l 10Jul2023_miseq_46/representative-sequences/sequences.fasta | awk '{ print $1 }'`
+
+for i in `seq 1 2 $no_lines`; 
+   do j=$((i+1));
+   seqname=`head -n $i 10Jul2023_miseq_46/representative-sequences/sequences.fasta | tail -n 1`;
+   head -n $j 10Jul2023_miseq_46/representative-sequences/sequences.fasta | tail -n 1 > tempseq;
+   blastn -task blastn -db cetacean_refseq_mitogenome.fasta -query tempseq -outfmt 6 -evalue 0.05 -word_size 11 -gapopen 5 -gapextend 2 -penalty -3 -reward 2 | sort -k 11g > tempblast;
+   echo $seqname `head -n 1 tempblast` `head -n 2 tempblast | tail -n 1` >> 410Jul2023_miseq_46/blast_results.txt;
+   rm tempseq;
+   rm tempblast;
+done 
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/blast_results.txt 4Apr2023_post_size/blast_results.txt
+
+
+
 ```
 Next step, pull into R and compare proportion of cetacean reads between different runs across the different samples and in total
 ```
