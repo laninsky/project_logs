@@ -500,6 +500,15 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/tabulate-feature 
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
 
+qiime metadata tabulate \
+  --m-input-file 10Jul2023_miseq_46/feature-data.qza  \
+  --o-visualization 10Jul2023_miseq_46/tabulate-feature.qzv
+  
+qiime tools export \
+  --input-path 10Jul2023_miseq_46/tabulate-feature.qzv \
+  --output-path 10Jul2023_miseq_46/tabulate-feature
+
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/tabulate-feature ./10Jul2023_miseq_46
 ```
 
 Final step within qiime is to get some QC on the whole process
