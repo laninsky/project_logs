@@ -93,8 +93,8 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 #  1 >1de437a06f44c1dbfb8555be9f132d98 NC_006853.1 NC_000845.1 # Select seq MF177853.1	Cervus elaphus isolate Deer_117_Dloop_LaBres_desVos control region, partial sequence; mitochondrial	Cervus elaphus	608	608	100%	5e-171	95.77%	785	MF177853.1
 #  2 >22e1da6854342aa04cca4195ef7feeff NC_006853.1 NC_000845.1 # Select seq OU343111.1	Cervus elaphus genome assembly, organelle: mitochondrion	Cervus elaphus	699	699	100%	0.0	100.00%	16353	OU343111.1
 #  3 >df38dfadcab674979906fab9b7c68a6f NC_006853.1 NC_000845.1 # Select seq KF153096.1	Cervus elaphus isolate ELA4 D-loop, partial sequence; mitochondrial	Cervus elaphus	697	697	100%	0.0	100.00%	1133	KF153096.1
-#  4 >a924fdd7505646960f2836536b1451c0 NC_006853.1 NC_000845.1
-#  5 >0e8b3c7cfd6cbd006f780c918c8c17b4 NC_006853.1 NC_000845.1
+#  4 >a924fdd7505646960f2836536b1451c0 NC_006853.1 NC_000845.1 # Select seq KF153094.1	Cervus elaphus isolate ELA2 D-loop, partial sequence; mitochondrial	Cervus elaphus	699	699	100%	0.0	100.00%	1135	KF153094.1
+#  5 >0e8b3c7cfd6cbd006f780c918c8c17b4 NC_006853.1 NC_000845.1 # Select seq FJ743483.1	Cervus elaphus isolate NW1 control region, partial sequence; mitochondrial	Cervus elaphus	697	697	100%	0.0	100.00%	756	FJ743483.1
 #  6 >9c5d781154376a3e5b22935be166588c NC_006853.1 NC_000845.1
 #  7 >4bb6e8edc654cfa200395021c56da004 NC_006853.1 NC_000845.1
 #  8 >00b555be4c6622c8e31b07f2e03c4575 NC_006853.1 NC_000845.1
