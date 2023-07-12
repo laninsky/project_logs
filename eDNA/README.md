@@ -320,6 +320,7 @@ qiime dada2 denoise-paired \
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
 
+# Needed more than 5G RAM for this one
 qiime dada2 denoise-paired \
 --i-demultiplexed-seqs 10Jul2023_miseq_46/demultiplexed-seqs-trimmed.qza \
 --p-trunc-len-f 0 \
@@ -352,6 +353,11 @@ qiime feature-table summarize \
   --m-sample-metadata-file barcodes.tsv
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
+
+qiime feature-table summarize \
+  --i-table 10Jul2023_miseq_46/feature-data.qza \
+  --o-visualization 10Jul2023_miseq_46/feature-data-vis.qzv \
+  --m-sample-metadata-file barcodes.tsv
   
 ```
 
