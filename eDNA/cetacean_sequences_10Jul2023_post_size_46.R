@@ -98,7 +98,7 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 #  6 >9c5d781154376a3e5b22935be166588c NC_006853.1 NC_000845.1 # Select seq MN714199.1	Bos taurus isolate NDHN34 mitochondrion, complete genome	Bos taurus	736	736	100%	0.0	100.00%	16339	MN714199.1
 #  7 >4bb6e8edc654cfa200395021c56da004 NC_006853.1 NC_000845.1 # Select seq OP527049.1	Bos taurus breed Jiaxian red cattle mitochondrion, complete genome	Bos taurus	736	736	100%	0.0	100.00%	16339	OP527049.1
 #  8 >00b555be4c6622c8e31b07f2e03c4575 NC_006853.1 NC_000845.1 # Select seq MZ087694.1	Bos taurus isolate CAR021 mitochondrion, partial genome	Bos taurus	737	737	100%	0.0	100.00%	16318	MZ087694.1
-#  9 >af4011e2cd4c79b95214ae0903a13566 NC_006853.1 NC_000845.1
+#  9 >af4011e2cd4c79b95214ae0903a13566 NC_006853.1 NC_000845.1 # Select seq MN200928.1	Bos taurus isolate CDY441 mitochondrion, complete genome	Bos taurus	737	737	100%	0.0	100.00%	16339	MN200928.1
 # 10 >b804060b3c10c0cd2959213169f3793f NC_006853.1 NC_000845.1
 # 11 >ef478e5bc63d3d14cb1f1089611ef412 NC_006853.1 NC_000845.1
 # 12 >7bf26daef7d8a46d1a24674fd92d9fb1 NC_006853.1 NC_000845.1
