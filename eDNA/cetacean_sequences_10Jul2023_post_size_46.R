@@ -103,7 +103,7 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 # 11 >ef478e5bc63d3d14cb1f1089611ef412 NC_006853.1 NC_000845.1 # Select seq LC412530.1	Bos indicus x Bos taurus 1418 mitochondrial DNA, D-loop, partial sequence	Bos indicus x Bos taurus	736	736	100%	0.0	100.00%	708	LC412530.1
 # 12 >7bf26daef7d8a46d1a24674fd92d9fb1 NC_006853.1 NC_000845.1 # Select seq GQ890101.1	Bos indicus haplotype ICH86 tRNA-Thr gene, partial sequence; tRNA-Pro gene, complete sequence; and D-loop, partial sequence; mitochondrial	Bos indicus	736	736	100%	0.0	100.00%	557	GQ890101.1
 # 13 >b4df66ddc9984ade713c31dcf66d1249 NC_060610.1 NC_019591.1 # Select seq KC312627.1	Cephalorhynchus hectori maui voucher NI36 mitochondrion, partial genome	Cephalorhynchus hectori maui	617	617	93%	4e-172	98.84%	13343	KC312627.1
-# 14 >b66851e94153cfc68842581920d2a1c8 NC_005268.1 NC_000845.1
+# 14 >b66851e94153cfc68842581920d2a1c8 NC_005268.1 NC_000845.1 # No significant similarity found.
 # 15 >58df14d211f6a61b796f727ddc121e77 NC_019590.1 NC_045404.1
 # 16 >e85bb5066207a56c1b7ee551d2e6b32a NC_019590.1 NC_045404.1
 # 17 >1402d4f46085eda18d8ea47e495fdaef NC_019590.1 NC_045404.1
