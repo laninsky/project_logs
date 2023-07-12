@@ -358,7 +358,6 @@ qiime feature-table summarize \
   --i-table 10Jul2023_miseq_46/feature-data.qza \
   --o-visualization 10Jul2023_miseq_46/feature-data-vis.qzv \
   --m-sample-metadata-file barcodes.tsv
-  
 ```
 
 Exporting all of this to have a look
@@ -381,6 +380,9 @@ qiime tools export \
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
 
+qiime tools export \
+  --input-path 10Jul2023_miseq_46/feature-data-vis.qzv \
+  --output-path 10Jul2023_miseq_46/feature-data-vis
 ```
 
 We then download it to our computer so we can look at the outputs
@@ -390,7 +392,7 @@ scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/narrow-single-end/feature-data-vis .
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/paired-end-sequences/feature-data-vis ./paired-end-sequences
 scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/4Apr2023_post_size/feature-data-vis ./4Apr2023_post_size
 # Skipping the 19Jun2023_post_size_45 run because only single end
-
+scp -r mahuika:/nesi/nobackup/uoo02423/eDNA/10Jul2023_miseq_46/feature-data-vis ./10Jul2023_miseq_46
 ```
 
 Next step is to tabulate the sequences
@@ -412,6 +414,10 @@ qiime feature-table tabulate-seqs \
   --o-visualization 4Apr2023_post_size/representative-sequences.qzv
 
 # Skipping the 19Jun2023_post_size_45 run because only single end
+
+qiime feature-table tabulate-seqs \
+  --i-data 10Jul2023_miseq_46/representative-sequences.qza \
+  --o-visualization 10Jul2023_miseq_46/representative-sequences.qzv
 
 ```
 
