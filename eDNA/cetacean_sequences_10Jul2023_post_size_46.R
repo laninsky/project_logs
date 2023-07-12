@@ -8,7 +8,7 @@ library(tidyverse)
 ## 2. SETTING THE DIRECTORY ##
 ##############################
 
-setwd("/Users/aleal62p/Dropbox (Otago University)/eDNA/4Apr2023_post_size/")
+setwd("/Users/aleal62p/Dropbox (Otago University)/eDNA/10Jul2023_miseq_46")
 
 #########################
 ## 3. READING IN FILES ##
