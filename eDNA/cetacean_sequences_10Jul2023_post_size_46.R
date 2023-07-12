@@ -38,7 +38,7 @@ description <- sapply((strsplit(str_sub(references,14,1000),split = " ")), funct
 references <- as_tibble(cbind(reference_names,description))
 
 # Reading in BLAST results
-blast_results <- readLines("single-end-blast_results.txt")
+blast_results <- readLines("blast_results.txt")
 unlisted_blast_results <- unlist(strsplit(blast_results," "))
 padded_blast_results <- unlisted_blast_results[1]
 for (i in 2:length(unlisted_blast_results)) {
