@@ -105,7 +105,7 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 # 13 >b4df66ddc9984ade713c31dcf66d1249 NC_060610.1 NC_019591.1 # Select seq KC312627.1	Cephalorhynchus hectori maui voucher NI36 mitochondrion, partial genome	Cephalorhynchus hectori maui	617	617	93%	4e-172	98.84%	13343	KC312627.1
 # 14 >b66851e94153cfc68842581920d2a1c8 NC_005268.1 NC_000845.1 # No significant similarity found.
 # 15 >58df14d211f6a61b796f727ddc121e77 NC_019590.1 NC_045404.1 # Select seq OX596401.1	Stenella coeruleoalba genome assembly, chromosome: 16	Stenella coeruleoalba	640	640	100%	8e-179	99.71%	85750194	OX596401.1
-# 16 >e85bb5066207a56c1b7ee551d2e6b32a NC_019590.1 NC_045404.1
+# 16 >e85bb5066207a56c1b7ee551d2e6b32a NC_019590.1 NC_045404.1 # Select seq OX596401.1	Stenella coeruleoalba genome assembly, chromosome: 16	Stenella coeruleoalba	634	634	100%	4e-177	99.43%	85750194	OX596401.1
 # 17 >1402d4f46085eda18d8ea47e495fdaef NC_019590.1 NC_045404.1
 # 18 >61662843f1b5b251a3843c15120e973b NC_019590.1 NC_032301.1
 # 19 >c9f2c239890256f23238141f87fd559a NC_019590.1 NC_045404.1
@@ -703,7 +703,7 @@ data_transposed[,-1] <- data_transposed[,-1] %>% mutate_if(is.character,as.numer
 
 # Adding column for total read count, cetacean read count, non-cetacean read count
 data_transposed <- data_transposed %>% mutate(total_read_count = rowSums(across(where(is.numeric))))
-data_transposed <- data_transposed %>% mutate(cetacean_read_count = `b4df66ddc9984ade713c31dcf66d1249`)
+data_transposed <- data_transposed %>% mutate(cetacean_read_count = `b4df66ddc9984ade713c31dcf66d1249` + `58df14d211f6a61b796f727ddc121e77` + `e85bb5066207a56c1b7ee551d2e6b32a`)
 data_transposed <- data_transposed %>% mutate(notcetacean_read_count = total_read_count-cetacean_read_count)
 data_transposed <- data_transposed %>% mutate(cetacean_data = ifelse(cetacean_read_count>0, "YES", "NO"))
 
@@ -758,7 +758,8 @@ data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in%
 ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
 
 # Looking at who has dolphin (didn't bother showing the columns with no counts)                     
-data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES") %>% select(sites,`b9b4cc338ab6d82ecec7f071c6c86a99`,`d3b6c31a9253146da682e1562425081c`)
+data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES") %>% select(sites,`b4df66ddc9984ade713c31dcf66d1249`, `58df14d211f6a61b796f727ddc121e77`, `e85bb5066207a56c1b7ee551d2e6b32a`,
+                                                                                 )
 ## A tibble: 3 × 3
 #  sites          b9b4cc338ab6d82ecec7f071c6c86a99 d3b6c31a9253146da682e156…¹
 #  <chr>                                     <dbl>                      <dbl>
