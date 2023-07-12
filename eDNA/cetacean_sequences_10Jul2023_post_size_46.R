@@ -102,7 +102,7 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 # 10 >b804060b3c10c0cd2959213169f3793f NC_006853.1 NC_000845.1 # Select seq LC604465.1	Bos taurus UD_TD1316_13 mitochondrial DNA, tRNA-Thr, tRNA-Pro, D-loop, partial and complete sequence	Bos taurus	737	737	100%	0.0	100.00%	708	LC604465.1
 # 11 >ef478e5bc63d3d14cb1f1089611ef412 NC_006853.1 NC_000845.1 # Select seq LC412530.1	Bos indicus x Bos taurus 1418 mitochondrial DNA, D-loop, partial sequence	Bos indicus x Bos taurus	736	736	100%	0.0	100.00%	708	LC412530.1
 # 12 >7bf26daef7d8a46d1a24674fd92d9fb1 NC_006853.1 NC_000845.1 # Select seq GQ890101.1	Bos indicus haplotype ICH86 tRNA-Thr gene, partial sequence; tRNA-Pro gene, complete sequence; and D-loop, partial sequence; mitochondrial	Bos indicus	736	736	100%	0.0	100.00%	557	GQ890101.1
-# 13 >b4df66ddc9984ade713c31dcf66d1249 NC_060610.1 NC_019591.1
+# 13 >b4df66ddc9984ade713c31dcf66d1249 NC_060610.1 NC_019591.1 # Select seq KC312627.1	Cephalorhynchus hectori maui voucher NI36 mitochondrion, partial genome	Cephalorhynchus hectori maui	617	617	93%	4e-172	98.84%	13343	KC312627.1
 # 14 >b66851e94153cfc68842581920d2a1c8 NC_005268.1 NC_000845.1
 # 15 >58df14d211f6a61b796f727ddc121e77 NC_019590.1 NC_045404.1
 # 16 >e85bb5066207a56c1b7ee551d2e6b32a NC_019590.1 NC_045404.1
@@ -703,9 +703,7 @@ data_transposed[,-1] <- data_transposed[,-1] %>% mutate_if(is.character,as.numer
 
 # Adding column for total read count, cetacean read count, non-cetacean read count
 data_transposed <- data_transposed %>% mutate(total_read_count = rowSums(across(where(is.numeric))))
-data_transposed <- data_transposed %>% mutate(cetacean_read_count = `c56aeaa2e20146e2b600719a8636b8ca` + `6fb709e98fed8e24c76527b3543266a5` + `dc2362156d12f6395f1cac37a46394c4` + `b9b4cc338ab6d82ecec7f071c6c86a99` + `00d3eb5ff7626e23a0ec71b1d3047897` + `a9efc975a214150079b7a53dddc66341` + `2af1040b6f0ab4aa22a5c5bed20b4a5e` + 
-                                             `7cd3f01672548ce22287163eae26764a` + `64e01782c07ab080afcbd732aec0ea6f` + `3eeab7673e92d88a4db910bf24ba0b18` + `b3b59906612af3bd9bbb17ab1f6e3eff` + `d3b6c31a9253146da682e1562425081c` + 
-                                             `0f8f54b8998d0491a2d8bbddd3cc8593` + `1802c9d7430c86b30ea549cf6db935a5`)
+data_transposed <- data_transposed %>% mutate(cetacean_read_count = `b4df66ddc9984ade713c31dcf66d1249`)
 data_transposed <- data_transposed %>% mutate(notcetacean_read_count = total_read_count-cetacean_read_count)
 data_transposed <- data_transposed %>% mutate(cetacean_data = ifelse(cetacean_read_count>0, "YES", "NO"))
 
