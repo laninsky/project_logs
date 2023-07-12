@@ -101,7 +101,7 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 #  9 >af4011e2cd4c79b95214ae0903a13566 NC_006853.1 NC_000845.1 # Select seq MN200928.1	Bos taurus isolate CDY441 mitochondrion, complete genome	Bos taurus	737	737	100%	0.0	100.00%	16339	MN200928.1
 # 10 >b804060b3c10c0cd2959213169f3793f NC_006853.1 NC_000845.1 # Select seq LC604465.1	Bos taurus UD_TD1316_13 mitochondrial DNA, tRNA-Thr, tRNA-Pro, D-loop, partial and complete sequence	Bos taurus	737	737	100%	0.0	100.00%	708	LC604465.1
 # 11 >ef478e5bc63d3d14cb1f1089611ef412 NC_006853.1 NC_000845.1 # Select seq LC412530.1	Bos indicus x Bos taurus 1418 mitochondrial DNA, D-loop, partial sequence	Bos indicus x Bos taurus	736	736	100%	0.0	100.00%	708	LC412530.1
-# 12 >7bf26daef7d8a46d1a24674fd92d9fb1 NC_006853.1 NC_000845.1
+# 12 >7bf26daef7d8a46d1a24674fd92d9fb1 NC_006853.1 NC_000845.1 # Select seq GQ890101.1	Bos indicus haplotype ICH86 tRNA-Thr gene, partial sequence; tRNA-Pro gene, complete sequence; and D-loop, partial sequence; mitochondrial	Bos indicus	736	736	100%	0.0	100.00%	557	GQ890101.1
 # 13 >b4df66ddc9984ade713c31dcf66d1249 NC_060610.1 NC_019591.1
 # 14 >b66851e94153cfc68842581920d2a1c8 NC_005268.1 NC_000845.1
 # 15 >58df14d211f6a61b796f727ddc121e77 NC_019590.1 NC_045404.1
