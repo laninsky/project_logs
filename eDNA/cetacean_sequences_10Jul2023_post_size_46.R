@@ -81,11 +81,11 @@ blast_results <- blast_results %>% mutate(`1_pident`=as.numeric(`1_pident`),
                          `2_evalue`=as.numeric(`2_evalue`),
                          `2_bitscore`=as.numeric(`2_bitscore`))
 
-# Differences between cetacean and "junk" based on length. 
-blast_results %>% arrange(desc(`1_length`))
+# Differences between cetacean and "junk" based on length... chosen to look at everything with a match >100 bp
+blast_results %>% arrange(desc(`1_length`))  %>% print(n=595)
 
 #Checking top 20 results, but suspect only top 14 are cetacean
-blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sseqid`)
+blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sseqid`) %>% print(n=595)
 
 ## A tibble: 4,561 × 3
 #    seqname                           `1_sseqid`  `2_sseqid` 
