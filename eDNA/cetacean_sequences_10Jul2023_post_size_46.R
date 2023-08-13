@@ -685,7 +685,10 @@ blast_results %>% arrange(desc(`1_length`)) %>% select(seqname,`1_sseqid`,`2_sse
 #593 >0e435da8e451ea3f3b90563eeb84e4e3 NC_000845.1 NC_041303.1
 #594 >aebcee3d5e645f4b4949dc38dd784efd NC_005278.1 NC_019590.1
 #595 >8601c7d84827c1eec77b81ac2f7aba0c NC_000845.1 NC_006853.1
-                      
+
+# Steph did the really hard mahi and went through and pulled out all the rough
+# BLAST matches for all of the above.
+ 
 ########################################
 ## 4. ASSIGNING SEQUENCES AS CETACEAN ##
 ########################################
@@ -703,107 +706,655 @@ data_transposed[,-1] <- data_transposed[,-1] %>% mutate_if(is.character,as.numer
 
 # Adding column for total read count, cetacean read count, non-cetacean read count
 data_transposed <- data_transposed %>% mutate(total_read_count = rowSums(across(where(is.numeric))))
-data_transposed <- data_transposed %>% mutate(cetacean_read_count = `b4df66ddc9984ade713c31dcf66d1249` + `58df14d211f6a61b796f727ddc121e77` + `e85bb5066207a56c1b7ee551d2e6b32a` +
-                                             `1402d4f46085eda18d8ea47e495fdaef` + `61662843f1b5b251a3843c15120e973b` + `c9f2c239890256f23238141f87fd559a` +
-                                             `b49b26d4f24c09f4dc0fb1f9383a7840` + `930ad36477acf2976046a0d75309e5b1`)
-data_transposed <- data_transposed %>% mutate(notcetacean_read_count = total_read_count-cetacean_read_count)
+
+# This includes one lag mtDNA and several "short" Hector's
+data_transposed <- data_transposed %>% mutate(cetacean_read_count = `3ab21e3c0ffbc45bc8ee9834b80153af` +
+                                                `21d568455da4b0da17409f875b74b4e1` +
+                                                `1c8a3f0d5fa90f34f8449152c4b3934c` +
+                                                `4d0f51b5c8c6f6d6612b53c110c2e496` +
+                                                `c456c737beaa9c9fa4ab79193112d035` +
+                                                `e59576f7f2148465ae21240f215f9a11` +
+                                                `1b70e941c90430e5c44ab8e3f3188b19` +
+                                                `7fefa31cad055cffb349b198ef7cca95` +
+                                                `0df3586c12ca438f54c06c3f3299f158` +
+                                                `8014b01e4b4a815cbcb5948b49ce1e08` +
+                                                `32294e7748574ac6bd67f05753885920` +
+                                                `d7b3d9b0b2f2429f75cf2487c71c4794` +
+                                                `1a14516e9c4b94be8950158218457b70` +
+                                                `f33324f3f8ba11d106c53d22232f7918` +
+                                                `ffd33a1b5e1571c741bd007e5f7540c4` +
+                                                `2c0ea1e7959f5912afe4a7eb34d0808c` +
+                                                `47246b6d10da4f0e6826ba7075df3591` +
+                                                `64eebcbdf676a3dfb30c5781b46abba6` +
+                                                `55224fa228538c07a2a11404352c90ce` +
+                                                `ccf15dbb0769b5c9d8e90b486cc3dbb9` +
+                                                `7011c674fdef3d24c532f8618484522c` +
+                                                `4bce9517dea8c5c43a9589c5e2a6d521` +
+                                                `d26bd118017d0d46c877a75e50e17bf0` +
+                                                `37e3ce1b433b7868dacdc79e7cd6450d` +
+                                                `e9be233eccecc0438aae90e57360e444` +
+                                                `b7f2e68d045fbe131ee4c6ba0e813ccd` +
+                                                `3366772c9437ee0be05bfc9ef2eb4d95` +
+                                                `687327bb6fd27393e5c3367ce4b3d65e` +
+                                                `725474af2bd14da516e77373e88d9064` +
+                                                `51e99f1561642be31e57a0dca44ed76e` +
+                                                `c837dacffab28a2143ac02db9bec52a6` +
+                                                `8fa0f12fb0674059ad7c030ea0a97dd7` +
+                                                `e5c08dbb5fa365a6836ab40c7f194c21` +
+                                                `b7031f7134801b19e5769c12debf4c8f` +
+                                                `f717f8ee2c6256675f267e15f74ed2aa` +
+                                                `e5a8945dc15fb145084171d1ec309499` +
+                                                `149408b54ed799f547d0da6ee888988f` +
+                                                `7bc090d0133eff1fdfd64b4652112a76` +
+                                                `90b9adb46b7da4f03b46b8bf30f6688c` +
+                                                `fbf2ae3d6204746d52c3a5c87121090e` +
+                                                `e37a7c35f705abc1501c3febd5af6459` +
+                                                `e648d321df397891f8c667b23e69337e` +
+                                                `be91e513388397b8694e9b637d4788c5` +
+                                                `8a7ed83c6993cb121c7f855a8862836d` +
+                                                `cf747bc2dea9ae5b1f374468fd6e54bf` +
+                                                `479e2d037cc60ac2d68a2408e554cff0` +
+                                                `02a3d0b7f9d0fb44b0bf67cad5bfd6b4` +
+                                                `a47e6f25974031e46cb9eab3241e9c0b` +
+                                                `5eb01902cfd33d20894993a1b62ea080` +
+                                                `24990b71ee888b9fa47c6492baaf1cd2` +
+                                                `6e9d7f1a4600cbaab80211a1caa2d114` +
+                                                `04b972cfdfbcd25d81d271f1f4dc67e3` +
+                                                `930ad36477acf2976046a0d75309e5b1` +
+                                                `1a7c4940f2b6e49cc16248ddbde80464` +
+                                                `0ccf9a6a56497c136b680682078dfb15` +
+                                                `960b33ab163e12143c534a58b3e8341c` +
+                                                `8f81208afef9bfa702f49a8ca322da5c` +
+                                                `03c2f2be679b425a0bff2c5084fc93e4` +
+                                                `8347d9209525d32c9f3ff6e2c209529a` +
+                                                `750445d50b6d98502b3113b858661efa` +
+                                                `ff31cc72fc855535fcaf4444b160cccc` +
+                                                `ac7596993192af0089eb57d884978287` +
+                                                `4bd2041073a743e0b7b3c9d5f8eee6e8` +
+                                                `f2a347a00189c60a69197a1e83192147` +
+                                                `9a073e2aba6cbfba7226af9e7f1a83cf` +
+                                                `4fcb14b9b5cc8da0a7feb1010206df4a` +
+                                                `ed79e1c348aff95b308f13eef68f418a` +
+                                                `49545394ed37a7a094e981692ae2c314` +
+                                                `2d555a820ffeba6fa3f659435fdde65e` +
+                                                `972115aabe4b38c27638d57c8c55ec97` +
+                                                `e0d36a10f0af1bb163a6c39199cd9310` +
+                                                `f34367b3bd8f85a522a8845c50c24640` +
+                                                `4f1c68a3cbd66a0e9b9f267c6f983220` +
+                                                `f6ed871ba12fc7afc09a31cd2764021e` +
+                                                `e416c23bd0c936141415b375b67d9004` +
+                                                `8b72eece7667e89348ffdef8e8d65f22` +
+                                                `b4339681484f3d9ddfc0bb9d8c254a7c` +
+                                                `44055e62dfa2c3a956227b7a8510a8dc` +
+                                                `b19d51feccae6c9d6d2efa94a290ff37` +
+                                                `77ed3aa8f89fe274e2120fabf22c21f1` +
+                                                `cc6a4dc168d2650ce51d2458ab4ed099` +
+                                                `f60eddd986b532de59344cfabcdbe5bb` +
+                                                `5d7597918590574fb5c8cec6299dedce` +
+                                                `7a21db7fa1f5ead8ebe3eecc7e1cbae8` +
+                                                `2c87ccc533318240da03590d20848b4d` +
+                                                `bbace2aeb0c7f2296dedd47d2a66aea7` +
+                                                `3389457a400614d668317432c5d14bc7` +
+                                                `7a638d2298c2dfee00e142284b2cc844` +
+                                                `5bab0ba2d3500c9472d122c530e5b327` +
+                                                `f0a5d183a4495a17be51b2b6c4217701` +
+                                                `9e7474944ea2e68f4d85470a39fb46c8` +
+                                                `dee442ac9a971da1a3b6fca3d5ee9c4a` +
+                                                `8a655f3e3ebe476019ea017840eda56a` +
+                                                `3daa20c971857c642958832b71d2a652` +
+                                                `a0772c97dd7034543775e12d8700c1b9` +
+                                                `9fc6750115b84fffa707c476ee16e5a2` +
+                                                `af68f5c739fd0adec8c025716b11485a` +
+                                                `9471a3b17b69cd9802b35b1a3c8a43e3` +
+                                                `06ec6f26d3c53c93a716455030cadb45` +
+                                                `cf44d1592b39b36164a5ceda969d194a` +
+                                                `659a889e6719beac2dd0d2af52a26e61` +
+                                                `255b43df9fb0a47bcd683a8350743a6d` +
+                                                `93ebc1ed0f9b9fec1eafa873833c200c` +
+                                                `005b9380fad43688342f596b9505bc23` +
+                                                `f3066f7d2b5ee1e9fe77a2f264697c77` +
+                                                `fada270f9562a08125a21ff9e0ad6f04` +
+                                                `26fccf2319ff114feac4dd8c46a54b26` +
+                                                `d3fab9987c1536f6a5da18c7cb23ff01` +
+                                                `a3ffa3f8469d5a5fb6fd6403810b9699` +
+                                                `65af8c08f7ab1a661c967837e37a82be` +
+                                                `d9b1b9f84b613d66f71aea134adb20d5` +
+                                                `ee04feda596a915a61cb8dc060bc72d7` +
+                                                `825b95323ba354f059932e2ef612aa76` +
+                                                `f092856be87b7dd162b5285b9b3107d5` +
+                                                `999b84a12eae591cbc7dde8ab241afcf` +
+                                                `bab05f7e0ecccf4bc4c805bd2c5dd063` +
+                                                `3857439c197ba18d5862c59cc5634980` +
+                                                `4ad9e0ad6185635438112a757a96b61a` +
+                                                `a94bee1bf518fb319fbf7839b0213ba7` +
+                                                `f149685075dfb9101c82248fc99daad9` +
+                                                `27eedb83b7455b3e12a4c84ea050ceb7` +
+                                                `7f2595c4571dc58f611863f6666c5b15` +
+                                                `d35c83735020ee692f9320a3fa2fbc7b` +
+                                                `4a77759733a2f3d2724ac4763472e513` +
+                                                `49cac9f9d45a3d090a04ef67b9414f4b` +
+                                                `8ab718dafa88cd114a3405e9604a3b76` +
+                                                `8d829622c9586ac7d9aae59cb76de90c` +
+                                                `19eff1ead1affdcb51d05baf62a5363f` +
+                                                `65f42d3a841c1a9f1ea89f41cb97b28f` +
+                                                `642e5d11d6a9195db9bec10ad32ce28b` +
+                                                `a621f65afbf08c74956464c0c710b7cc` +
+                                                `efeb30b77c5d851eed38dd12859aff24` +
+                                                `7f4e4304b30d3a274de9c59f87ac9354` +
+                                                `6734f31d5d851b0dbac363de7fad3ff9` +
+                                                `885c951a8b550c67857fcabcf1442bd2` +
+                                                `8c68659fee5eb3e2f17470b48c2c9068` +
+                                                `3fbba1832b3b876f6b8240f8d7e68386` +
+                                                `56a2656fe8cf1771126505cbd1cdbc4a` +
+                                                `b2a491dbac8ece2f4320bcea38ef578a` +
+                                                `b4df66ddc9984ade713c31dcf66d1249` +
+                                                `fcb0171fc30586f85ec5c0823f758a58` +
+                                                `8af18296f182e70dcde1cec6537d355f` +
+                                                `d0f182c7d07562049f5d45a0ea3bbd3d` +
+                                                `5d5f2212fce06da92772b2210171dd80` +
+                                                `98c7dd79dbd547bd94ac08292b19c3c2` +
+                                                `48424ac403bf11669f4c151acc0864a4` +
+                                                `09fcd385e1cd9255292763fe6e446eb5` +
+                                                `07238d06d928a554678f33871617758c` +
+                                                `f9efa42204e2c490029cb3a0f16042a8` +
+                                                `3a3927df811529d576aaf2d53f340462` +
+                                                `1a13b97f765fb293ae744a7638ff7146` +
+                                                `a1c65af73416537bfbb472ee72fe363d` +
+                                                `2a59ca94b100f41a41e534f9b60932ff` +
+                                                `b3f4f930a846f73ff7574424ea4b233a` +
+                                                `4648734771a03a6612defe26760f1039` +
+                                                `39b293db59619fbcf77bd2074a405a0c` +
+                                                `9b895bc75e14f47bf16398eeccd14de2` +
+                                                `644ecd65f3dacdc958754e79ab603f57` +
+                                                `4587d28cbca6c337f9207fc84362a8a8` +
+                                                `022d286a79164774bd703f3570aff4c3` +
+                                                `64ed680e2565e2a7bc119c7e512b7eae` +
+                                                `0cb940435ad504ee6a74b1a2d9d68a5a` +
+                                                `34c46d371dd91bcf088eeac939461fc9` +
+                                                `3f1bced1a409a0e649ae5dc8a963bce2` +
+                                                `5f5f9fd016100de00ef70388f94873bd` +
+                                                `08b3481d27039b79e1796ac0504228a0` +
+                                                `f7cec5edc37636ebdebbfadc91e9cd8e` +
+                                                `aef86b9dae61e03c855294d54eb13536` +
+                                                `47294070559662521fd4dc04eb1bedc3` +
+                                                `263415ab0598254c2d47b8bc6f77aed2` +
+                                                `7030820de55d02747973f1e68f0a4e85` +
+                                                `5c01486b14ec73600b632874eb49f195` +
+                                                `c022e8eaa327e4f5914e193c9759f678` +
+                                                `ebb5efbf1d55419abe182476314a3efd` +
+                                                `3bc6456629607f927525f6ac2aed15ba` +
+                                                `4109880af34bf07fb89cd0db3f937b52` +
+                                                `3d670cf7c1babc9668da78c0c0bc487e` +
+                                                `d48149a7ae12c6d79589e18abcc2c8cb` +
+                                                `c4fb8dff6f7bd1c464ecc5ace46d4401` +
+                                                `2330cf8d4146c5d217b40d4012df2e73` +
+                                                `3cfd7d1a6d0b6a72e471d7440cec0e0a` +
+                                                `c180a6e6a0b1f0b510adc782d669cb98` +
+                                                `217e1f84cab9dab3bbb1419b804bb7e6` +
+                                                `2f80826f20b029bff1239413e98d1836` +
+                                                `60579da29648354e97d2c93b287c08d9` +
+                                                `d17211f387da2c4833333b6e8c116660` +
+                                                `a179edcec732f6c6ea7cbd26de8b4fcd` +
+                                                `6f5b00cb4c5b290f069b29c2f6b34f3e` +
+                                                `5fcb169010a71cb19cb831871073ee68` +
+                                                `9c0463c1be8e27c7a1430a5fb4f0931f` +
+                                                `c09099a69c75b736130109f362cc8d22` +
+                                                `06086c531e90ee196dd824e0fe4a48a4` +
+                                                `625de95a7e9e3f28cbd5ec9be309ac60` +
+                                                `4a027196aae40aa953f3225f6ae9a0f9` +
+                                                `eec08d44b74dc070d3b01025789fae06` +
+                                                `07b1db3f9326f45f3612ece963ed5956` +
+                                                `86358ea52d7880d979985027596ad24d` +
+                                                `b219c2e0cf467061721e87099c3028b6` +
+                                                `951d9000f3eddd689c3f3f55e171faa6` +
+                                                `1b99b3b4f6d44a0c1f879b9da21719ec` +
+                                                `0998c38acdde5b8f9348ec146ab8d74b` +
+                                                `b7adc3db447dc9552bbede43af6f042d` +
+                                                `03b6750cdb469b15db4de0cf8476948e` +
+                                                `5591495ebe89d1eaa2e1cdda8a1f59c2` +
+                                                `0a13ad009fd4adedff0126bf6f419c66` +
+                                                `a86e63e4b727eee57795531e207187cc` +
+                                                `5c7ca4df73d39ecb0353af47643d52f5` +
+                                                `9f9e8260a04ec6440fdf1491e2d2c44a` +
+                                                `22da579b1d1e9c6674fecfb289e6997e` +
+                                                `8172ee601f8c022ecaba8cc346300f98` +
+                                                `e055f2bbe5c368da7805d488f10b6064` +
+                                                `25f3ff85f87cedf46851df061880d5b9` +
+                                                `cd48e92892f805e709ea3b46f8b7eb96` +
+                                                `db4f33c63625f8c0f28546e3a80d8231` +
+                                                `f8768c47b3ec2c0564337402a2883aef` +
+                                                `073142775b48f504b7a164792bcf8874` +
+                                                `a8381d6822b4cd8ea700b5380f7db334` +
+                                                `7f99ef5391c8d1c89c0a20483abdc4b5` +
+                                                `6f989b9132648ee3728049b8350bf657` +
+                                                `65337e26c5bf0068d120427f3b18dc9e` +
+                                                `3c192f31b428d42b74cbf33b26da7d08` +
+                                                `55791ea07493ec81f7ac9e01458e11fc` +
+                                                `c35ce92b1860bed4e734563c9e182d2e` +
+                                                `1e6e858bfba56b587c191913cdf706bb` +
+                                                `0e6eb4a4109569bfb977a795241b7f37` +
+                                                `06a5570825ba8251f6ef121bde47d266` +
+                                                `c54170b4e8727b8ced46b147ebfa0944` +
+                                                `f492d7885c4800a91e02a036922d2485` +
+                                                `37778833d89ee0e4a7614fda44451cf4` +
+                                                `82f7f819d70ac227e932bd0b42b6ebd6` +
+                                                `1078bbb7a7073f3679e37803213373c8` +
+                                                `4277cdc2131cc6d7ebec2b478eb52aaf` +
+                                                `150ca1bf1485143f014d1f147cf35fdb` +
+                                                `0f9db141f591d6b0679dd000cc89b0fe` +
+                                                `32155044945909f976ce0a159ce15d3e` +
+                                                `ce7d693f03f1d66b3d2e5147205fe3c8` +
+                                                `e1fb5d3aa0363c06b3e2ac3e2d63fa92` +
+                                                `f5a4166fc8fd6424125bed58a03bd18a` +
+                                                `487a3f682dc608da20233a7d311fb74e` +
+                                                `1e1012afa63783b0326f89ff8a50eb69` +
+                                                `18ec722b131de4e644388fb411fecb05` +
+                                                `20a661e2817bb5b2aa3a43106abeb59c` +
+                                                `7258c99441a7f84641460ab7033427b8` +
+                                                `1a0a143b9b01255e360aeda06b1b4542` +
+                                                `547f79146c46be5c0ecbeeef9ea35997` +
+                                                `5347feae64d38ca47d20dc212d8bb9b5` +
+                                                `3684af042800202ebebe92f7b551e01e` +
+                                                `fb45490a5376e29481832aa8e1f601e4` +
+                                                `7268a7a0d6537d1becf54e1f79a7000f` +
+                                                `de82d9e1fee7518fe71b9a603edff7f3` +
+                                                `2f3b5d533da747751b530652f57a4064` +
+                                                `b4387a52b050edcef027aa032340170b` +
+                                                `c1bd8bd765b65af59760015338972c83` +
+                                                `9029b5417ae87c1f31047182ec7740ab` +
+                                                `c7ddc8148afa3a80b6efbde9ded36f02` +
+                                                `c37f43b857e2945d0b74d157a409382c` +
+                                                `16d05a95342b149c7ebc368912f013aa` +
+                                                `3764182694b3aae1b07f32a37107e08d` +
+                                                `fc78892ea4e8581b4b93e9f6b594efa9` +
+                                                `9c43fd6d3afb2672c71aa5980aaa0188` +
+                                                `5f407c321ae3bcb08f366a1978f215f6` +
+                                                `34161c0b4f92ea65da6d6ce4c231375d` +
+                                                `931f7b97057d6a022b67dfe4559c8f05` +
+                                                `7c42e691ead83c0fdf70961ca4fea66e` +
+                                                `c3a07ae5b6cba1461cae8feec02b7ad8` +
+                                                `2f26ecab4e681d53f5e49b03e9227e0f` +
+                                                `fafa8ed63d1cff3332f85a7ae0746e5d` +
+                                                `994a8632852b4d02513d85a69f06b1bb` +
+                                                `9f26dfb211d465b74a0caeceed8483ec` +
+                                                `752d58a8280fdab2a7add27fe2716ca3` +
+                                                `9242f4defeb8ca688a768ea0c064d61b` +
+                                                `7fadea97f8a1526458409231763b82ae` +
+                                                `c058d26d0aef09f626443815e4a362b9` +
+                                                `70e5c3d39f67e2da3bedca9130828d4b` +
+                                                `0e4f98c0adbd16d89cdefa5a35a4d46e` +
+                                                `a974f2e85d97440160c07773f197fd6c` +
+                                                `eb636e31d73ff957f0365ed50051c336` +
+                                                `cd8ca5b5b3e4634ed92e4b5e986c1031` +
+                                                `50abc1f98a05f83a9f8656547f04d65c` +
+                                                `93d920c77df49d7ac38ca71bf2360b5c` +
+                                                `8a94210cf1fe8c5bb49bb6085b5e727f` +
+                                                `e0e9a38da6597d3ac70f5bf4174ce043` +
+                                                `5a81acac8779cad8722db557b32123cf` +
+                                                `f47e33433210027837c6d9aa802d9a0e` +
+                                                `75c1ebca413f88c1072c57c7a565ebe7` +
+                                                `30b167d8b6d01e656250531f083b860b` +
+                                                `c1f616909c137773961c2842132e05e5` +
+                                                `8201b622341e04649cf8515b3e74ab40` +
+                                                `e677789ae7086944a1334c4d19e3d163` +
+                                                `b68eadd63c5876af7f346b182d1a478f` +
+                                                `79bd7adb69eeb3418653b87cd2c351f1` +
+                                                `6a427c9a8f8735d94b4d92dbcc411361` +
+                                                `f30ce522f672fd62ec34364bb73d887c` +
+                                                `ea8dabf12854ed4c92c0fa201f41a648` +
+                                                `5f9a8ad57cbaa04830800f5292f5f5c3` +
+                                                `2f8421ebe0a64da0bf078d9cc4b239f9` +
+                                                `f178113e6d26abeda50b5d77f44befd1` +
+                                                `fd511117609761a5a462a7006500c185` +
+                                                `58b58b550b8b1f6ba094b65e9ae2c9f6` +
+                                                `10adae68ef71349bd3f1bc29b73ed548` +
+                                                `7d93f63316d4cee6b6e24a0bb6708942` +
+                                                `6d30f0eff10f47ab702aa21bc96f1f93` +
+                                                `d01575d7f1616df362201aea84268a40` +
+                                                `ee415ea642c393a4fbd51a588c6fe1cc` +
+                                                `9d334cc5055f2716a51bd553caa32416` +
+                                                `7a624415ab0374f09c35650594c27ebf` +
+                                                `1cc1f625e3fee0f2d890a75d7fda8232` +
+                                                `6166ad827ed62ce121d7aa759d94545b` +
+                                                `be4e4e0c687dd68fc8323143b636090e` +
+                                                `fafff1d83ea585afed36a2aa88605bd6` +
+                                                `3379a1ab3bf11fb28cb6d4aaf3f36ae1` +
+                                                `6aa04a018f27ad696c3e896606dc774f` +
+                                                `241bc55b7dc7861efff30118e4777f73` +
+                                                `2209ed048f38026a1deeac3054025606` +
+                                                `d1264f5c40479de686039aad687ef8ed` +
+                                                `3971a6a6135ce1ff851fe8d0753fb5b9` +
+                                                `b84f02de48219085ada57aa41f8d41f1` +
+                                                `4a2fab4612c23a4b712f52ed8ef7db2f` +
+                                                `425174c12826b71e6db73afceea57857` +
+                                                `095aa326d3b095ebc25cc2a374ed3706` +
+                                                `82c63f205a6a8d406d464fa3ba857e63` +
+                                                `367b22e2ba90c2c052f7a7f709d12a99` +
+                                                `7e487a1da73894062360f41a326a4a95` +
+                                                `d69dbce0eeddccb2b03fb6f42eafe196` +
+                                                `6df7550dfe108c6599ac3eacfe6672e9` +
+                                                `21e495db884cfc2bf9d0d6501c10defc` +
+                                                `8768b7977551403ec804d1d865916dff` +
+                                                `0d1525378ec95751943caa8caad2e0a2` +
+                                                `4688e06740dd8793a66bab5107b1f5a4` +
+                                                `ba1e784ba85e16239452429204e54f2d` +
+                                                `c4fd48fa7da76d98f9958a83db87ab60` +
+                                                `43b076ffde4f03bcbcd6965a4f3ef86d` +
+                                                `63e5c08c8393285cbf6a673439eea9ed` +
+                                                `3755b298b496dc02eb31839569439fa0` +
+                                                `384d49a8bce50ff01f264fa13da1eb0f` +
+                                                `030e14da91cc6b9061054c1a11522ece` +
+                                                `f3c1fbd2bd445cf13a7fc715942583d9` +
+                                                `a5ac542a524984882ec00c954df97434` +
+                                                `9647fcf5969bceff49e836e7b84419bc` +
+                                                `0a46a07d796f0af10e4348748a5d3857` +
+                                                `79b6c606f9ee9aaafbcbcc6606941be1` +
+                                                `94a1df83500ca3911b5921e899ac02d2` +
+                                                `6993aa2dda2820954b66e7e2e268014a` +
+                                                `858020226230d7749cea17546b6a630f` +
+                                                `9ad66c7c1e2eb0232736989180c6e96c` +
+                                                `ba2646d9954c2dc861bb704d26830ddb` +
+                                                `b96dc7160c15a14c553443d4a67c863b` +
+                                                `70541fa08d80c25fe2a479ba68add0ca` +
+                                                `f9edb021089f2490bf4a4e5d91c83a89` +
+                                                `82547d435d707e7681083637cfc74f7a` +
+                                                `fb7082ee031534f5184e79c830b2eec9` +
+                                                `f10f371f4cbd7c5d404c5bc6ad8c166f` +
+                                                `74b758955550042a117bae09d5c13349` +
+                                                `3d7d5acc0b403b604468ae7a88858273` +
+                                                `8362a554a99bd5cc9abba475de01b265` +
+                                                `aeb0311d3194e74c3b072fb38a2ad09d` +
+                                                `9e03f32393b2c36f2e8791b03deeea9c` +
+                                                `0e8a77e6edd40a1c00d1b677f0c385ff` +
+                                                `33a0cb8a4aac4e089c12baee2e34c4c2` +
+                                                `876518f95611c57e4340ee6b919711f3` +
+                                                `76cff329b3caca71b29cfeab3f79f7b5` +
+                                                `267dce0efa584f21776ae858859005a1` +
+                                                `0ff6a07dfd1a42171ecbd9dd58dd8787` +
+                                                `a6ecef45df0d3907d92c0ca992087a50` +
+                                                `8eec050588ce3bd79853c641fe44c0a5` +
+                                                `d7137274131b93625982fd43d5ea503f` +
+                                                `67505aadbd29eb69793962fcfb4585b7` +
+                                                `c0cebb5ebbb1cd18c432d3bafb2505b7` +
+                                                `604bf16fc4ccf05b40ba010fe20f33d9` +
+                                                `8d4b1ff46f18da9a086bad47daa7724b` +
+                                                `a3199b184b21d77c887091bcaf152635` +
+                                                `d37ae17d3baf5ed66c01280a2737ed09` +
+                                                `b7da6933a24598e6c63cdf10bd833fbe` +
+                                                `4deeb835141cb71b659f24435d191ece` +
+                                                `a34a6df0173acc66e259ee3e368aafaf` +
+                                                `0ad5c310b66118ca8dc1f2ae25757f2e` +
+                                                `65631b53970342fc04fd744a93a1f47b` +
+                                                `03598a0dfa79006b6c9190c1e79f1dc8` +
+                                                `44b4c9293f223f8982fb6fcaf849a317` +
+                                                `8e8339111f7c7cde76bb671a3b54684e` +
+                                                `6a35fc87818f10208af9cc54c3a7cac6` +
+                                                `ba2a2939cc047052afaae6293cf90dde` +
+                                                `98001324dc0d1f1dfb07bb3ac2d58fed` +
+                                                `4536f3928ceec22e439a2211073fbb65` +
+                                                `c7827e11a35b41d5b7a154033581bed5` +
+                                                `7f5205ce63eab6c31124676a0494e053` +
+                                                `e0953e5a03df9bf7f277d1301dfcf57b` +
+                                                `e9f619b8d3a00b335d22ff2125401df4` +
+                                                `b33ea3997bdf575f6a554c7948bcb29e` +
+                                                `92151676c3561c776daa9dd69acacf0b` +
+                                                `53c09c9bfd40f095345f382090db5a9c` +
+                                                `d383ae79c05a4bfa2ec7087ef17ab8bb` +
+                                                `0dcbce9c1c010fee4cd399c596e94467` +
+                                                `ba0068e287f9adb9514390cd1d383820` +
+                                                `e7de81429b83b772c7315956c383e3aa` +
+                                                `1c92870dcb72bc5e34cb7e90d3d0da68` +
+                                                `b2fdacd35abc726019b49abd96849539` +
+                                                `01eee9b6b4d26c465adda6ab77297bda` +
+                                                `b3197ae09d1ab2a52921d17def40a633` +
+                                                `494b6bbc3022136c12723c9ba0f0c3d8` +
+                                                `0102126b5a3ac072820865d8e6a0fa34` +
+                                                `9c8062952ece3d21b4aef970b2fae852` +
+                                                `728b9eb4c1e907c7e5b630080abc2405` +
+                                                `fb4e5d57cdb06b6f1fce90382786677e` +
+                                                `d5b837fe399e5f2961986968e709a1a6` +
+                                                `5d9fb606cf6a7c4417191fc5d241a38c` +
+                                                `b8989ab04aebd4d6ffd69449d3ef5de3` +
+                                                `a4ebaec2252683a9706d9a3c28c6650d` +
+                                                `b6e979049866abca6c05d6436f71b459` +
+                                                `d4d82cafd5924c4827f8a3c36fc036fd` +
+                                                `79f75ce90dc4643c175c570a7e73a9c6` +
+                                                `ea2073c038247e8cf17d26d723aa1eaf` +
+                                                `6dbba86f7adc8afb6b79ce105324558a` +
+                                                `d1e2b2c84616eaa24749104704c1e24e` +
+                                                `b17b24197547c4704ece6dbc1581893a` +
+                                                `0fe8469e86350976e1e20519407f783c` +
+                                                `20ff02138690661f4d173bebc181df16` +
+                                                `7e983d3eccce835dd185ff584ebe4173` +
+                                                `943c63c943eedac2780114dc3a24f865` +
+                                                `651f7eb3373991aa13fd97175e6f20f0` +
+                                                `f2cdef0057381354d0da33ae526403ed` +
+                                                `5fdb143693ae8b193def31275589dabe` +
+                                                `d96a37f49271214b533c6414931cdab8` +
+                                                `6a95e66999d9dd86e1eca8e68fd24bbe` +
+                                                `3ebfdbe888831e0747e452f022cdb993` +
+                                                `dcfc5321f36c822d4d74cdb3f2db10b2` +
+                                                `3933f568cc23d1cd905e1d770da3d7a6` +
+                                                `417b9d3bbc781d131cf934bf4ddae56b` +
+                                                `4ab022aa914d59d3805cd4adca2fd2bc` +
+                                                `c50a6750fb7f7faafeeae8e024e2cff1` +
+                                                `6f8b9c848b168dfffc03af0e68266043` +
+                                                `5ebd5481c071d2b2b107d285e125cb66` +
+                                                `144bc4725998d0ba67b90415a588c195` +
+                                                `1c2e49534908e335a7a8669bd554a5b9` +
+                                                `d797fb79e616db43e94b8dc124d3cc4c` +
+                                                `fe913f290bbeae50aac04221388ef2e5` +
+                                                `0162b28a247612266c699b9fc14cddeb` +
+                                                `b8042f9cb76426fe916dd9af7c8b409e` +
+                                                `b3b66c55d0bb6ec643b5fc4459f32ae9` +
+                                                `87f5119d7513c23844f369cdb574e765` +
+                                                `098fabaf4cef98bd7e19a820450f12d3` +
+                                                `f8e8d27e72a8fc3bb511a729c9f6dbae` +
+                                                `e5e2fb324db72884681120e6c8384721` +
+                                                `28ea523136fa64cc4e27d09bab018412` +
+                                                `a863a3b798e269f5e56f079e04a08207` +
+                                                `163fd2487928a7da038a76bf99ad0b73` +
+                                                `ac18e7ebe4109c2e2c70fac36118b764` +
+                                                `d0f6787251831d5f7ddc5c69cbe2806e` +
+                                                `d314a6f15584b0ff648804dd92a3dc12` +
+                                                `30fa1967fab60465fc81c4d2e1f514c8` +
+                                                `b0e741ec12a0fc3aefbdfa287a9a05b5` +
+                                                `0c5f9e9c4ad4f8e03f98d0288c15be84` +
+                                                `14491bfb956ed8fde87af3b0363ab355` +
+                                                `c62a1242a319c68a247104ead5a862e8` +
+                                                `d20d21453861c116cf4b86d66929c434` +
+                                                `853e7a56ce0fd005cd9b8609250374dd` +
+                                                `9f954519bbba815d96bc6d5c1fadf474` +
+                                                `1ee2d71b6d2fe6ab8071b1bab4e8532b` +
+                                                `cc95ff0289ce081f0838fd7d4dd662c9` +
+                                                `182db13889f88187f5d54a1802b2419a` +
+                                                `09b996ff3263607f88a44df9cc38d4a2` +
+                                                `c16e06ef238e68dddcf7072a5a060d03` +
+                                                `7d903b72697f3c1767657ccb8073e8f5` +
+                                                `e81ef93ce9bd0b3c27d39702cfba0908` +
+                                                `e1fa9240b461a956b0931d08b32d4ddf` +
+                                                `2ae6741c8f96058c0939d0a7cb900953` +
+                                                `a107e5afc77c21827a3ce65048ad373e` +
+                                                `2fa288d8ed656ce685d953ab529e30c5` +
+                                                `14f441912590a6438d3c9a867d1bee81` +
+                                                `dc361ef6f3d64786c4dbedbc4f97c2b8` +
+                                                `4b7ca875d42d47d567f5afdcfccab1db` +
+                                                `b2462a139fe22b53f5c41f8ca9e188d2` +
+                                                `2d9fe38711c68521b44ab1ca28abaf73` +
+                                                `0b74c813716de487ca39bb5e41922dc7` +
+                                                `9484ef518b80941693ffcbf6802739f3` +
+                                                `49070623d492966c572e03579d8f3f6d` +
+                                                `8284acdc9b41384c98a510c06a19c76c` +
+                                                `de4aa16ebe30a33b138af3718184a69f` +
+                                                `54fd53a1117b049b0744e20fb472d1b5` +
+                                                `9d4e64ff5d141dffeb65553835f013c7` +
+                                                `18f0da50ac3e1ee918002c350d575899` +
+                                                `5f4bc2e58e33e7e0fb317977be62f0b0` +
+                                                `4649d603e1c6d687de7c6f5e82e72d48` +
+                                                `238331d597367e317faae924ee092ee5` +
+                                                `5c991cb6f825839b23731d74b305e1d0` +
+                                                `c7e2895babd9c9b9bc397aacbf36ea9d` +
+                                                `e72b2a4ec14cee6a572beaf293dabeb5` +
+                                                `b221ad8d576466c245bf56c2e1057d4f` +
+                                                `8932abc15a66dedf99a953da11b726c3` +
+                                                `4016c672b6551f37b5d9ddc17a901d83` +
+                                                `c65354ebe224727f8526e40cebfd065a` +
+                                                `41723d979a4daaa4cb5f2a9fc8a9041c` +
+                                                `244affc8b80f9df2e98d8c3333bdc406` +
+                                                `6a5bf1368ea0f0ed823d454355f646fc` +
+                                                `57ef4c1e2bdf43c238ff0e81872f197b` +
+                                                `47ec993e879fef951c3f830c70f2ce09` +
+                                                `904737c7766968d28f5fdb231e886d08` +
+                                                `05e27c7873a5ab195c365ea70b50c6e3` +
+                                                `ea495aaf1ef956dc14b582044a5929e3` +
+                                                `0ccf84feb340cf8a98fc9b13333ed111` +
+                                                `85999a631af7e63c2137ac037a731ccc` +
+                                                `7b4061e97ec77266947fb1fe4581a5de` +
+                                                `73d56f1544ea02e70160537b7d2ad290` +
+                                                `f67d2c5bba90245a9f505fe757220a29` +
+                                                `e19ae6f9c21927956b0fa03bf32b5b90` +
+                                                `9ff2a3fb253bcfb005b02d288f007f90` +
+                                                `4742c7baf9e3be3aeb69e37b3fbfd57c` +
+                                                `ea70106ac47870256309301f71c379ad` +
+                                                `7fd105183f2bc0e4ea38a921aae4bf3d` +
+                                                `816498d23ea20b7321d92a43102b2b59` +
+                                                `66826a996533c4d39b5fd7ebfceeb463` +
+                                                `44ba0d3f57de7e8f7b988a51c4453e4f` +
+                                                `caeb90f98894ad202200362c4420d15e` +
+                                                `5feb1ff755df7c570a1312e13bfcf5fb` +
+                                                `9554b8d9bc8190391b47cfcfa5f85e69`)
+
+data_transposed <- data_transposed %>% mutate(pseudo_read_count = `7fcdfeadd08cdad61220b0c38e89f336` +
+                                                `aebcee3d5e645f4b4949dc38dd784efd` +
+                                                `f4dc178077ad63c04b79b6025304c340` +
+                                                `23a99bd60d1d56a6812a85c77d3c81ff` +
+                                                `97adae1509757a3c8fb52cfbe9d02ecc` +
+                                                `c9e5c8b51267be2fecf2f1a78ee90461` +
+                                                `802f9e58053ef84aed86b7bb00ab6324` +
+                                                `009ecb1d3217329224858f82199f9c56` +
+                                                `95375478adfde6c94b3f92d75686510b` +
+                                                `9d03c4bc04cbf0c998fc428083a91d92` +
+                                                `e85bb5066207a56c1b7ee551d2e6b32a` +
+                                                `1402d4f46085eda18d8ea47e495fdaef` +
+                                                `61662843f1b5b251a3843c15120e973b` +
+                                                `c9f2c239890256f23238141f87fd559a` +
+                                                `b49b26d4f24c09f4dc0fb1f9383a7840` +
+                                                `09564a3f9827be9a072b401f1c1b1444` +
+                                                `33972fb6a99877ba134bc009aa7612cb` +
+                                                `66c41c63ab51300ef5d5c7e2f009d3aa` +
+                                                `348406eb4f0749cc1657b7bcbaf8f2a9` +
+                                                `531caa8c443c00d75e3a94e47e363543` +
+                                                `5a8664056e668e3f3e8cf234912cdff5` +
+                                                `c724d62405fd099e770109e79dbf8d03` +
+                                                `0b9c99fb5ec3a8c53048d90ce2b2c395` +
+                                                `9f286a6097eca9aa48db4df241716e01` +
+                                                `4e4da0760c0b8c574f0a176366df2dbb` +
+                                                `b7408b9362dd0a116864e83ca1433d42` +
+                                                `58df14d211f6a61b796f727ddc121e77` )
+
+data_transposed <- data_transposed %>% mutate(artiodactyl_read_count = `7bf26daef7d8a46d1a24674fd92d9fb1` +
+                                                `ef478e5bc63d3d14cb1f1089611ef412` +
+                                                `4bb6e8edc654cfa200395021c56da004` +
+                                                `00b555be4c6622c8e31b07f2e03c4575` +
+                                                `af4011e2cd4c79b95214ae0903a13566` +
+                                                `9c5d781154376a3e5b22935be166588c` +
+                                                `b804060b3c10c0cd2959213169f3793f` +
+                                                `8d8fa0e48388d36b239bd4ddc6457c84` +
+                                                `b3b75d72e49d2d73536f445e127930f6` +
+                                                `d81702ef0e308cb0bad9f7f2f963f5dc` +
+                                                `346289a447a8552321aea7fda50e288a` +
+                                                `79d3c441e7a876b57f2524e093b37901` +
+                                                `15475a3c0c4cfcee8f9ee162443ec780` +
+                                                `19716a1e24f14df0db19689749b44ca6` +
+                                                `5e77b58e507b1090fb5f1bec1314582a` +
+                                                `a72f7cde4bb7fbe1ec63560e415a362e` +
+                                                `21abe63fd39e9adea6b0bfbee3f6935f` +
+                                                `f586738f85e5be8f5345c45dadbc521d` +
+                                                `f7d8ddf9fab67cca8dc44756ce118601` +
+                                                `5773121ffcee612346a7cfa2890a75ea` +
+                                                `b3925ebd22f2aa0f728ed7f855ad3611` +
+                                                `180801498a59466afa0df8c91c1f6b85` +
+                                                `8e8195db297de2cfcc25af16cde44b5e` +
+                                                `0691554a421697a0a4d427582041fc73` +
+                                                `8230c9bbdff6caeffcf21d684d436d1b` +
+                                                `9f30cb04c8ede243026fcc004c6a6f3d` +
+                                                `38b4cebb9360b7f697a7fc8e0ce9e506` +
+                                                `74a88e617b8a5391e4ad933c02ad3f9a` +
+                                                `d1b28c88b50ffb105fe69994ed67208c` +
+                                                `543f7977657cfd02f6c2cac915cfaa59` +
+                                                `e794ba80d7defca88a728dd04e4ab78f` +
+                                                `2d7b374587842214753e9fa8eb4da476` +
+                                                `69d5e488aa190e34fb2555bece2c402f` +
+                                                `8f1d4b25fa5af372c3a73f1d7eefafab` +
+                                                `5e34c1b8c1bac7a6539ad3f04673504b` +
+                                                `407bf850c779966a6c4e4f2f969271ec` +
+                                                `151af2a917ac8b9c2d7bc58e976bbffa` +
+                                                `370b27bdb9bd4a3798310b67f0b78c58` +
+                                                `7f67a8ad07e4b6e27e0d1bd7c374322b` +
+                                                `86814e3c5eaf694b16f0b3d078e43cb0` +
+                                                `0189ff3433742ab42c7570c38cbd1ba8` +
+                                                `10141ae087065d77ee465874f463fdf6` +
+                                                `cf8298d9ac6da31834f4878c061dbd63` +
+                                                `be13e6f33fd70fbd7e8beeb7db12dd6a` +
+                                                `8317b8197e4e08bc326af42a80d974ba` +
+                                                `22e1da6854342aa04cca4195ef7feeff` +
+                                                `1de437a06f44c1dbfb8555be9f132d98` +
+                                                `a924fdd7505646960f2836536b1451c0` +
+                                                `df38dfadcab674979906fab9b7c68a6f` +
+                                                `0e8b3c7cfd6cbd006f780c918c8c17b4` +
+                                                `0e435da8e451ea3f3b90563eeb84e4e3` +
+                                                `8601c7d84827c1eec77b81ac2f7aba0c`)
+
+# This one had a "kind of" blast match but didn't end up matching up to anything
+#>b66851e94153cfc68842581920d2a1c8
+
+data_transposed <- data_transposed %>% mutate(other_read_count = total_read_count-cetacean_read_count-pseudo_read_count-artiodactyl_read_count)
 data_transposed <- data_transposed %>% mutate(cetacean_data = ifelse(cetacean_read_count>0, "YES", "NO"))
 
 # How many samples have cetacean DNA?
 data_transposed %>% group_by(cetacean_data) %>% summarise(n())
 ## A tibble: 2 × 2
-#  cetacean_data `n()`
-#  <chr>         <int>
-#1 NO               28
-#2 YES              68
+#cetacean_data `n()`
+#<chr>         <int>
+#1 NO                3
+#2 YES              93
 
 # Which samples DON'T?
+# Some of our control samples
 data_transposed %>% filter(cetacean_data=="NO") %>% select(sites)
-# A tibble: 28 × 1
-#   sites             
-#   <chr>             
-# 1 BLANK_03.17A      
-# 2 BLANK_03.17B      
-# 3 BP_AKH_HD_036B    
-# 4 BP_AKH_HD_037A    
-# 5 BP_AKH_HD06A      
-# 6 BP_AKH_HD06B      
-# 7 BP_E_HD05B        
-# 8 BP_N_HD02B        
-# 9 BP_N_HD03B        
-#10 BP_N_HD10B        
-#11 BP_S_CTRL_01A     
-#12 BP_S_CTRL_01B     
-#13 BP_S_HD_020A      
-#14 BP_S_HD_022B      
-#15 DroguetestDunedinA
-#16 DroguetestDunedinB
-#17 NegativeA         
-#18 NegativeB         
-#19 NegativeC         
-#20 NegativeD         
-#21 TIM_CNTRL_01B     
-#22 TIM_HD_039A       
-#23 TIM_HD_040A       
-#24 TIM_HD_041A       
-#25 TIM_HD_041B       
-#26 TIM_HD_042A       
-#27 TIM_HD_044A       
-#28 TIM_HD_044B  
-# Interestingly, again not every A and B - suggests perhaps our coverage isn't high enough                      
 
 # Verifying negatives/blanks have low coverage
 data_transposed <- data_transposed %>% mutate(negative_blank = ifelse(sites %in% c("BLANK_03.17A","BLANK_03.17B","NegativeA","NegativeB","NegativeC","NegativeD","BP_E_CNTRL_02A","BP_E_CNTRL_02B",
                                                                                    "BP_S_CTRL_01A","BP_S_CTRL_01B","TIM_CNTRL_01A","TIM_CNTRL_01B"),"YES","NO"))
+# Looks like the blanks have relatively low cetacean read counts
+ggplot() + geom_point(data=data_transposed, mapping=aes(x=total_read_count,y=cetacean_read_count,color=negative_blank))
+data_transposed %>% filter(negative_blank=="YES") %>% select(cetacean_read_count,total_read_count)
+# However, at next QC stage, will need to look at identity of "contaminating" haplotype
 
-# Some have pretty high coverage, and one appears to have dolphin DNA
-ggplot() + geom_point(data=data_transposed, mapping=aes(x=cetacean_data,y=total_read_count,color=negative_blank))
 
-# Looking at who has dolphin (didn't bother showing the columns with no counts)                     
-data_transposed %>% filter(cetacean_data=="YES",negative_blank=="YES") %>% select(sites,`b4df66ddc9984ade713c31dcf66d1249`, `58df14d211f6a61b796f727ddc121e77`, `e85bb5066207a56c1b7ee551d2e6b32a`,
-                                                                                 `1402d4f46085eda18d8ea47e495fdaef`, `61662843f1b5b251a3843c15120e973b`, `c9f2c239890256f23238141f87fd559a`,
-                                                                                 `b49b26d4f24c09f4dc0fb1f9383a7840`, `930ad36477acf2976046a0d75309e5b1`)
-## A tibble: 3 × 3
-#  sites          b9b4cc338ab6d82ecec7f071c6c86a99 d3b6c31a9253146da682e156…¹
-#  <chr>                                     <dbl>                      <dbl>
-#1 BP_E_CNTRL_02A                                3                          0
-#2 BP_E_CNTRL_02B                                0                         12
-#3 TIM_CNTRL_01A                                52                          0
-## … with abbreviated variable name ¹​d3b6c31a9253146da682e1562425081c
-# Both sequences are likely Hector's 
+data_transposed <- data_transposed %>% mutate(other_read_count = total_read_count-cetacean_read_count-pseudo_read_count-artiodactyl_read_count)
 
-# To compare control coverage to previous size selection
-data_transposed %>% filter(negative_blank=="YES") %>% select(sites,total_read_count)
-## A tibble: 12 × 2
-#   sites          total_read_count
-#   <chr>                     <dbl>
-# 1 BLANK_03.17A                  2
-# 2 BLANK_03.17B                  2
-# 3 BP_E_CNTRL_02A              351
-# 4 BP_E_CNTRL_02B             1375
-# 5 BP_S_CTRL_01A               522
-# 6 BP_S_CTRL_01B               877
-# 7 NegativeA                     9
-# 8 NegativeB                    76
-# 9 NegativeC                   103
-#10 NegativeD                     5
-#11 TIM_CNTRL_01A               903
-#12 TIM_CNTRL_01B               732
 
 # Plotting just the samples with dolphin
 dolphin_only <- data_transposed %>% filter(cetacean_data=="YES") %>% 
-                      mutate(cetacean_read_count=cetacean_read_count/total_read_count,notcetacean_read_count=notcetacean_read_count/total_read_count) %>% 
-                      select(sites,cetacean_read_count,notcetacean_read_count,total_read_count) %>% 
-                      pivot_longer(!sites,names_to="species",values_to="read_count")
+  mutate(cetacean_read_count=cetacean_read_count/total_read_count,
+         pseudo_read_count=pseudo_read_count/total_read_count,
+         artiodactyl_read_count=artiodactyl_read_count/total_read_count,
+         other_read_count=other_read_count/total_read_count,
+         sites=paste(sites,negative_blank,sep="___")) %>% 
+  select(sites,cetacean_read_count,pseudo_read_count,artiodactyl_read_count,other_read_count,total_read_count) %>% 
+  pivot_longer(!sites,names_to="species",values_to="read_count")
 
-ggplot((dolphin_only %>% filter(species!="total_read_count")), aes(x=sites,y=read_count,fill=species)) +
+dolphin_only <- dolphin_only %>% mutate(negative_blank=gsub(".*___","",sites),
+                        sites=gsub("___.*","",sites))
+
+# Just for the blanks
+ggplot((dolphin_only %>% filter(species!="total_read_count",negative_blank=="YES")), aes(x=sites,y=read_count,fill=species)) +
   geom_bar(stat="identity")
 
-dolphin_only_w_blanks <- dolphin_only %>% mutate(negative_blank = ifelse(sites %in% c("BLANK_03.17A","BLANK_03.17B","NegativeA","NegativeB","NegativeC","NegativeD","BP_E_CNTRL_02A","BP_E_CNTRL_02B",
-                                                                                      "BP_S_CTRL_01A","BP_S_CTRL_01B","TIM_CNTRL_01A","TIM_CNTRL_01B"),"YES","NO"))
+# Just for non blanks
+ggplot((dolphin_only %>% filter(species!="total_read_count",negative_blank=="NO")), aes(x=sites,y=read_count,fill=species)) +
+  geom_bar(stat="identity")
 
-# Based both on the increased number of sites with cetacean sequences and the increase % mapping as cetacean, things look a lot better!
 
-dolphin_only_pivot_wider <- dolphin_only_w_blanks %>% pivot_wider(names_from = species, values_from = read_count)
-ggplot(dolphin_only_pivot_wider) + geom_point(mapping=aes(x=total_read_count,y=cetacean_read_count,colour=negative_blank))
-# Mild relationship between read depth and amount of cetacean
+
